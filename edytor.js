@@ -1,41 +1,18 @@
-class SelectTool {
-    name = "Select"
-    icon = "sel"
-    mouseLayer = false
-}
-
-class MoveTool {
-    name = "Move"
-    icon = "mov"
-    mouseLayer = false
-}
-
-class ResizeTool {
-    name = "Resize"
-    icon = "siz"
-    mouseLayer = false
-}
-
-class CircleTool {
-    name = "Circle"
-    icon = "cir"
-    mouseLayer = true
-}
-
 class RectangleTool {
     name = "Rectangle"
     icon = "rec"
     mouseLayer = true
     #startPoint = [0,0];
-    #movePoint = [0, 0];
-    #endPoint = [0, 0];
+    #movePoint = [0,0];
+    #endPoint = [0,0];
     #refDrawedObject = null;
     #ref = {}
 
-    constructor(edytor, mouseLayer, svg) {
+    constructor(edytor, mouseLayer, svg, pixelLayer) {
         this.#ref.edytor = edytor;
         this.#ref.mouseLayer = mouseLayer;
         this.#ref.svg = svg;
+        this.#ref.pixelLayer = pixelLayer;
     }
 
     DrawStart(x, y) {
@@ -47,6 +24,8 @@ class RectangleTool {
             if (this.#refDrawedObject == null) {
                 this.#refDrawedObject = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
                 this.#refDrawedObject.setAttribute("fill", this.#ref.edytor.GetColorFg());
+                this.#refDrawedObject.setAttribute("fill-opacity", this.#ref.edytor.GetFillOpacity());
+                this.#refDrawedObject.setAttribute("fill-rule", this.#ref.edytor.GetFillRule());
                 this.#refDrawedObject.setAttribute("stroke", this.#ref.edytor.GetColorBg());
                 this.#refDrawedObject.setAttribute("stroke-width", this.#ref.edytor.GetStrokeWidth());
                 this.#refDrawedObject.setAttribute("stroke-opacity", this.#ref.edytor.GetStrokeOpacity());
@@ -74,6 +53,59 @@ class RectangleTool {
     }
 }
 
+class PencilTool {
+    name = "Pencil"
+    icon = "pen"
+    mouseLayer = true
+    #topLeft = [0, 0];
+    #bottomRight = [0, 0];
+    #prevPos = [-1, -1];
+    #ref = {}
+
+    constructor(edytor, mouseLayer, svg, pixelLayer) {
+        this.#ref.edytor = edytor;
+        this.#ref.mouseLayer = mouseLayer;
+        this.#ref.svg = svg;
+        this.#ref.pixelLayer = pixelLayer;
+        this.#ref.pixelLayerCtx = this.#ref.pixelLayer.getContext('2d');
+    }
+
+    DrawStart(x, y) {
+        this.#ref.pixelLayerCtx.strokeStyle = this.#ref.edytor.GetColorFg();
+        this.#ref.pixelLayerCtx.lineWidth = this.#ref.edytor.GetStrokeWidth();
+        this.#ref.pixelLayerCtx.lineCap = this.#ref.edytor.GetStrokeLinecap();
+        this.#ref.pixelLayerCtx.lineJoin = this.#ref.edytor.GetStrokeLinejoin();
+        // todo
+        //this.#ref.pixelLayerCtx.setLineDash(this.#ref.edytor.GetStrokeDasharray());
+        this.#ref.pixelLayerCtx.beginPath();
+        this.#ref.pixelLayerCtx.moveTo(x, y);
+    }
+    DrawMove(x, y) {
+        if (x < this.#topLeft[0])
+            this.#topLeft[0] = x;
+        if (x > this.#bottomRight[0])
+            this.#bottomRight[0] = x;
+        if (y < this.#topLeft[1])
+            this.#topLeft[1] = y;
+        if (y > this.#bottomRight[1])
+            this.#bottomRight[1] = y;
+
+        if (this.#prevPos[0] != -1 && this.#prevPos[0] != x && this.#prevPos[1] != y) {
+            this.#ref.pixelLayerCtx.lineTo(x, y);
+            this.#ref.pixelLayerCtx.stroke();
+        }
+
+        this.#prevPos[0] = x;
+        this.#prevPos[1] = y;
+    }
+    DrawEnd(x, y) {
+        this.#ref.pixelLayerCtx.closePath();
+    }
+    DrawCancel() {
+        this.#ref.pixelLayerCtx.closePath();
+    }
+}
+
 class Edytor {
     #id = {
         container: "edytor",
@@ -81,6 +113,8 @@ class Edytor {
         grid: "grid",
         mouseLayerContainer: "mouse_layer_container",
         mouseLayer: "mouse_layer",
+        pixelLayerContainer: "pixel_layer_container",
+        pixelLayer: "pixel_layer",
         svgContainer: "svg_container",
         svg: "svg",
         sidebarLeft: "sidebar_left",
@@ -92,6 +126,8 @@ class Edytor {
         grid: null,
         mouseLayerContainer: null,
         mouseLayer: null,
+        pixelLayerContainer: null,
+        pixelLayer: null,
         svgContainer: null,
         svg: null,
         sidebarLeft: null,
@@ -137,11 +173,13 @@ class Edytor {
         this.#initGrid();
         this.#initSVG();
         this.#initMouseLayer();
+        this.#initPixelLayer();
         this.#initSidebars();
         this.#setScroll();
         this.#initTools();
         this.#initColors();
         this.#initStroke();
+        this.#initFill();
         this.#initProperties();
     }
 
@@ -238,17 +276,8 @@ class Edytor {
         this.#ref.grid = document.createElement('canvas');
         this.#ref.grid.id = this.#id.grid;
         this.#ref.gridContainer.appendChild(this.#ref.grid);
-        this.ResizeGridToWindow();
+        this.ResizeCanvasLayerToWindow(this.#ref.grid, this.#ref.gridContainer, '');
         this.InitGridGrid();
-    }
-
-    ResizeGridToWindow() {
-        var w = window.innerWidth;
-        var h = window.innerHeight;
-        this.#ref.grid.width = w*2;
-        this.#ref.grid.height = h*2;
-        this.#ref.gridContainer.style.width = w*2 + 'px';
-        this.#ref.gridContainer.style.height = h*2 + 'px';
     }
 
     InitGridGrid() {
@@ -301,13 +330,6 @@ class Edytor {
         this.ResizeSVGToWindow();
     }
 
-    ResizeSVGToWindow() {
-        var w = window.innerWidth;
-        var h = window.innerHeight;
-        this.#ref.svgContainer.style.width = w*2 + 'px';
-        this.#ref.svgContainer.style.height = h*2 + 'px';
-    }
-
     #initMouseLayer() {
         this.#ref.mouseLayerContainer = document.createElement('div');
         this.#ref.mouseLayerContainer.id = this.#id.mouseLayerContainer;
@@ -316,7 +338,7 @@ class Edytor {
         this.#ref.mouseLayer = document.createElement('canvas');
         this.#ref.mouseLayer.id = this.#id.mouseLayer;
         this.#ref.mouseLayerContainer.appendChild(this.#ref.mouseLayer);
-        this.ResizeMouseLayerToWindow();
+        this.ResizeCanvasLayerToWindow(this.#ref.mouseLayer, this.#ref.mouseLayerContainer, 'none');
 
         var scope = this;
         this.#ref.mouseLayer.addEventListener('mousedown', function(e) {
@@ -338,15 +360,17 @@ class Edytor {
         });
     }
 
-    ResizeMouseLayerToWindow() {
-        var w = window.innerWidth;
-        var h = window.innerHeight;
-        this.#ref.mouseLayer.width = w*2;
-        this.#ref.mouseLayer.height = h*2;
-        this.#ref.mouseLayerContainer.style.width = w*2 + 'px';
-        this.#ref.mouseLayerContainer.style.height = h*2 + 'px';
-        this.#ref.mouseLayerContainer.style.display = 'none';
+    #initPixelLayer() {
+        this.#ref.pixelLayerContainer = document.createElement('div');
+        this.#ref.pixelLayerContainer.id = this.#id.pixelLayerContainer;
+        this.#ref.container.appendChild(this.#ref.pixelLayerContainer);
+
+        this.#ref.pixelLayer = document.createElement('canvas');
+        this.#ref.pixelLayer.id = this.#id.pixelLayer;
+        this.#ref.pixelLayerContainer.appendChild(this.#ref.pixelLayer);
+        this.ResizeCanvasLayerToWindow(this.#ref.pixelLayer, this.#ref.pixelLayerContainer, '');
     }
+
 
     #initSidebars() {
         this.#addDivToContainer('sidebarLeft', 'sidebar', 'sidebar_left');
@@ -356,11 +380,8 @@ class Edytor {
 
     #initToolObjects() {
         this.#tools = {
-            'select': new SelectTool(this, this.#ref.mouseLayer, this.#ref.svg),
-            'move': new MoveTool(this, this.#ref.mouseLayer, this.#ref.svg),
-            'resize': new ResizeTool(this, this.#ref.mouseLayer, this.#ref.svgs),
-            'circle': new CircleTool(this, this.#ref.mouseLayer, this.#ref.svg),
-            'rectangle': new RectangleTool(this, this.#ref.mouseLayer, this.#ref.svg)
+            'rectangle': new RectangleTool(this, this.#ref.mouseLayer, this.#ref.svg, this.#ref.pixelLayer),
+            'pencil': new PencilTool(this, this.#ref.mouseLayer, this.#ref.svg, this.#ref.pixelLayer)
         }
     }
 
@@ -372,6 +393,70 @@ class Edytor {
             this.#addSidebarLeftTool(key);
         }
         this.#addClearBoth(this.#ref.sidebarLeft);
+    }
+
+    #initColors() {
+        this.#addSidebarTitle('sidebarLeft',"Fg Color");
+        var i = 0;
+        var firstColor = "";
+        for (const key in this.#colors) {
+            if (i == 0) {
+                firstColor = key;
+            }
+            this.#addSidebarLeftColor("fg", key);
+            i++;
+        }
+        this.#addClearBoth(this.#ref.sidebarLeft);
+
+        this.#addSidebarTitle('sidebarLeft',"Bg Color");
+        for (const key in this.#colors) {
+            this.#addSidebarLeftColor("bg", key);
+        }
+        this.#addClearBoth(this.#ref.sidebarLeft);
+
+        this.SetColor("fg", firstColor);
+        this.SetColor("bg", firstColor);
+    }
+
+    #initStroke() {
+        this.#addSidebarTitle('sidebarLeft',"Stroke");
+        this.#addSidebarLeftInputText("stroke_width", "width", "3");
+        this.#addSidebarLeftInputText("stroke_opacity", "opacity", "100%");
+        this.#addSidebarLeftSelect("stroke_linecap", "linecap", {"butt": "butt", "square": "square", "round": "round"});
+        this.#addSidebarLeftSelect("stroke_linejoin", "linejoin", {"miter": "miter", "round": "round", "bevel": "bevel"});
+        this.#addSidebarLeftInputText("stroke_dasharray", "dasharray", "5");
+    }
+
+    #initFill() {
+        this.#addSidebarTitle('sidebarLeft',"Fill");
+        this.#addSidebarLeftInputText("fill_opacity", "opacity", "100%");
+        this.#addSidebarLeftSelect("fill_rule", "rule", {"nonzero": "nonzero", "evenodd": "evenodd", "inherit": "inherit"});
+    }
+
+    #initProperties() {
+        this.#addSidebarTitle('sidebarRight',"Properties");
+
+        for (var i=0; i<10; i++) {
+            var p = document.createElement('div');
+            p.className = "property";
+
+            var lbl = document.createElement('label');
+            lbl.innerHTML = "Property:";
+
+            var inp = document.createElement('input');
+            inp.type = "text";
+            inp.value = "val";
+
+            p.appendChild(lbl);
+            p.appendChild(inp);
+            this.#ref.sidebarRight.appendChild(p);
+        }
+    }
+
+    #setScroll() {
+        var w = window.innerWidth;
+        var h = window.innerHeight;
+        window.scrollTo(w/2,h/2);
     }
 
     SetTool(name) {
@@ -439,6 +524,13 @@ class Edytor {
         return document.getElementById('stroke_dasharray').value;
     }
 
+    GetFillOpacity() {
+        return document.getElementById('fill_opacity').value;
+    }
+    GetFillRule() {
+        return document.getElementById('fill_rule').value;
+    }
+
     SetColorFg(name) {
         var o = document.getElementById("colorfg_"+name);
         o.classList.remove("bevel");
@@ -473,68 +565,29 @@ class Edytor {
         this.#colorBg = name;
     }
 
-    #initColors() {
-        this.#addSidebarTitle('sidebarLeft',"Fg Color");
-        var i = 0;
-        var firstColor = "";
-        for (const key in this.#colors) {
-            if (i == 0) {
-                firstColor = key;
-            }
-            this.#addSidebarLeftColor("fg", key);
-            i++;
-        }
-        this.#addClearBoth(this.#ref.sidebarLeft);
-
-        this.#addSidebarTitle('sidebarLeft',"Bg Color");
-        for (const key in this.#colors) {
-            this.#addSidebarLeftColor("bg", key);
-        }
-        this.#addClearBoth(this.#ref.sidebarLeft);
-
-        this.SetColor("fg", firstColor);
-        this.SetColor("bg", firstColor);
-    }
-
-    #initStroke() {
-        this.#addSidebarTitle('sidebarLeft',"Stroke");
-        this.#addSidebarLeftInputText("stroke_width", "width", "3");
-        this.#addSidebarLeftInputText("stroke_opacity", "opacity", "100%");
-        this.#addSidebarLeftSelect("stroke_linecap", "linecap", {"butt": "butt", "square": "square", "round": "round"});
-        this.#addSidebarLeftSelect("stroke_linejoin", "linejoin", {"miter": "miter", "round": "round", "bevel": "bevel"});
-        this.#addSidebarLeftInputText("stroke_dasharray", "dasharray", "5");
-    }
-
-    #initProperties() {
-        this.#addSidebarTitle('sidebarRight',"Properties");
-
-        for (var i=0; i<10; i++) {
-            var p = document.createElement('div');
-            p.className = "property";
-
-            var lbl = document.createElement('label');
-            lbl.innerHTML = "Property:";
-
-            var inp = document.createElement('input');
-            inp.type = "text";
-            inp.value = "val";
-
-            p.appendChild(lbl);
-            p.appendChild(inp);
-            this.#ref.sidebarRight.appendChild(p);
-        }
-    }
-
     ResizeSidebarsToWindow() {
         var h = window.innerHeight;
         this.#ref.sidebarLeft.style.height = h + 'px';
         this.#ref.sidebarRight.style.height = h + 'px';
     }
 
-    #setScroll() {
+    ResizeCanvasLayerToWindow(canv, canvCont, display) {
         var w = window.innerWidth;
         var h = window.innerHeight;
-        window.scrollTo(w/2,h/2);
+        canv.width = w*2;
+        canv.height = h*2;
+        canvCont.style.width = w*2 + 'px';
+        canvCont.style.height = h*2 + 'px';
+        if (display != '') {
+            canvCont.style.display = display;
+        }
+    }
+
+    ResizeSVGToWindow() {
+        var w = window.innerWidth;
+        var h = window.innerHeight;
+        this.#ref.svgContainer.style.width = w*2 + 'px';
+        this.#ref.svgContainer.style.height = h*2 + 'px';
     }
 }
 
