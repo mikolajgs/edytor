@@ -8,10 +8,10 @@ class RectangleTool {
     #refDrawedObject = null;
     #ref = {}
 
-    constructor(edytor, mouseLayer, svg, pixelLayer) {
+    constructor(edytor, mouseLayer, svgLayer, pixelLayer) {
         this.#ref.edytor = edytor;
         this.#ref.mouseLayer = mouseLayer;
-        this.#ref.svg = svg;
+        this.#ref.svgLayer = svgLayer;
         this.#ref.pixelLayer = pixelLayer;
     }
 
@@ -37,7 +37,7 @@ class RectangleTool {
             this.#refDrawedObject.setAttribute("height", (this.#startPoint[1] < this.#movePoint[1] ? this.#movePoint[1] - this.#startPoint[1] : this.#startPoint[1] - this.#movePoint[1]));
             this.#refDrawedObject.setAttribute("x", (this.#startPoint[0] < this.#movePoint[0] ? this.#startPoint[0] : this.#movePoint[0]))
             this.#refDrawedObject.setAttribute("y", (this.#startPoint[1] < this.#movePoint[1] ? this.#startPoint[1] : this.#movePoint[1]))
-            this.#ref.svg.appendChild(this.#refDrawedObject);
+            this.#ref.svgLayer.appendChild(this.#refDrawedObject);
         } else {
             if (this.#refDrawedObject != null) {
                 this.#refDrawedObject.parentNode.removeChild(this.#refDrawedObject);
@@ -62,10 +62,10 @@ class PencilTool {
     #prevPos = [-1, -1];
     #ref = {}
 
-    constructor(edytor, mouseLayer, svg, pixelLayer) {
+    constructor(edytor, mouseLayer, svgLayer, pixelLayer) {
         this.#ref.edytor = edytor;
         this.#ref.mouseLayer = mouseLayer;
-        this.#ref.svg = svg;
+        this.#ref.svgLayer = svgLayer;
         this.#ref.pixelLayer = pixelLayer;
         this.#ref.pixelLayerCtx = this.#ref.pixelLayer.getContext('2d');
     }
@@ -109,27 +109,27 @@ class PencilTool {
 class Edytor {
     #id = {
         container: "edytor",
-        gridContainer: "grid_container",
-        grid: "grid",
+        gridLayerContainer: "grid_layer_container",
+        gridLayer: "grid_layer",
         mouseLayerContainer: "mouse_layer_container",
         mouseLayer: "mouse_layer",
         pixelLayerContainer: "pixel_layer_container",
         pixelLayer: "pixel_layer",
-        svgContainer: "svg_container",
-        svg: "svg",
+        svgLayerContainer: "svg_layer_container",
+        svgLayer: "svg_layer",
         sidebarLeft: "sidebar_left",
         sidebarRight: "sidebar_right"
     }
     #ref = {
         container: null,
-        gridContainer: null,
-        grid: null,
+        gridLayerContainer: null,
+        gridLayer: null,
         mouseLayerContainer: null,
         mouseLayer: null,
         pixelLayerContainer: null,
         pixelLayer: null,
-        svgContainer: null,
-        svg: null,
+        svgLayerContainer: null,
+        svgLayer: null,
         sidebarLeft: null,
         sidebarRight: null
     }
@@ -170,8 +170,8 @@ class Edytor {
             alert("div with id='edytor' not found");
             return;
         }
-        this.#initGrid();
-        this.#initSVG();
+        this.#initGridLayer();
+        this.#initSVGLayer();
         this.#initMouseLayer();
         this.#initPixelLayer();
         this.#initSidebars();
@@ -268,26 +268,27 @@ class Edytor {
         this.#ref.container.appendChild(this.#ref[ref]);
     }
 
-    #initGrid() {
-        this.#ref.gridContainer = document.createElement('div');
-        this.#ref.gridContainer.id = this.#id.gridContainer;
-        this.#ref.container.appendChild(this.#ref.gridContainer);
+    #initGridLayer() {
+        this.#ref.gridLayerContainer = document.createElement('div');
+        this.#ref.gridLayerContainer.id = this.#id.gridLayerContainer;
+        this.#ref.gridLayerContainer.className = "layer_container";
+        this.#ref.container.appendChild(this.#ref.gridLayerContainer);
 
-        this.#ref.grid = document.createElement('canvas');
-        this.#ref.grid.id = this.#id.grid;
-        this.#ref.gridContainer.appendChild(this.#ref.grid);
-        this.ResizeCanvasLayerToWindow(this.#ref.grid, this.#ref.gridContainer, '');
+        this.#ref.gridLayer = document.createElement('canvas');
+        this.#ref.gridLayer.id = this.#id.gridLayer;
+        this.#ref.gridLayerContainer.appendChild(this.#ref.gridLayer);
+        this.ResizeCanvasLayerToWindow(this.#ref.gridLayer, this.#ref.gridLayerContainer, '');
         this.InitGridGrid();
     }
 
     InitGridGrid() {
-        var ctx = this.#ref.grid.getContext("2d");
+        var ctx = this.#ref.gridLayer.getContext("2d");
         ctx.fillStyle = this.#layoutColors.gridBackground;
-        ctx.fillRect(0, 0, this.#ref.grid.width, this.#ref.grid.height);
+        ctx.fillRect(0, 0, this.#ref.gridLayer.width, this.#ref.gridLayer.height);
         ctx.lineWidth = 1;
         ctx.strokeStyle = this.#layoutColors.gridStroke2;
 
-        for (var i=0; i<=this.#ref.grid.width/10; i++) {
+        for (var i=0; i<=this.#ref.gridLayer.width/10; i++) {
             var j = i*10;
             ctx.beginPath();
             if (j % 100 == 0) {
@@ -298,11 +299,11 @@ class Edytor {
                 ctx.strokeStyle = this.#layoutColors.gridStroke3;
             }
             ctx.moveTo(j, 0);
-            ctx.lineTo(j, this.#ref.grid.height);
+            ctx.lineTo(j, this.#ref.gridLayer.height);
             ctx.stroke();
             ctx.closePath();
         }
-        for (var i=0; i<=this.#ref.grid.height/10; i++) {
+        for (var i=0; i<=this.#ref.gridLayer.height/10; i++) {
             var j = i*10;
             ctx.beginPath();
             if (j % 100 == 0) {
@@ -313,26 +314,28 @@ class Edytor {
                 ctx.strokeStyle = this.#layoutColors.gridStroke3;
             }
             ctx.moveTo(0, j);
-            ctx.lineTo(this.#ref.grid.width, j);
+            ctx.lineTo(this.#ref.gridLayer.width, j);
             ctx.stroke();
             ctx.closePath();
         }
     }
 
-    #initSVG() {
-        this.#ref.svgContainer = document.createElement('div');
-        this.#ref.svgContainer.id = this.#id.svgContainer;
-        this.#ref.container.appendChild(this.#ref.svgContainer);
-        this.#ref.svg = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
-        this.#ref.svg.setAttribute('width', '100%');
-        this.#ref.svg.setAttribute('height', '100%');
-        this.#ref.svgContainer.appendChild(this.#ref.svg);
-        this.ResizeSVGToWindow();
+    #initSVGLayer() {
+        this.#ref.svgLayerContainer = document.createElement('div');
+        this.#ref.svgLayerContainer.id = this.#id.svgLayerContainer;
+        this.#ref.svgLayerContainer.className = "layer_container";
+        this.#ref.container.appendChild(this.#ref.svgLayerContainer);
+        this.#ref.svgLayer = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
+        this.#ref.svgLayer.setAttribute('width', '100%');
+        this.#ref.svgLayer.setAttribute('height', '100%');
+        this.#ref.svgLayerContainer.appendChild(this.#ref.svgLayer);
+        this.ResizeSVGLayerToWindow();
     }
 
     #initMouseLayer() {
         this.#ref.mouseLayerContainer = document.createElement('div');
         this.#ref.mouseLayerContainer.id = this.#id.mouseLayerContainer;
+        this.#ref.mouseLayerContainer.className = "layer_container";
         this.#ref.container.appendChild(this.#ref.mouseLayerContainer);
 
         this.#ref.mouseLayer = document.createElement('canvas');
@@ -363,6 +366,7 @@ class Edytor {
     #initPixelLayer() {
         this.#ref.pixelLayerContainer = document.createElement('div');
         this.#ref.pixelLayerContainer.id = this.#id.pixelLayerContainer;
+        this.#ref.pixelLayerContainer.className = "layer_container";
         this.#ref.container.appendChild(this.#ref.pixelLayerContainer);
 
         this.#ref.pixelLayer = document.createElement('canvas');
@@ -380,8 +384,8 @@ class Edytor {
 
     #initToolObjects() {
         this.#tools = {
-            'rectangle': new RectangleTool(this, this.#ref.mouseLayer, this.#ref.svg, this.#ref.pixelLayer),
-            'pencil': new PencilTool(this, this.#ref.mouseLayer, this.#ref.svg, this.#ref.pixelLayer)
+            'rectangle': new RectangleTool(this, this.#ref.mouseLayer, this.#ref.svgLayer, this.#ref.pixelLayer),
+            'pencil': new PencilTool(this, this.#ref.mouseLayer, this.#ref.svgLayer, this.#ref.pixelLayer)
         }
     }
 
@@ -583,11 +587,11 @@ class Edytor {
         }
     }
 
-    ResizeSVGToWindow() {
+    ResizeSVGLayerToWindow() {
         var w = window.innerWidth;
         var h = window.innerHeight;
-        this.#ref.svgContainer.style.width = w*2 + 'px';
-        this.#ref.svgContainer.style.height = h*2 + 'px';
+        this.#ref.svgLayerContainer.style.width = w*2 + 'px';
+        this.#ref.svgLayerContainer.style.height = h*2 + 'px';
     }
 }
 
