@@ -2,6 +2,7 @@ class RectangleTool {
     name = "Rectangle"
     icon = "rec"
     mouseLayer = true
+    multiClick = false
     #startPoint = [0,0];
     #movePoint = [0,0];
     #endPoint = [0,0];
@@ -53,10 +54,67 @@ class RectangleTool {
     }
 }
 
+class PolygonTool {
+    name = "Polygon"
+    icon = "pgon"
+    mouseLayer = true
+    multiClick = true
+    #points = [];
+    #refDrawedObject = null;
+    #ref = {};
+
+    constructor(edytor, mouseLayer, svgLayer, pixelLayer) {
+        this.#ref.edytor = edytor;
+        this.#ref.mouseLayer = mouseLayer;
+        this.#ref.svgLayer = svgLayer;
+        this.#ref.pixelLayer = pixelLayer;
+    }
+
+    DrawStart(x,y) {
+    }
+    DrawPoint(x,y) {
+        this.#points.push([x,y]);
+        if (this.#points.length == 2) {
+            if (this.#refDrawedObject == null) {
+                this.#refDrawedObject = document.createElementNS("http://www.w3.org/2000/svg", 'polygon');
+                this.#refDrawedObject.setAttribute("fill", this.#ref.edytor.GetColorFg());
+                this.#refDrawedObject.setAttribute("fill-opacity", this.#ref.edytor.GetFillOpacity());
+                this.#refDrawedObject.setAttribute("fill-rule", this.#ref.edytor.GetFillRule());
+                this.#refDrawedObject.setAttribute("stroke", this.#ref.edytor.GetColorBg());
+                this.#refDrawedObject.setAttribute("stroke-width", this.#ref.edytor.GetStrokeWidth());
+                this.#refDrawedObject.setAttribute("stroke-opacity", this.#ref.edytor.GetStrokeOpacity());
+                this.#refDrawedObject.setAttribute("stroke-linecap", this.#ref.edytor.GetStrokeLinecap());
+                this.#refDrawedObject.setAttribute("stroke-linejoin", this.#ref.edytor.GetStrokeLinejoin());
+                this.#refDrawedObject.setAttribute("stroke-dasharray", this.#ref.edytor.GetStrokeDasharray());
+            }
+            this.#refDrawedObject.setAttribute("points", this.#points[0][0]+" "+this.#points[0][1]+" "+this.#points[1][0]+" "+this.#points[1][1]);
+            this.#ref.svgLayer.appendChild(this.#refDrawedObject);
+        }
+        if (this.#points.length > 2 && (this.#points[this.#points.length-1] != x && this.#points[this.#points.length-1] != y)) {
+            this.#refDrawedObject.setAttribute("points", this.#refDrawedObject.getAttribute("points")+" "+x+" "+y);
+        }
+    }
+    DrawMove(x,y) {
+    }
+    DrawEnd(x,y) {
+        if (this.#points[this.#points.length-1][0] == this.#points[this.#points.length-2][0] && this.#points[this.#points.length-1][1] == this.#points[this.#points.length-2][1]) {
+            this.#points.pop();
+        }
+        console.log('end: '+x+' '+y);
+        console.log(this.#points);
+        this.#points = [];
+        this.#refDrawedObject = null;
+    }
+    DrawCancel() {
+        //this.#refDrawedObject.parentNode.removeChild(this.#refDrawedObject);
+    }
+}
+
 class PencilTool {
     name = "Pencil"
     icon = "pen"
     mouseLayer = true
+    multiClick = false
     #topLeft = [0, 0];
     #bottomRight = [0, 0];
     #prevPos = [-1, -1];
@@ -346,20 +404,36 @@ class Edytor {
         var scope = this;
         this.#ref.mouseLayer.addEventListener('mousedown', function(e) {
             scope.#mouseDown = true;
-            scope.#tools[scope.#tool].DrawStart(e.layerX, e.layerY);
+            var multiClick = scope.#tools[scope.#tool].multiClick;
+            if (!multiClick) {
+                scope.#tools[scope.#tool].DrawStart(e.layerX, e.layerY);
+            }
         });
         this.#ref.mouseLayer.addEventListener('mousemove', function(e) {
-            if (scope.#mouseDown) {
+            var multiClick = scope.#tools[scope.#tool].multiClick;
+            if ((scope.#mouseDown && !multiClick) || multiClick) {
                 scope.#tools[scope.#tool].DrawMove(e.layerX, e.layerY);
             }
         });
         this.#ref.mouseLayer.addEventListener('mouseup', function(e) {
             scope.#mouseDown = false;
-            scope.#tools[scope.#tool].DrawEnd(e.layerX, e.layerY);
+            var multiClick = scope.#tools[scope.#tool].multiClick;
+            if (!multiClick) {
+                scope.#tools[scope.#tool].DrawEnd(e.layerX, e.layerY);
+            } else {
+                scope.#tools[scope.#tool].DrawPoint(e.layerX, e.layerY);
+            }
         });
         this.#ref.mouseLayer.addEventListener('mouseout', function(e) {
             scope.#mouseDown = false;
             scope.#tools[scope.#tool].DrawCancel();
+        });
+        this.#ref.mouseLayer.addEventListener('dblclick', function(e) {
+            scope.#mouseDown = false;
+            var multiClick = scope.#tools[scope.#tool].multiClick;
+            if (multiClick) {
+                scope.#tools[scope.#tool].DrawEnd(e.layerX, e.layerY);
+            }
         });
     }
 
@@ -385,7 +459,8 @@ class Edytor {
     #initToolObjects() {
         this.#tools = {
             'rectangle': new RectangleTool(this, this.#ref.mouseLayer, this.#ref.svgLayer, this.#ref.pixelLayer),
-            'pencil': new PencilTool(this, this.#ref.mouseLayer, this.#ref.svgLayer, this.#ref.pixelLayer)
+            'pencil': new PencilTool(this, this.#ref.mouseLayer, this.#ref.svgLayer, this.#ref.pixelLayer),
+            'polygon': new PolygonTool(this, this.#ref.mouseLayer, this.#ref.svgLayer, this.#ref.pixelLayer)
         }
     }
 
