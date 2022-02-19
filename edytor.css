@@ -10,7 +10,7 @@ body {
     position: relative;
 }
 
-.layer_container {
+#layer_container {
     padding: 0;
     margin: 0;
     position: absolute;
@@ -18,17 +18,25 @@ body {
     left: 0;
 }
 
-#grid_layer_container {
-    z-index: 10;
+.layer {
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
-#svg_layer_container {
-    z-index: 20;
+
+#grid_layer {
+    z-index: 100;
 }
-#pixel_layer_container {
-    z-index: 30;
+#vector_layer {
+    z-index: 210;
 }
-#mouse_layer_container {
-    z-index: 40;
+#pixel_layer {
+    z-index: 220;
+}
+#pad_layer {
+    z-index: 400;
 }
 
 #sidebar_left {
@@ -39,7 +47,7 @@ body {
     top: 0;
     width: 80px;
     background: #444444;
-    z-index: 110;
+    z-index: 510;
 }
 #sidebar_right {
     right: 0;
@@ -49,7 +57,7 @@ body {
     top: 0;
     width: 180px;
     background: #3d3d3d;
-    z-index: 120;
+    z-index: 520;
 }
 
 .sidebar_title {
