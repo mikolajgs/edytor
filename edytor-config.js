@@ -7,7 +7,8 @@ class Config {
         pixel: "pixel_layer",
         vector: "vector_layer",
         sidebarLeft: "sidebar_left",
-        sidebarRight: "sidebar_right"
+        sidebarRight: "sidebar_right",
+        layerList: "layer_list"
     }
     #colors = {
         "black": "black",

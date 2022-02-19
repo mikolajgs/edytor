@@ -3,7 +3,8 @@ class Layout {
         container: "",
         layerContainer: "",
         sidebarLeft: "",
-        sidebarRight: ""
+        sidebarRight: "",
+        layerList: ""
     }
 
     #ref = {
@@ -225,11 +226,84 @@ class Layout {
         }
     }
 
-    constructor(idContainer, idLayerContainer, idSidebarLeft, idSidebarRight) {
+    #initLayers() {
+        this.#addSidebarTitle('sidebarRight', "Layers");
+
+        var l = document.createElement('div');
+        l.id = this.#id.layerList;
+
+        var p = document.createElement('div');
+        p.className = "property";
+
+        var b = document.createElement('input');
+        b.type = "checkbox";
+        p.appendChild(b);
+
+        var inp = document.createElement('input');
+        inp.type = "text";
+        inp.value = "Layer 1";
+        inp.className = "layer_name";
+        p.appendChild(inp);
+
+        var b = document.createElement('button');
+        b.className = "toggle_off";
+        b.innerHTML = "L";
+        p.appendChild(b);
+        var b = document.createElement('button');
+        b.className = "toggle_on";
+        b.innerHTML = "H";
+        p.appendChild(b);
+        var b = document.createElement('button');
+        b.className = "toggle_on";
+        b.innerHTML = "U";
+        p.appendChild(b);
+        var b = document.createElement('button');
+        b.className = "toggle_off";
+        b.innerHTML = "D";
+        p.appendChild(b);
+
+        l.appendChild(p);
+
+
+        this.#ref.sidebarRight.appendChild(l);
+
+
+        var p = document.createElement('div');
+        p.className = "property";
+        var b = document.createElement('button');
+        b.innerHTML = "Add";
+        b.className = "action";
+        p.appendChild(b);
+        var b = document.createElement('button');
+        b.innerHTML = "Lock";
+        b.className = "action";
+        p.appendChild(b);
+        var b = document.createElement('button');
+        b.innerHTML = "Unlock";
+        b.className = "action";
+        p.appendChild(b);
+        var b = document.createElement('button');
+        b.innerHTML = "Show";
+        b.className = "action";
+        p.appendChild(b);
+        var b = document.createElement('button');
+        b.innerHTML = "Hide";
+        b.className = "action";
+        p.appendChild(b);
+        var b = document.createElement('button');
+        b.innerHTML = "Del";
+        b.className = "action";
+        p.appendChild(b);
+
+        this.#ref.sidebarRight.appendChild(p);
+    }
+
+    constructor(idContainer, idLayerContainer, idSidebarLeft, idSidebarRight, idLayerList) {
         this.#id.container = idContainer;
         this.#id.layerContainer = idLayerContainer;
         this.#id.sidebarLeft = idSidebarLeft;
         this.#id.sidebarRight = idSidebarRight;
+        this.#id.layerList = idLayerList;
 
         this.#ref.container = document.getElementById(this.#id.container);
         if (this.#ref.container == null) {
@@ -250,6 +324,7 @@ class Layout {
         this.#initColors();
         this.#initStroke();
         this.#initFill();
+        this.#initLayers();
         this.#initProperties();
     }
 }

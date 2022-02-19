@@ -133,6 +133,64 @@ body {
     background-image: linear-gradient(#191919, #2d2d2d);
     border: 0;
 }
+.property button.action {
+    font-size: 8px;
+    font-family: arial;
+    color: #cccccc;
+    background-image: linear-gradient(#2d2d2d, #191919);
+    border: solid 1px #555555;
+    margin-right: 2px;
+    cursor: pointer;
+}
+.property button.action:hover {
+    background-image: linear-gradient(#dddddd, #777777);
+    color: #333333;
+}
+
+.property input.layer_name {
+    flex: 30px;
+    width: 30px;
+    font-size: 10px;
+    font-family: arial;
+    color: #cccccc;
+    background-image: linear-gradient(#191919, #2d2d2d);
+    border: 0;
+}
+
+.property button.toggle_off {
+    font-size: 8px;
+    font-family: arial;
+    color: #cccccc;
+    background-image: linear-gradient(#2d2d2d, #191919);
+    border: solid 1px #555555;
+    margin-right: 2px;
+    cursor: pointer;
+}
+.property button.toggle_off:hover {
+    background-image: linear-gradient(#2d2d2d, #191919);
+    color: #cccccc;
+    border: solid 1px #eeeeee;
+}
+
+.property button.toggle_on {
+    font-size: 8px;
+    font-family: arial;
+    color: #333333;
+    background-image: linear-gradient(#dddddd, #777777);
+    border: solid 1px #555555;
+    margin-right: 2px;
+    cursor: pointer;
+}
+.property button.toggle_on:hover {
+    background-image: linear-gradient(#dddddd, #777777);
+    color: #333333;
+    border: solid 1px #eeeeee;
+}
+
+#layer_list {
+    padding: 0;
+    margin: 0;
+}
 
 .tool_property {
     font-size: 10px;
