@@ -27,6 +27,9 @@ class VectorLayer {
 
     SetZIndex(v) {
         this.#zIndex = v;
+        if (this.#ref.vector != null) {
+            this.#ref.vector.style.zIndex = this.#zIndex;
+        }
     }
 
     Init() {
@@ -35,6 +38,12 @@ class VectorLayer {
         this.#ref.vector.setAttribute('width', '100%');
         this.#ref.vector.setAttribute('height', '100%');
         this.#ref.vector.classList.add('layer');
+        this.#ref.vector.style.margin = 0;
+        this.#ref.vector.style.padding = 0;
+        this.#ref.vector.style.position = "absolute";
+        this.#ref.vector.style.top = 0;
+        this.#ref.vector.style.left = 0;
+        this.#ref.vector.style.zIndex = this.#zIndex;
         this.#ref.container.appendChild(this.#ref.vector);
     }
 

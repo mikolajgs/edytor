@@ -62,10 +62,16 @@ class Pad {
         });
     }
 
-    Init(getToolFn) {
+    Init(zIndex, getToolFn) {
         this.#ref.pad = document.createElement('canvas');
         this.#ref.pad.id = this.#id.pad;
         this.#ref.pad.classList.add('layer');
+        this.#ref.pad.style.margin = 0;
+        this.#ref.pad.style.padding = 0;
+        this.#ref.pad.style.position = "absolute";
+        this.#ref.pad.style.top = 0;
+        this.#ref.pad.style.left = 0;
+        this.#ref.pad.style.zIndex = zIndex;
         this.#ref.container.appendChild(this.#ref.pad);
         this.#resizeToWindow();
 

@@ -14,10 +14,16 @@ class Grid {
         }
     }
 
-    Init() {
+    Init(zIndex) {
         this.#ref.grid = document.createElement('canvas');
         this.#ref.grid.id = this.#id.grid;
         this.#ref.grid.classList.add('layer');
+        this.#ref.grid.style.margin = 0;
+        this.#ref.grid.style.padding = 0;
+        this.#ref.grid.style.position = "absolute";
+        this.#ref.grid.style.top = 0;
+        this.#ref.grid.style.left = 0;
+        this.#ref.grid.style.zIndex = zIndex;
         this.#ref.container.appendChild(this.#ref.grid);
         this.#resizeToWindow();
         this.#draw();

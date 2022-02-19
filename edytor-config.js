@@ -28,11 +28,19 @@ class Config {
         "teal": "teal",
         "aqua": "aqua"
     }
+    #zIndexes = {
+        grid: 101,
+        pad: 401,
+        layerStart: 201
+    }
 
     GetColors() {
         return this.#colors;
     }
     GetID(s) {
         return this.#id[s];
+    }
+    GetZIndex(s) {
+        return this.#zIndexes[s];
     }
 }

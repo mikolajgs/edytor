@@ -1,42 +1,5 @@
 body {
     background-color: #262626;
-    margin:0;
-    padding:0;
-}
-
-#edytor {
-    padding: 0;
-    margin: 0;
-    position: relative;
-}
-
-#layer_container {
-    padding: 0;
-    margin: 0;
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
-.layer {
-    padding: 0;
-    margin: 0;
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
-#grid_layer {
-    z-index: 100;
-}
-#vector_layer {
-    z-index: 210;
-}
-#pixel_layer {
-    z-index: 220;
-}
-#pad_layer {
-    z-index: 400;
 }
 
 #sidebar_left {
@@ -126,6 +89,11 @@ body {
 .property label {
     flex: 50px;
 }
+.property label.type {
+    flex: 20px;
+    font-size: 8px;
+    width: 20px;
+}
 .property input {
     font-size: 10px;
     font-family: arial;
@@ -148,8 +116,8 @@ body {
 }
 
 .property input.layer_name {
-    flex: 30px;
-    width: 30px;
+    flex: 60px;
+    width: 60px;
     font-size: 10px;
     font-family: arial;
     color: #cccccc;

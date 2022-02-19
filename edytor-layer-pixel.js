@@ -34,12 +34,21 @@ class PixelLayer {
 
     SetZIndex(v) {
         this.#zIndex = v;
+        if (this.#ref.pixel != null) {
+            this.#ref.pixel.style.zIndex = this.#zIndex;
+        }
     }
 
     Init() {
         this.#ref.pixel = document.createElement('canvas');
         this.#ref.pixel.id = this.#id.pixel;
         this.#ref.pixel.classList.add('layer');
+        this.#ref.pixel.style.margin = 0;
+        this.#ref.pixel.style.padding = 0;
+        this.#ref.pixel.style.position = "absolute";
+        this.#ref.pixel.style.top = 0;
+        this.#ref.pixel.style.left = 0;
+        this.#ref.pixel.style.zIndex = this.#zIndex;
         this.#ref.container.appendChild(this.#ref.pixel);
         this.#resizeToWindow();
     }

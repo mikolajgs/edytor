@@ -20,9 +20,28 @@ class Layout {
     #tools = [];
     #colors = {};
 
+    InitBody() {
+        // Just in case
+        document.body.style.margin = 0;
+        document.body.style.padding = 0;
+    }
+
+    InitContainer() {
+        // We don't want this in the CSS
+        this.#ref.container.style.margin = 0;
+        this.#ref.container.style.padding = 0;
+        this.#ref.container.style.position = "relative";
+    }
+
     InitLayerContainer() {
         this.#ref.layerContainer = document.createElement('div');
         this.#ref.layerContainer.id = this.#id.layerContainer;
+        // Again, we don't want the positioning to be in the CSS file
+        this.#ref.layerContainer.style.margin = 0;
+        this.#ref.layerContainer.style.padding = 0;
+        this.#ref.layerContainer.style.position = "absolute";
+        this.#ref.layerContainer.style.top = 0;
+        this.#ref.layerContainer.style.left = 0;
         this.#ref.container.appendChild(this.#ref.layerContainer);
         var w = window.innerWidth;
         var h = window.innerHeight;
@@ -229,44 +248,9 @@ class Layout {
     #initLayers() {
         this.#addSidebarTitle('sidebarRight', "Layers");
 
-        var l = document.createElement('div');
-        l.id = this.#id.layerList;
-
-        var p = document.createElement('div');
-        p.className = "property";
-
-        var b = document.createElement('input');
-        b.type = "checkbox";
-        p.appendChild(b);
-
-        var inp = document.createElement('input');
-        inp.type = "text";
-        inp.value = "Layer 1";
-        inp.className = "layer_name";
-        p.appendChild(inp);
-
-        var b = document.createElement('button');
-        b.className = "toggle_off";
-        b.innerHTML = "L";
-        p.appendChild(b);
-        var b = document.createElement('button');
-        b.className = "toggle_on";
-        b.innerHTML = "H";
-        p.appendChild(b);
-        var b = document.createElement('button');
-        b.className = "toggle_on";
-        b.innerHTML = "U";
-        p.appendChild(b);
-        var b = document.createElement('button');
-        b.className = "toggle_off";
-        b.innerHTML = "D";
-        p.appendChild(b);
-
-        l.appendChild(p);
-
-
-        this.#ref.sidebarRight.appendChild(l);
-
+        this.#ref.layerList = document.createElement('div');
+        this.#ref.layerList.id = this.#id.layerList;
+        this.#ref.sidebarRight.appendChild(this.#ref.layerList);
 
         var p = document.createElement('div');
         p.className = "property";
@@ -312,7 +296,7 @@ class Layout {
         }
     }
 
-    Init(getToolIconFn, setToolFn, tools, colors, setColorFn) {
+    InitToolsEtc(getToolIconFn, setToolFn, tools, colors, setColorFn) {
         this.#getToolIconFn = getToolIconFn;
         this.#setToolFn = setToolFn;
         this.#setColorFn = setColorFn;
@@ -326,5 +310,47 @@ class Layout {
         this.#initFill();
         this.#initLayers();
         this.#initProperties();
+
+        this.AddLayer('svg');
+        this.AddLayer('px');
+    }
+
+    AddLayer(t) {
+        var p = document.createElement('div');
+        p.className = "property";
+
+        var b = document.createElement('input');
+        b.type = "checkbox";
+        p.appendChild(b);
+
+        var typ = document.createElement('label');
+        typ.className = "type";
+        typ.innerHTML = t;
+        p.appendChild(typ);
+
+        var inp = document.createElement('input');
+        inp.type = "text";
+        inp.value = "Layer 1";
+        inp.className = "layer_name";
+        p.appendChild(inp);
+
+        var b = document.createElement('button');
+        b.className = "toggle_off";
+        b.innerHTML = "L";
+        p.appendChild(b);
+        var b = document.createElement('button');
+        b.className = "toggle_on";
+        b.innerHTML = "H";
+        p.appendChild(b);
+        var b = document.createElement('button');
+        b.className = "toggle_on";
+        b.innerHTML = "U";
+        p.appendChild(b);
+        var b = document.createElement('button');
+        b.className = "toggle_off";
+        b.innerHTML = "D";
+        p.appendChild(b);
+
+        this.#ref.layerList.appendChild(p);
     }
 }

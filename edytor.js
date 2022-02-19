@@ -22,22 +22,24 @@ class Edytor {
             return;
         }
         this.#layout = new Layout(this.#cfg.GetID('container'), this.#cfg.GetID('layerContainer'), this.#cfg.GetID('sidebarLeft'), this.#cfg.GetID('sidebarRight'), this.#cfg.GetID('layerList'));
+        this.#layout.InitBody();
+        this.#layout.InitContainer();
         this.#layout.InitLayerContainer();
 
         this.#grid = new Grid(this.#cfg.GetID('layerContainer'), this.#cfg.GetID('grid'));
-        this.#grid.Init();
+        this.#grid.Init(this.#cfg.GetZIndex('grid'));
 
         this.#pad = new Pad(this.#cfg.GetID('layerContainer'), this.#cfg.GetID('pad'));
         var scope = this;
-        this.#pad.Init(function() {
+        this.#pad.Init(this.#cfg.GetZIndex('pad'), function() {
             return scope.#tools[scope.#tool];
         });
 
-        this.AddVectorLayer();
-        this.AddPixelLayer();
+        this.AddVectorLayer(this.#cfg.GetZIndex('layerStart'));
+        this.AddPixelLayer(this.#cfg.GetZIndex('layerStart')+10);
 
         var toolNames = this.#initTools();
-        this.#layout.Init(function(n) {
+        this.#layout.InitToolsEtc(function(n) {
             return scope.#tools[n].GetIcon();
         }, function(n) {
             scope.SetTool(n);
@@ -46,15 +48,15 @@ class Edytor {
         });
     }
 
-    AddVectorLayer() {
+    AddVectorLayer(zIndex) {
         var l = new VectorLayer(this.#cfg.GetID('layerContainer'), this.#cfg.GetID('vector'));
-        l.SetZIndex(210);
+        l.SetZIndex(zIndex);
         l.Init();
         this.#layers.push(l);
     }
-    AddPixelLayer() {
+    AddPixelLayer(zIndex) {
         var l = new PixelLayer(this.#cfg.GetID('layerContainer'), this.#cfg.GetID('pixel'));
-        l.SetZIndex(220);
+        l.SetZIndex(zIndex);
         l.Init();
         this.#layers.push(l);
     }
