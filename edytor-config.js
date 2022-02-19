@@ -31,6 +31,8 @@ class Config {
     #zIndexes = {
         grid: 101,
         pad: 401,
+        sidebarLeft: 511,
+        sidebarRight: 521,
         layerStart: 201
     }
 

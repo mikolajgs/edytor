@@ -39,7 +39,7 @@ class Edytor {
         this.AddPixelLayer(this.#cfg.GetZIndex('layerStart')+10);
 
         var toolNames = this.#initTools();
-        this.#layout.InitToolsEtc(function(n) {
+        this.#layout.InitSidebars(this.#cfg.GetZIndex('sidebarLeft'), this.#cfg.GetZIndex('sidebarRight'), function(n) {
             return scope.#tools[n].GetIcon();
         }, function(n) {
             scope.SetTool(n);

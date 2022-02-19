@@ -2,25 +2,18 @@ body {
     background-color: #262626;
 }
 
-#sidebar_left {
-    left: 0;
+.sidebar_left {
     border-right: solid 1px #222222;
     box-shadow: 2px 0 3px 0 #222222;
     position: fixed;
-    top: 0;
     width: 80px;
     background: #444444;
-    z-index: 510;
 }
-#sidebar_right {
-    right: 0;
+.sidebar_right {
     border-left: solid 1px #222222;
     box-shadow: -2px 0 3px 0 #222222;
-    position: fixed;
-    top: 0;
     width: 180px;
     background: #3d3d3d;
-    z-index: 520;
 }
 
 .sidebar_title {

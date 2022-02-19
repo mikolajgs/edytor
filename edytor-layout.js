@@ -49,10 +49,18 @@ class Layout {
         this.#ref.layerContainer.style.height = (h*2) + 'px';
     }
 
-    #addDivToContainer(ref, className, id) {
+    #addSidebarDivToContainer(ref, className, id, zIndex, side) {
         this.#ref[ref] = document.createElement('div');
         this.#ref[ref].className = className;
         this.#ref[ref].id = id;
+        this.#ref[ref].style.zIndex = zIndex;
+        this.#ref[ref].style.position = "fixed";
+        this.#ref[ref].style.top = 0;
+        if (side == "right") {
+            this.#ref[ref].style.right = 0;
+        } else if (side == "left") {
+            this.#ref[ref].style.left = 0;
+        }
         this.#ref.container.appendChild(this.#ref[ref]);
     }
 
@@ -62,9 +70,9 @@ class Layout {
         this.#ref.sidebarRight.style.height = h + 'px';
     }
 
-    #initSidebars() {
-        this.#addDivToContainer('sidebarLeft', 'sidebar', this.#id.sidebarLeft);
-        this.#addDivToContainer('sidebarRight', 'sidebar', this.#id.sidebarRight);
+    #initSidebars(zIndexSidebarLeft, zIndexSidebarRight) {
+        this.#addSidebarDivToContainer('sidebarLeft', 'sidebar_left', this.#id.sidebarLeft, zIndexSidebarLeft, 'left');
+        this.#addSidebarDivToContainer('sidebarRight', 'sidebar_right', this.#id.sidebarRight, zIndexSidebarRight, 'right');
         this.#resizeSidebarsToWindow();
     }
 
@@ -296,13 +304,13 @@ class Layout {
         }
     }
 
-    InitToolsEtc(getToolIconFn, setToolFn, tools, colors, setColorFn) {
+    InitSidebars(zIndexSidebarLeft, zIndexSidebarRight, getToolIconFn, setToolFn, tools, colors, setColorFn) {
         this.#getToolIconFn = getToolIconFn;
         this.#setToolFn = setToolFn;
         this.#setColorFn = setColorFn;
         this.#tools = tools;
         this.#colors = colors;
-        this.#initSidebars();
+        this.#initSidebars(zIndexSidebarLeft, zIndexSidebarRight);
         this.#setScroll();
         this.#initTools();
         this.#initColors();
