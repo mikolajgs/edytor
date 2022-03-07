@@ -21,7 +21,7 @@ class Edytor {
             alert("div with id='"+this.#cfg.GetID('container')+"' not found");
             return;
         }
-        this.#layout = new Layout(this.#cfg.GetID('container'), this.#cfg.GetID('layerContainer'), this.#cfg.GetID('sidebarLeft'), this.#cfg.GetID('sidebarRight'), this.#cfg.GetID('layerList'));
+        this.#layout = new Layout(this.#cfg.GetID('container'), this.#cfg.GetID('layerContainer'), this.#cfg.GetID('sidebarLeft'), this.#cfg.GetID('sidebarRight'), this.#cfg.GetID('layerList'), this.#cfg.GetID('toolContainer'), this.#cfg.GetID('colorFgContainer'), this.#cfg.GetID('colorBgContainer'));
         this.#layout.InitBody();
         this.#layout.InitContainer();
         this.#layout.InitLayerContainer();

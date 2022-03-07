@@ -23,13 +23,31 @@ body {
     text-align: center;
     padding: 1px;
     background-image: linear-gradient(#444444, #333333);
-}
-
-.bevel {
     border-left: solid 1px #555555;
     border-top: solid 1px #555555;
     border-right: solid 1px #212121;
     border-bottom: solid 1px #212121;
+}
+
+.sidebar_container {
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar_container .toggle_off {
+    border-left: solid 1px #555555;
+    border-top: solid 1px #555555;
+    border-right: solid 1px #212121;
+    border-bottom: solid 1px #212121;
+}
+
+.sidebar_container .toggle_on {
+    border-right: solid 1px #777777;
+    border-bottom: solid 1px #777777;
+    border-top: solid 1px #222222;
+    border-left: solid 1px #222222;
+    border: solid 1px #eeeeee;
+    color: #ffffff;
 }
 
 .tool {
@@ -37,7 +55,6 @@ body {
     height: 34px;
     width: 34px;
     line-height: 34px;
-    float: left;
     text-align: center;
     vertical-align: middle;
     font-size: 10px;
@@ -52,7 +69,6 @@ body {
     height: 18px;
     width: 18px;
     line-height: 18px;
-    float: left;
     text-align: center;
     vertical-align: middle;
     font-size: 10px;
@@ -62,13 +78,6 @@ body {
     cursor: pointer;
 }
 
-.bevel_off {
-    border-right: solid 1px #777777;
-    border-bottom: solid 1px #777777;
-    border-top: solid 1px #222222;
-    border-left: solid 1px #222222;
-    color: #ffffff;
-}
 
 .property {
     font-size: 10px;

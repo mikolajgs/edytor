@@ -4,14 +4,20 @@ class Layout {
         layerContainer: "",
         sidebarLeft: "",
         sidebarRight: "",
-        layerList: ""
+        layerList: "",
+        toolContainer: "",
+        colorFgContainer: "",
+        colorBgContainer: ""
     }
 
     #ref = {
         container: null,
         layerContainer: null,
         sidebarLeft: null,
-        sidebarRight: null
+        sidebarRight: null,
+        toolContainer: null,
+        colorFgContainer: null,
+        colorBgContainer: null
     }
 
     #getToolIconFn = null;
@@ -84,40 +90,70 @@ class Layout {
 
     #addSidebarTitle(ref, t) {
         var d = document.createElement('div');
-        d.className = "sidebar_title bevel";
+        d.className = "sidebar_title";
         d.innerHTML = t;
         this.#ref[ref].appendChild(d);
     }
 
-    #addSidebarLeftTool(n) {
+    #addSidebarContainer(ref, n) {
+        this.#ref[n] = document.createElement('div');
+        this.#ref[n].className = "sidebar_container";
+        this.#ref[n].style.display = "flex";
+        this.#ref[n].style.flexFlow = "row wrap";
+        this.#ref[n].id = this.#id[n];
+        this.#ref[ref].appendChild(this.#ref[n]);
+    }
+
+    #addSidebarToggle(ref, n, id, className, innerHtml, additionalFn, clickFn, addX) {
         var t = document.createElement('div');
-        t.className = "bevel tool";
-        t.innerHTML = this.#getToolIconFn(n);
-        t.id = "tool_"+n;
+        t.className = "toggle_off sidebar_toggle "+className;
+        t.innerHTML = innerHtml;
+        t.id = id;
+
+        if (additionalFn != null) {
+            additionalFn(t);
+        }
 
         var scope = this;
         t.addEventListener('click', function() {
-            scope.#setToolFn(n);
+            clickFn(n);
 
-            var o = document.getElementById("tool_"+n);
-            o.classList.remove("bevel");
-            o.classList.add("bevel_off");
-            for (var i=0; i<scope.#tools.length; i++) {
-                if (scope.#tools[i] == n) {
-                    continue;
+            var tools = scope.#ref[ref].querySelectorAll('.'+className);
+            for (var i=0; i<tools.length; i++) {
+                tools[i].classList.remove('toggle_on');
+                tools[i].classList.add('toggle_off');
+                if (addX) {
+                    tools[i].innerHTML = '';
                 }
-                var o = document.getElementById("tool_"+scope.#tools[i]);
-                o.classList.remove("bevel_off")
-                o.classList.add("bevel");
             }
 
+            this.classList.remove('toggle_off');
+            this.classList.add('toggle_on');
+            if (addX) {
+                this.innerHTML = 'X';
+            }
         });
-        this.#ref.sidebarLeft.appendChild(t);
+
+        this.#ref[ref].appendChild(t);
     }
 
-    #addSidebarLeftColor(fgbg, n) {
+    #addSidebarLeftTool(ref, n) {
+        var scope = this;
+        this.#addSidebarToggle(ref, n, 'tool_'+n, 'tool', this.#getToolIconFn(n), null, function(nm) {
+            scope.#setToolFn(nm);
+        }, false);
+    }
+
+    #addSidebarLeftColor(ref, fgbg, n) {
+        var scope = this;
+        this.#addSidebarToggle(ref, n, 'color_'+fgbg+'_'+n, 'color', '', function(o) {
+            o.style.background = scope.#colors[n];
+        }, function(nm) {
+            scope.#setColorFn(fgbg, nm);
+        }, true);
+/*
         var t = document.createElement('div');
-        t.className = "bevel color";
+        t.className = "toggle_off color";
         t.innerHTML = "&nbsp;";
         t.id = "color"+fgbg+"_"+n;
         t.style.background = this.#colors[n];
@@ -127,20 +163,20 @@ class Layout {
             scope.#setColorFn(fgbg, n);
 
             var o = document.getElementById("color"+fgbg+"_"+n);
-            o.classList.remove("bevel");
-            o.classList.add("bevel_off");
+            o.classList.remove("toggle_off");
+            o.classList.add("toggle_on");
             o.innerHTML = 'X';
             for (const key in scope.#colors) {
                 if (key == n) {
                     continue;
                 }
                 var o = document.getElementById("color"+fgbg+"_"+key);
-                o.classList.remove("bevel_off");
-                o.classList.add("bevel");
+                o.classList.remove("toggle_on");
+                o.classList.add("toggle_off");
                 o.innerHTML = '&nbsp;';
             }
         });
-        this.#ref.sidebarLeft.appendChild(t);
+        this.#ref.sidebarLeft.appendChild(t);*/
     }
 
     #addSidebarLeftInputText(id, label, defval) {
@@ -181,38 +217,32 @@ class Layout {
         this.#ref.sidebarLeft.appendChild(p);
     }
 
-    #addClearBoth(p) {
-        var c = document.createElement('div');
-        c.className = "clear";
-        p.appendChild(c);
-    }
-
     #initTools() {
         this.#addSidebarTitle('sidebarLeft',"Tools");
+        this.#addSidebarContainer('sidebarLeft', 'toolContainer');
         for (var i=0; i<this.#tools.length; i++) {
-            this.#addSidebarLeftTool(this.#tools[i]);
+            this.#addSidebarLeftTool('toolContainer', this.#tools[i]);
         }
-        this.#addClearBoth(this.#ref.sidebarLeft);
     }
 
     #initColors() {
         this.#addSidebarTitle('sidebarLeft',"Fg Color");
+        this.#addSidebarContainer('sidebarLeft', 'colorFgContainer');
         var i = 0;
         var firstColor = "";
         for (const key in this.#colors) {
             if (i == 0) {
                 firstColor = key;
             }
-            this.#addSidebarLeftColor("fg", key);
+            this.#addSidebarLeftColor('colorFgContainer', "fg", key);
             i++;
         }
-        this.#addClearBoth(this.#ref.sidebarLeft);
 
         this.#addSidebarTitle('sidebarLeft',"Bg Color");
+        this.#addSidebarContainer('sidebarLeft', 'colorBgContainer');
         for (const key in this.#colors) {
-            this.#addSidebarLeftColor("bg", key);
+            this.#addSidebarLeftColor('colorBgContainer', "bg", key);
         }
-        this.#addClearBoth(this.#ref.sidebarLeft);
 
         this.#setColorFn("fg", firstColor);
         this.#setColorFn("bg", firstColor);
@@ -290,12 +320,15 @@ class Layout {
         this.#ref.sidebarRight.appendChild(p);
     }
 
-    constructor(idContainer, idLayerContainer, idSidebarLeft, idSidebarRight, idLayerList) {
+    constructor(idContainer, idLayerContainer, idSidebarLeft, idSidebarRight, idLayerList, idToolContainer, idColorFgContainer, idColorBgContainer) {
         this.#id.container = idContainer;
         this.#id.layerContainer = idLayerContainer;
         this.#id.sidebarLeft = idSidebarLeft;
         this.#id.sidebarRight = idSidebarRight;
         this.#id.layerList = idLayerList;
+        this.#id.toolContainer = idToolContainer;
+        this.#id.colorFgContainer = idColorFgContainer;
+        this.#id.colorBgContainer = idColorBgContainer;
 
         this.#ref.container = document.getElementById(this.#id.container);
         if (this.#ref.container == null) {

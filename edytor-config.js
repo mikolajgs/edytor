@@ -8,7 +8,10 @@ class Config {
         vector: "vector_layer",
         sidebarLeft: "sidebar_left",
         sidebarRight: "sidebar_right",
-        layerList: "layer_list"
+        layerList: "layer_list",
+        toolContainer: "tool_container",
+        colorFgContainer: "colorfg_container",
+        colorBgContainer: "colorbg_container"
     }
     #colors = {
         "black": "black",
