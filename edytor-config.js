@@ -11,7 +11,9 @@ class Config {
         layerList: "layer_list",
         toolContainer: "tool_container",
         colorFgContainer: "colorfg_container",
-        colorBgContainer: "colorbg_container"
+        colorBgContainer: "colorbg_container",
+        strokeContainer: "stroke_container",
+        fillContainer: "fill_container"
     }
     #colors = {
         "black": "black",

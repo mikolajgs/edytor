@@ -1,15 +1,4 @@
 class Layout {
-    #id = {
-        container: "",
-        layerContainer: "",
-        sidebarLeft: "",
-        sidebarRight: "",
-        layerList: "",
-        toolContainer: "",
-        colorFgContainer: "",
-        colorBgContainer: ""
-    }
-
     #ref = {
         container: null,
         layerContainer: null,
@@ -17,12 +6,15 @@ class Layout {
         sidebarRight: null,
         toolContainer: null,
         colorFgContainer: null,
-        colorBgContainer: null
+        colorBgContainer: null,
+        strokeContainer: null,
+        fillContainer: null
     }
 
     #getToolIconFn = null;
     #setToolFn = null;
     #setColorFn = null;
+    #getIDFn = null;
     #tools = [];
     #colors = {};
 
@@ -41,7 +33,7 @@ class Layout {
 
     InitLayerContainer() {
         this.#ref.layerContainer = document.createElement('div');
-        this.#ref.layerContainer.id = this.#id.layerContainer;
+        this.#ref.layerContainer.id = this.#getIDFn('layerContainer');
         // Again, we don't want the positioning to be in the CSS file
         this.#ref.layerContainer.style.margin = 0;
         this.#ref.layerContainer.style.padding = 0;
@@ -77,8 +69,8 @@ class Layout {
     }
 
     #initSidebars(zIndexSidebarLeft, zIndexSidebarRight) {
-        this.#addSidebarDivToContainer('sidebarLeft', 'sidebar_left', this.#id.sidebarLeft, zIndexSidebarLeft, 'left');
-        this.#addSidebarDivToContainer('sidebarRight', 'sidebar_right', this.#id.sidebarRight, zIndexSidebarRight, 'right');
+        this.#addSidebarDivToContainer('sidebarLeft', 'sidebar_left', this.#getIDFn('sidebarLeft'), zIndexSidebarLeft, 'left');
+        this.#addSidebarDivToContainer('sidebarRight', 'sidebar_right', this.#getIDFn('sidebarRight'), zIndexSidebarRight, 'right');
         this.#resizeSidebarsToWindow();
     }
 
@@ -100,7 +92,7 @@ class Layout {
         this.#ref[n].className = "sidebar_container";
         this.#ref[n].style.display = "flex";
         this.#ref[n].style.flexFlow = "row wrap";
-        this.#ref[n].id = this.#id[n];
+        this.#ref[n].id = this.#getIDFn(n);
         this.#ref[ref].appendChild(this.#ref[n]);
     }
 
@@ -151,70 +143,33 @@ class Layout {
         }, function(nm) {
             scope.#setColorFn(fgbg, nm);
         }, true);
-/*
-        var t = document.createElement('div');
-        t.className = "toggle_off color";
-        t.innerHTML = "&nbsp;";
-        t.id = "color"+fgbg+"_"+n;
-        t.style.background = this.#colors[n];
+    }
 
-        var scope = this;
-        t.addEventListener('click', function() {
-            scope.#setColorFn(fgbg, n);
+    #addSidebarProperty(ref, label, id, className, defval, vals) {
+        var d = document.createElement('div');
+        d.className = "sidebar_property "+className;
+        var l = document.createElement('label');
+        l.innerHTML = label;
 
-            var o = document.getElementById("color"+fgbg+"_"+n);
-            o.classList.remove("toggle_off");
-            o.classList.add("toggle_on");
-            o.innerHTML = 'X';
-            for (const key in scope.#colors) {
-                if (key == n) {
-                    continue;
-                }
-                var o = document.getElementById("color"+fgbg+"_"+key);
-                o.classList.remove("toggle_on");
-                o.classList.add("toggle_off");
-                o.innerHTML = '&nbsp;';
+        var i = null;
+        if (vals == null) {
+            i = document.createElement('input');
+            i.type = "text";
+            i.value = defval;
+            i.id = id;
+        } else {
+            i = document.createElement('select');
+            i.id = id;
+            for (const key in vals) {
+                var o = document.createElement('option');
+                o.value = key;
+                o.innerHTML = vals[key];
+                i.appendChild(o);
             }
-        });
-        this.#ref.sidebarLeft.appendChild(t);*/
-    }
-
-    #addSidebarLeftInputText(id, label, defval) {
-        var p = document.createElement('div');
-        p.className = "tool_property";
-
-        var lbl = document.createElement('label');
-        lbl.innerHTML = label;
-
-        var inp = document.createElement('input');
-        inp.type = "text";
-        inp.id = id;
-        inp.value = defval;
-
-        p.appendChild(lbl);
-        p.appendChild(inp);
-        this.#ref.sidebarLeft.appendChild(p);
-    }
-
-    #addSidebarLeftSelect(id, label, vals) {
-        var p = document.createElement('div');
-        p.className = "tool_property";
-
-        var lbl = document.createElement('label');
-        lbl.innerHTML = label;
-
-        var sel = document.createElement('select');
-        sel.id = id;
-
-        for (const key in vals) {
-            var o = document.createElement('option');
-            o.value = key;
-            o.innerHTML = vals[key];
-            sel.appendChild(o);
         }
-        p.appendChild(lbl);
-        p.appendChild(sel);
-        this.#ref.sidebarLeft.appendChild(p);
+        d.appendChild(l);
+        d.appendChild(i);
+        this.#ref[ref].appendChild(d);
     }
 
     #initTools() {
@@ -250,17 +205,19 @@ class Layout {
 
     #initStroke() {
         this.#addSidebarTitle('sidebarLeft',"Stroke");
-        this.#addSidebarLeftInputText("stroke_width", "width", "3");
-        this.#addSidebarLeftInputText("stroke_opacity", "opacity", "100%");
-        this.#addSidebarLeftSelect("stroke_linecap", "linecap", {"butt": "butt", "square": "square", "round": "round"});
-        this.#addSidebarLeftSelect("stroke_linejoin", "linejoin", {"miter": "miter", "round": "round", "bevel": "bevel"});
-        this.#addSidebarLeftInputText("stroke_dasharray", "dasharray", "5");
+        this.#addSidebarContainer('sidebarLeft', 'strokeContainer');
+        this.#addSidebarProperty('sidebarLeft', "Width", "stroke_width", "", "3");
+        this.#addSidebarProperty('sidebarLeft', "Opacity", "stroke_opacity", "", "100%");
+        this.#addSidebarProperty('sidebarLeft', "Linecap", "stroke_linecap", "", "", {"butt": "butt", "square": "square", "round": "round"});
+        this.#addSidebarProperty('sidebarLeft', "Linejoin", "stroke_linejoin", "", "", {"miter": "miter", "round": "round", "bevel": "bevel"});
+        this.#addSidebarProperty('sidebarLeft', "Dasharray", "stroke_dasharray", "", "5");
     }
 
     #initFill() {
         this.#addSidebarTitle('sidebarLeft',"Fill");
-        this.#addSidebarLeftInputText("fill_opacity", "opacity", "100%");
-        this.#addSidebarLeftSelect("fill_rule", "rule", {"nonzero": "nonzero", "evenodd": "evenodd", "inherit": "inherit"});
+        this.#addSidebarContainer('sidebarLeft', 'fillContainer');
+        this.#addSidebarProperty('sidebarLeft', "Opacity", "fill_opacity", "", "100%");
+        this.#addSidebarProperty('sidebarLeft', "Rule", "fill_rule", "", "", {"nonzero": "nonzero", "evenodd": "evenodd", "inherit": "inherit"});
     }
 
     #initProperties() {
@@ -287,7 +244,7 @@ class Layout {
         this.#addSidebarTitle('sidebarRight', "Layers");
 
         this.#ref.layerList = document.createElement('div');
-        this.#ref.layerList.id = this.#id.layerList;
+        this.#ref.layerList.id = this.#getIDFn('layerList');
         this.#ref.sidebarRight.appendChild(this.#ref.layerList);
 
         var p = document.createElement('div');
@@ -320,19 +277,12 @@ class Layout {
         this.#ref.sidebarRight.appendChild(p);
     }
 
-    constructor(idContainer, idLayerContainer, idSidebarLeft, idSidebarRight, idLayerList, idToolContainer, idColorFgContainer, idColorBgContainer) {
-        this.#id.container = idContainer;
-        this.#id.layerContainer = idLayerContainer;
-        this.#id.sidebarLeft = idSidebarLeft;
-        this.#id.sidebarRight = idSidebarRight;
-        this.#id.layerList = idLayerList;
-        this.#id.toolContainer = idToolContainer;
-        this.#id.colorFgContainer = idColorFgContainer;
-        this.#id.colorBgContainer = idColorBgContainer;
+    constructor(getIDFn) {
+        this.#getIDFn = getIDFn;
 
-        this.#ref.container = document.getElementById(this.#id.container);
+        this.#ref.container = document.getElementById(this.#getIDFn('container'));
         if (this.#ref.container == null) {
-            alert("div with id='"+this.#id.container+"' not found");
+            alert("div with id='"+this.#getIDFn('container')+"' not found");
             return;
         }
     }

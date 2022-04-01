@@ -16,12 +16,15 @@ class Edytor {
 
     constructor() {
         this.#cfg = new Config();
+        var scope = this;
 
         if (document.getElementById(this.#cfg.GetID("container")) == null) {
             alert("div with id='"+this.#cfg.GetID('container')+"' not found");
             return;
         }
-        this.#layout = new Layout(this.#cfg.GetID('container'), this.#cfg.GetID('layerContainer'), this.#cfg.GetID('sidebarLeft'), this.#cfg.GetID('sidebarRight'), this.#cfg.GetID('layerList'), this.#cfg.GetID('toolContainer'), this.#cfg.GetID('colorFgContainer'), this.#cfg.GetID('colorBgContainer'));
+        this.#layout = new Layout(function(n) {
+            return scope.#cfg.GetID(n);
+        });
         this.#layout.InitBody();
         this.#layout.InitContainer();
         this.#layout.InitLayerContainer();
@@ -30,7 +33,7 @@ class Edytor {
         this.#grid.Init(this.#cfg.GetZIndex('grid'));
 
         this.#pad = new Pad(this.#cfg.GetID('layerContainer'), this.#cfg.GetID('pad'));
-        var scope = this;
+        
         this.#pad.Init(this.#cfg.GetZIndex('pad'), function() {
             return scope.#tools[scope.#tool];
         });
@@ -126,78 +129,5 @@ var EdytorInstance = null;
 function Init() {
     EdytorInstance = new Edytor();
 }
-/*
-var origElemX = 0;
-var origElemY = 0;
-var drag = false;
-var dragElem = null;
 
-function svgElemMouseDown(e) {
-    dragElem = e.target;
-    origElemX = e.target.cx;
-    origElemY = e.target.cy;
-    drag = true;
-}
-
-function mouseUp(e) {
-    drag = false;
-}
-
-function mouseMove(e) {
-    if (drag) {
-        console.log(dragElem.cx);
-        dragElem.setAttribute("cx", e.offsetX);
-        dragElem.setAttribute("cy", e.offsetY);
-    }
-}
-
-function init() {
-    var w = window.innerWidth;
-    var h = window.innerHeight;
-
-    var canv = document.getElementById('canvas');
-    canv.width = w*2;
-    canv.height = h*2;
-
-    var canv_cont = document.getElementById('grid_container');
-    canv_cont.style.width  = w*2 + 'px';
-    canv_cont.style.height = h*2 + 'px';
-
-    var sv_cont = document.getElementById('svg_container');
-    sv_cont.style.width  = w*2 + 'px';
-    sv_cont.style.height = h*2 + 'px';
-
-    var sv = document.getElementById('svg');
-    sv.width = "100%";
-    sv.height = "100%";
-
-    document.getElementById('sidebar_left').style.height = h+'px';
-    document.getElementById('sidebar_right').style.height = h+'px';
-    document.getElementById('sidebar_extended_left').style.height = h+'px';
-    document.getElementById('sidebar_extended_right').style.height = h+'px';
-
-    window.scrollTo(w/2,h/2);
-
-    var ctx = canv.getContext("2d");
-    ctx.fillStyle = "#282828";
-    ctx.fillRect(0, 0, canv.width, canv.height);
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = "#4c4c4c";
-
-    for (i=0; i<=canv.width/100; i++) {
-        ctx.moveTo(i*100, 0);
-        ctx.lineTo(i*100, canv.height);
-        ctx.stroke();
-    }
-    for (i=0; i<=canv.height/100; i++) {
-        ctx.moveTo(0, i*100);
-        ctx.lineTo(canv.width, i*100);
-        ctx.stroke();
-    }
-
-    document.getElementById('circle').addEventListener("mousedown", svgElemMouseDown, false);
-    document.addEventListener('mouseup', mouseUp, false);
-    document.addEventListener('mousemove', mouseMove, false);
-}
-*/
 document.addEventListener("DOMContentLoaded", Init, false);
