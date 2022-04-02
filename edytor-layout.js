@@ -8,13 +8,23 @@ class Layout {
         colorFgContainer: null,
         colorBgContainer: null,
         strokeContainer: null,
-        fillContainer: null
+        fillContainer: null,
+        propertyContainer: null,
+        layerListContainer: null,
+        layerToolsContainer: null
     }
 
     #getToolIconFn = null;
     #setToolFn = null;
     #setColorFn = null;
     #getIDFn = null;
+    #addVectorLayerFn = null;
+    #addPixelLayerFn = null;
+    #deleteLayersFn = null;
+    #moveLayerUpFn = null;
+    #moveLayerDownFn = null;
+    #toggleLayersLockFn = null;
+    #toggleLayersHideFn = null;
     #tools = [];
     #colors = {};
 
@@ -222,63 +232,45 @@ class Layout {
 
     #initProperties() {
         this.#addSidebarTitle('sidebarRight',"Properties");
-
+        this.#addSidebarContainer('sidebarRight', 'propertyContainer');
         for (var i=0; i<10; i++) {
-            var p = document.createElement('div');
-            p.className = "property";
-
-            var lbl = document.createElement('label');
-            lbl.innerHTML = "Property:";
-
-            var inp = document.createElement('input');
-            inp.type = "text";
-            inp.value = "val";
-
-            p.appendChild(lbl);
-            p.appendChild(inp);
-            this.#ref.sidebarRight.appendChild(p);
+            this.#addSidebarProperty('sidebarRight', "Property "+i, "property_"+i, "property", "");
         }
     }
 
     #initLayers() {
         this.#addSidebarTitle('sidebarRight', "Layers");
-
-        this.#ref.layerList = document.createElement('div');
-        this.#ref.layerList.id = this.#getIDFn('layerList');
-        this.#ref.sidebarRight.appendChild(this.#ref.layerList);
-
-        var p = document.createElement('div');
-        p.className = "property";
-        var b = document.createElement('button');
-        b.innerHTML = "Add";
-        b.className = "action";
-        p.appendChild(b);
-        var b = document.createElement('button');
-        b.innerHTML = "Lock";
-        b.className = "action";
-        p.appendChild(b);
-        var b = document.createElement('button');
-        b.innerHTML = "Unlock";
-        b.className = "action";
-        p.appendChild(b);
-        var b = document.createElement('button');
-        b.innerHTML = "Show";
-        b.className = "action";
-        p.appendChild(b);
-        var b = document.createElement('button');
-        b.innerHTML = "Hide";
-        b.className = "action";
-        p.appendChild(b);
-        var b = document.createElement('button');
-        b.innerHTML = "Del";
-        b.className = "action";
-        p.appendChild(b);
-
-        this.#ref.sidebarRight.appendChild(p);
+        this.#addSidebarContainer('sidebarRight', 'layerListContainer');
+        this.#addSidebarContainer('sidebarRight', 'layerToolsContainer');
+        this.#initLayerTools();
     }
 
-    constructor(getIDFn) {
+    #addLayerToolButton(ref, label, fn) {
+        var b = document.createElement('button');
+        b.className = 'toggle_off layer_button';
+        b.innerHTML = label;
+        b.addEventListener('click', fn);
+        this.#ref[ref].appendChild(b);
+    }
+
+    #initLayerTools() {
+        var scope = this;
+        this.#addLayerToolButton('layerToolsContainer', '+V', function(e) { scope.#addVectorLayerFn(); });
+        this.#addLayerToolButton('layerToolsContainer', '+P', function(e) { scope.#addPixelLayerFn(); });
+        this.#addLayerToolButton('layerToolsContainer', 'L', function(e) { });
+        this.#addLayerToolButton('layerToolsContainer', 'H', function(e) { });
+        this.#addLayerToolButton('layerToolsContainer', 'X', function(e) { });
+    }
+
+    constructor(getIDFn, addVectorLayerFn, addPixelLayerFn, deleteLayersFn, toggleLayersLockFn, toggleLayersHideFn, moveLayerUpFn, moveLayerDownFn) {
         this.#getIDFn = getIDFn;
+        this.#addVectorLayerFn = addVectorLayerFn;
+        this.#addPixelLayerFn = addPixelLayerFn;
+        this.#deleteLayersFn = deleteLayersFn;
+        this.#toggleLayersLockFn = toggleLayersLockFn;
+        this.#toggleLayersHideFn = toggleLayersHideFn;
+        this.#moveLayerUpFn = moveLayerUpFn;
+        this.#moveLayerDownFn = moveLayerDownFn;
 
         this.#ref.container = document.getElementById(this.#getIDFn('container'));
         if (this.#ref.container == null) {
@@ -301,47 +293,92 @@ class Layout {
         this.#initFill();
         this.#initLayers();
         this.#initProperties();
-
-        this.AddLayer('svg');
-        this.AddLayer('px');
     }
 
-    AddLayer(t) {
-        var p = document.createElement('div');
-        p.className = "property";
+    AddVectorLayer(num) {
+        this.AddLayer('V', num);
+    }
 
-        var b = document.createElement('input');
-        b.type = "checkbox";
-        p.appendChild(b);
+    AddPixelLayer(num) {
+        this.AddLayer('P', num);
+    }
+
+    // functions for the layer tool buttons
+    // change everything to one function where you would call command and args
+
+    // delete X button and delete the layer
+    // delete layer by id
+    // selecting current layer when drawing
+    // selecting tool vs a type of layer + add 'v:' or 'p:' prefix for tools?
+    // moving up
+    // moving down
+
+    AddLayer(t, num) {
+        var d = document.createElement('div');
+        d.className = "sidebar_layer";
+        d.id = this.#getIDFn('layerPrefix')+num;
+
+        var sel = document.createElement('input');
+        sel.type = 'checkbox';
+        sel.className = 'select_layer';
+        sel.id = this.#getIDFn('layerSelect')+num;
+        d.appendChild(sel);
 
         var typ = document.createElement('label');
-        typ.className = "type";
+        typ.className = 'layer_type';
         typ.innerHTML = t;
-        p.appendChild(typ);
+        d.appendChild(typ);
 
-        var inp = document.createElement('input');
-        inp.type = "text";
-        inp.value = "Layer 1";
-        inp.className = "layer_name";
-        p.appendChild(inp);
+        var nam = document.createElement('input');
+        nam.type = 'text';
+        nam.value = 'Layer '+num;
+        nam.className = 'layer_name';
+        nam.id = this.#getIDFn('layerName')+num;
+        d.appendChild(nam);
 
-        var b = document.createElement('button');
-        b.className = "toggle_off";
-        b.innerHTML = "L";
-        p.appendChild(b);
-        var b = document.createElement('button');
-        b.className = "toggle_on";
-        b.innerHTML = "H";
-        p.appendChild(b);
-        var b = document.createElement('button');
-        b.className = "toggle_on";
-        b.innerHTML = "U";
-        p.appendChild(b);
-        var b = document.createElement('button');
-        b.className = "toggle_off";
-        b.innerHTML = "D";
-        p.appendChild(b);
+        var scope = this;
+        var btns = [
+            { lbl: 'L', id: this.#getIDFn('layerActionLockPrefix')+num, fn: function(e) { 
+                var ids = [];
+                var idArr = this.id.split('_');
+                ids.push(parseInt(idArr[idArr.length-1]));
+                scope.#toggleLayersLockFn(ids);
+            } },
+            { lbl: 'H', id: this.#getIDFn('layerActionHidePrefix')+num, fn: function(e) {
+                var ids = [];
+                var idArr = this.id.split('_');
+                ids.push(parseInt(idArr[idArr.length-1]));
+                scope.#toggleLayersHideFn(ids);
+            } },
+            { lbl: 'U', id: this.#getIDFn('layerActionMoveUpPrefix')+num, fn: function(e) {
+                var ids = [];
+                var idArr = this.id.split('_');
+                ids.push(parseInt(idArr[idArr.length-1]));
+                scope.#moveLayerUpFn(ids);
+            } },
+            { lbl: 'D', id: this.#getIDFn('layerActionMoveDownPrefix')+num, fn: function(e) {
+                var ids = [];
+                var idArr = this.id.split('_');
+                ids.push(parseInt(idArr[idArr.length-1]));
+                scope.#moveLayerDownFn(ids);
+            } },
+            { lbl: 'X', id: this.#getIDFn('layerActionDeletePrefix')+num, fn: function(e) {
+                var ids = [];
+                var idArr = this.id.split('_');
+                ids.push(parseInt(idArr[idArr.length-1]));
+                scope.#deleteLayersFn(ids);
+            } }
+        ];
 
-        this.#ref.layerList.appendChild(p);
+        for (var i=0; i<btns.length; i++) {
+            var b = document.createElement('button');
+            b.className = 'toggle_off layer_button';
+            b.innerHTML = btns[i].lbl;
+            b.id = btns[i].id;
+            b.addEventListener('click', btns[i].fn)
+            d.appendChild(b);
+        }
+
+        this.#ref.layerListContainer.prepend(d);     
     }
 }

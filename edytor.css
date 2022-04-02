@@ -112,123 +112,75 @@ body {
     cursor: pointer;
 }
 
-.property {
-    font-size: 10px;
-    font-family: arial;
-    color: #bdbdbd;
-    text-align: left;
-    padding: 3px;
-    background-image: linear-gradient(#3d3d3d, #333333);
-    display: flex;
-}
 .property label {
-    flex: 50px;
+    flex: 50x;
 }
-.property label.type {
-    flex: 20px;
-    font-size: 8px;
-    width: 20px;
-}
+
 .property input {
-    font-size: 10px;
-    font-family: arial;
-    color: #cccccc;
-    background-image: linear-gradient(#191919, #2d2d2d);
-    border: 0;
-}
-.property button.action {
-    font-size: 8px;
-    font-family: arial;
-    color: #cccccc;
-    background-image: linear-gradient(#2d2d2d, #191919);
-    border: solid 1px #555555;
-    margin-right: 2px;
-    cursor: pointer;
-}
-.property button.action:hover {
-    background-image: linear-gradient(#dddddd, #777777);
-    color: #333333;
+    width: 100px;
 }
 
-.property input.layer_name {
-    flex: 60px;
-    width: 60px;
-    font-size: 10px;
-    font-family: arial;
-    color: #cccccc;
-    background-image: linear-gradient(#191919, #2d2d2d);
-    border: 0;
+.property select {
+    width: 100px;
 }
 
-.property button.toggle_off {
-    font-size: 8px;
-    font-family: arial;
-    color: #cccccc;
-    background-image: linear-gradient(#2d2d2d, #191919);
-    border: solid 1px #555555;
-    margin-right: 2px;
-    cursor: pointer;
-}
-.property button.toggle_off:hover {
-    background-image: linear-gradient(#2d2d2d, #191919);
-    color: #cccccc;
-    border: solid 1px #eeeeee;
-}
-
-.property button.toggle_on {
-    font-size: 8px;
-    font-family: arial;
-    color: #333333;
-    background-image: linear-gradient(#dddddd, #777777);
-    border: solid 1px #555555;
-    margin-right: 2px;
-    cursor: pointer;
-}
-.property button.toggle_on:hover {
-    background-image: linear-gradient(#dddddd, #777777);
-    color: #333333;
-    border: solid 1px #eeeeee;
-}
-
-#layer_list {
-    padding: 0;
-    margin: 0;
-}
-
-.tool_property {
+.sidebar_layer {
     font-size: 10px;
     font-family: arial;
     color: #bdbdbd;
     text-align: left;
-    padding: 3px;
+    padding: 0px;
+    margin: 1px 0 1px 0;
+    border: solid 1px #555555;
     background-image: linear-gradient(#3d3d3d, #333333);
     display: flex;
 }
-.tool_property label {
-    flex: 15px;
-    width: 15px;
-    font-size: 8px;
-    padding-right: 2px;
-    overflow-wrap: break-word;
-}
-.tool_property input {
-    font-size: 10px;
-    font-family: arial;
-    color: #cccccc;
-    background-image: linear-gradient(#191919, #2d2d2d);
-    border: 0;
-    width: 40px;
-}
-.tool_property select {
-    font-size: 10px;
-    font-family: arial;
-    color: #cccccc;
-    background-image: linear-gradient(#191919, #2d2d2d);
-    border: 0;
-    width: 40px;
-    appearance: none;
+
+.sidebar_layer input[type=checkbox] {
+    width: 10px;
+    margin: 0 0 0 2px;
+    padding: 0px;
 }
 
-.clear {
-    clear: both;
+.sidebar_layer label {
+    width: 5px;
+    padding: 1px 3px 0 3px;
+    margin: 2px 0 0 1px;
+    font-size: 9px;
+}
+
+.sidebar_layer input[type=text] {
+    width: 60px;
+    padding: 1px 2px 0 2px;
+    margin: 0 0 0 2px;
+    height: 15px;
+    font-size: 9px;
+    font-family: arial;
+    color: #cccccc;
+    background-image: linear-gradient(#191919, #2d2d2d);
+    border: 0;
+}
+
+.sidebar_layer button {
+    width: 15px;
+    padding: 1px 2px 0 2px;
+    margin: 0 0 0 2px;
+    height: 15px;
+    font-size: 9px;
+    font-family: arial;
+    color: #cccccc;
+    background-image: linear-gradient(#191919, #2d2d2d);
+    border: 0;
+}
+
+.sidebar_container button {
+    width: 15px;
+    padding: 1px 2px 0 2px;
+    margin: 0 0 0 2px;
+    height: 15px;
+    font-size: 9px;
+    font-family: arial;
+    color: #cccccc;
+    background-image: linear-gradient(#191919, #2d2d2d);
+    border: 0;
 }

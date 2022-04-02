@@ -13,6 +13,7 @@ class Edytor {
 
     #layers = [];
     #layer = null;
+    #lastLayerNum = 0;
 
     constructor() {
         this.#cfg = new Config();
@@ -24,7 +25,22 @@ class Edytor {
         }
         this.#layout = new Layout(function(n) {
             return scope.#cfg.GetID(n);
-        });
+        }, function() {
+            return scope.AddVectorLayer();
+        }, function() {
+            return scope.AddPixelLayer();
+        }, function(nums) {
+            return scope.DeleteLayers(nums);
+        }, function(nums) {
+            alert('toggle layers lock');
+        }, function(nums) {
+            alert('toggle layers hide');
+        }, function(nums) {
+            alert('move layer up');
+        }, function(nums) {
+            alert('move layer down');
+        }
+        );
         this.#layout.InitBody();
         this.#layout.InitContainer();
         this.#layout.InitLayerContainer();
@@ -38,9 +54,6 @@ class Edytor {
             return scope.#tools[scope.#tool];
         });
 
-        this.AddVectorLayer(this.#cfg.GetZIndex('layerStart'));
-        this.AddPixelLayer(this.#cfg.GetZIndex('layerStart')+10);
-
         var toolNames = this.#initTools();
         this.#layout.InitSidebars(this.#cfg.GetZIndex('sidebarLeft'), this.#cfg.GetZIndex('sidebarRight'), function(n) {
             return scope.#tools[n].GetIcon();
@@ -49,19 +62,44 @@ class Edytor {
         }, toolNames, this.#cfg.GetColors(), function(t, c) {
             scope.SetColor(t, c);
         });
+
+        this.AddVectorLayer();
+        this.AddPixelLayer();
+        this.AddPixelLayer();
+        this.AddPixelLayer();
+        this.AddPixelLayer();
+        this.AddPixelLayer();
+        this.AddVectorLayer();
+        this.AddVectorLayer();
     }
 
-    AddVectorLayer(zIndex) {
-        var l = new VectorLayer(this.#cfg.GetID('layerContainer'), this.#cfg.GetID('vector'));
-        l.SetZIndex(zIndex);
-        l.Init();
-        this.#layers.push(l);
+    #getZIndexForNewLayer() {
+        var zIndex = this.#cfg.GetZIndex('layerStart');
+        if (this.#layers.length>0) {
+            zIndex = this.#layers[this.#layers.length-1].GetZIndex()+10;
+        }
+        return zIndex
     }
-    AddPixelLayer(zIndex) {
-        var l = new PixelLayer(this.#cfg.GetID('layerContainer'), this.#cfg.GetID('pixel'));
-        l.SetZIndex(zIndex);
+
+    AddVectorLayer() {
+        this.#lastLayerNum++;
+        var l = new VectorLayer(this.#cfg.GetID('layerContainer'), this.#cfg.GetID('vector'));
+        l.SetZIndex(this.#getZIndexForNewLayer());
         l.Init();
         this.#layers.push(l);
+        this.#layout.AddVectorLayer(this.#lastLayerNum);
+    }
+    AddPixelLayer() {
+        this.#lastLayerNum++;
+        var l = new PixelLayer(this.#cfg.GetID('layerContainer'), this.#cfg.GetID('pixel'));
+        l.SetZIndex(this.#getZIndexForNewLayer());
+        l.Init();
+        this.#layers.push(l);
+        this.#layout.AddPixelLayer(this.#lastLayerNum);
+    }
+
+    DeleteLayers(nums) {
+
     }
 
     GetStyle(s) {

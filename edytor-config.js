@@ -13,7 +13,18 @@ class Config {
         colorFgContainer: "colorfg_container",
         colorBgContainer: "colorbg_container",
         strokeContainer: "stroke_container",
-        fillContainer: "fill_container"
+        fillContainer: "fill_container",
+        propertyContainer: "property_container",
+        layerListContainer: "layerlist_container",
+        layerToolsContainer: "layertools_container",
+        layerPrefix: "layer_",
+        layerSelectPrefix: "layer_prefix_",
+        layerNamePrefix: "layer_name_",
+        layerActionLockPrefix: "layer_lock_",
+        layerActionHidePrefix: "layer_hide_",
+        layerActionMoveUpPrefix: "layer_moveup_",
+        layerActionMoveDownPrefix: "layer_movedown_",
+        layerActionDeletePrefix: "layer_delete_"
     }
     #colors = {
         "black": "black",

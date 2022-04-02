@@ -39,6 +39,10 @@ class PixelLayer {
         }
     }
 
+    GetZIndex() {
+        return this.#zIndex;
+    }
+
     Init() {
         this.#ref.pixel = document.createElement('canvas');
         this.#ref.pixel.id = this.#id.pixel;

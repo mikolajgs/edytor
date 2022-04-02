@@ -32,6 +32,10 @@ class VectorLayer {
         }
     }
 
+    GetZIndex() {
+        return this.#zIndex;
+    }
+
     Init() {
         this.#ref.vector = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
         this.#ref.vector.id = this.#id.vector;
