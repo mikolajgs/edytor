@@ -15,16 +15,8 @@ class Layout {
     }
 
     #getToolIconFn = null;
-    #setToolFn = null;
-    #setColorFn = null;
     #getIDFn = null;
-    #addVectorLayerFn = null;
-    #addPixelLayerFn = null;
-    #deleteLayersFn = null;
-    #moveLayerUpFn = null;
-    #moveLayerDownFn = null;
-    #toggleLayersLockFn = null;
-    #toggleLayersHideFn = null;
+    #doFn = null;
     #tools = [];
     #colors = {};
 
@@ -142,7 +134,7 @@ class Layout {
     #addSidebarLeftTool(ref, n) {
         var scope = this;
         this.#addSidebarToggle(ref, n, 'tool_'+n, 'tool', this.#getToolIconFn(n), null, function(nm) {
-            scope.#setToolFn(nm);
+            scope.#doFn('set-tool', nm);
         }, false);
     }
 
@@ -151,7 +143,7 @@ class Layout {
         this.#addSidebarToggle(ref, n, 'color_'+fgbg+'_'+n, 'color', '', function(o) {
             o.style.background = scope.#colors[n];
         }, function(nm) {
-            scope.#setColorFn(fgbg, nm);
+            scope.#doFn('set-'+fgbg+'-color', nm);
         }, true);
     }
 
@@ -209,8 +201,8 @@ class Layout {
             this.#addSidebarLeftColor('colorBgContainer', "bg", key);
         }
 
-        this.#setColorFn("fg", firstColor);
-        this.#setColorFn("bg", firstColor);
+        this.#doFn("set-fg-color", firstColor);
+        this.#doFn("set-bg-color", firstColor);
     }
 
     #initStroke() {
@@ -255,22 +247,26 @@ class Layout {
 
     #initLayerTools() {
         var scope = this;
-        this.#addLayerToolButton('layerToolsContainer', '+V', function(e) { scope.#addVectorLayerFn(); });
-        this.#addLayerToolButton('layerToolsContainer', '+P', function(e) { scope.#addPixelLayerFn(); });
-        this.#addLayerToolButton('layerToolsContainer', 'L', function(e) { });
-        this.#addLayerToolButton('layerToolsContainer', 'H', function(e) { });
-        this.#addLayerToolButton('layerToolsContainer', 'X', function(e) { });
+        this.#addLayerToolButton('layerToolsContainer', '+V', function(e) { 
+            scope.#doFn('add-vector-layer', []); 
+        });
+        this.#addLayerToolButton('layerToolsContainer', '+P', function(e) { 
+            scope.#doFn('add-pixel-layer', []);
+        });
+        this.#addLayerToolButton('layerToolsContainer', 'L', function(e) {
+            scope.#doFn('toggle-layers-lock', []);
+        });
+        this.#addLayerToolButton('layerToolsContainer', 'H', function(e) {
+            scope.#doFn('toggle-layers-hide', []);
+        });
+        this.#addLayerToolButton('layerToolsContainer', 'X', function(e) {
+            scope.#doFn('delete-layers', []);
+        });
     }
 
-    constructor(getIDFn, addVectorLayerFn, addPixelLayerFn, deleteLayersFn, toggleLayersLockFn, toggleLayersHideFn, moveLayerUpFn, moveLayerDownFn) {
+    constructor(getIDFn, doFn) {
         this.#getIDFn = getIDFn;
-        this.#addVectorLayerFn = addVectorLayerFn;
-        this.#addPixelLayerFn = addPixelLayerFn;
-        this.#deleteLayersFn = deleteLayersFn;
-        this.#toggleLayersLockFn = toggleLayersLockFn;
-        this.#toggleLayersHideFn = toggleLayersHideFn;
-        this.#moveLayerUpFn = moveLayerUpFn;
-        this.#moveLayerDownFn = moveLayerDownFn;
+        this.#doFn = doFn;
 
         this.#ref.container = document.getElementById(this.#getIDFn('container'));
         if (this.#ref.container == null) {
@@ -279,10 +275,8 @@ class Layout {
         }
     }
 
-    InitSidebars(zIndexSidebarLeft, zIndexSidebarRight, getToolIconFn, setToolFn, tools, colors, setColorFn) {
+    InitSidebars(zIndexSidebarLeft, zIndexSidebarRight, getToolIconFn, tools, colors) {
         this.#getToolIconFn = getToolIconFn;
-        this.#setToolFn = setToolFn;
-        this.#setColorFn = setColorFn;
         this.#tools = tools;
         this.#colors = colors;
         this.#initSidebars(zIndexSidebarLeft, zIndexSidebarRight);
@@ -303,12 +297,10 @@ class Layout {
         this.AddLayer('P', num);
     }
 
-    // functions for the layer tool buttons
-    // change everything to one function where you would call command and args
-
-    // delete X button and delete the layer
-    // delete layer by id
-    // selecting current layer when drawing
+    // delete many layers
+    // selecting current layer when drawing - layout.js
+    // selecting current layer in the UI
+    // current UI highlighted
     // selecting tool vs a type of layer + add 'v:' or 'p:' prefix for tools?
     // moving up
     // moving down
@@ -342,31 +334,31 @@ class Layout {
                 var ids = [];
                 var idArr = this.id.split('_');
                 ids.push(parseInt(idArr[idArr.length-1]));
-                scope.#toggleLayersLockFn(ids);
+                scope.#doFn('toggle-layers-lock', ids);
             } },
             { lbl: 'H', id: this.#getIDFn('layerActionHidePrefix')+num, fn: function(e) {
                 var ids = [];
                 var idArr = this.id.split('_');
                 ids.push(parseInt(idArr[idArr.length-1]));
-                scope.#toggleLayersHideFn(ids);
+                scope.#doFn('toggle-layers-hide', ids);
             } },
             { lbl: 'U', id: this.#getIDFn('layerActionMoveUpPrefix')+num, fn: function(e) {
                 var ids = [];
                 var idArr = this.id.split('_');
                 ids.push(parseInt(idArr[idArr.length-1]));
-                scope.#moveLayerUpFn(ids);
+                scope.#doFn('move-layer-up', ids);
             } },
             { lbl: 'D', id: this.#getIDFn('layerActionMoveDownPrefix')+num, fn: function(e) {
                 var ids = [];
                 var idArr = this.id.split('_');
                 ids.push(parseInt(idArr[idArr.length-1]));
-                scope.#moveLayerDownFn(ids);
+                scope.#doFn('move-layer-down', ids);
             } },
             { lbl: 'X', id: this.#getIDFn('layerActionDeletePrefix')+num, fn: function(e) {
                 var ids = [];
                 var idArr = this.id.split('_');
                 ids.push(parseInt(idArr[idArr.length-1]));
-                scope.#deleteLayersFn(ids);
+                scope.#doFn('delete-layers', ids);
             } }
         ];
 
@@ -380,5 +372,14 @@ class Layout {
         }
 
         this.#ref.layerListContainer.prepend(d);     
+    }
+
+    DeleteLayer(numList) {
+        for (var j=0; j<numList; j++) {
+            var el = document.getElementById(this.#getIDFn('layerPrefix')+numList[j]);
+            if (el !== null) {
+                el.remove();
+            }
+        }
     }
 }

@@ -3,6 +3,8 @@ class PixelLayer {
     #zIndex = 210;
     #visible = true;
     #locked = false;
+    #removed = false;
+    #num = 0;
 
     #id = {
         container: "",
@@ -43,7 +45,11 @@ class PixelLayer {
         return this.#zIndex;
     }
 
-    Init() {
+    GetNum() {
+        return this.#num;
+    }
+
+    Init(num) {
         this.#ref.pixel = document.createElement('canvas');
         this.#ref.pixel.id = this.#id.pixel;
         this.#ref.pixel.classList.add('layer');
@@ -55,6 +61,12 @@ class PixelLayer {
         this.#ref.pixel.style.zIndex = this.#zIndex;
         this.#ref.container.appendChild(this.#ref.pixel);
         this.#resizeToWindow();
+        this.#num = num;
+    }
+
+    Delete() {
+        this.#ref.pixel.remove();
+        this.#removed = true;
     }
 
     GetCanvas() {

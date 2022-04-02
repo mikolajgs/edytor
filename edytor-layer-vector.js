@@ -3,6 +3,8 @@ class VectorLayer {
     #zIndex = 210;
     #visible = true;
     #locked = false;
+    #num = 0;
+    #removed = false;
 
     #id = {
         container: "",
@@ -36,7 +38,11 @@ class VectorLayer {
         return this.#zIndex;
     }
 
-    Init() {
+    GetNum() {
+        return this.#num;
+    }
+
+    Init(num) {
         this.#ref.vector = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
         this.#ref.vector.id = this.#id.vector;
         this.#ref.vector.setAttribute('width', '100%');
@@ -49,6 +55,12 @@ class VectorLayer {
         this.#ref.vector.style.left = 0;
         this.#ref.vector.style.zIndex = this.#zIndex;
         this.#ref.container.appendChild(this.#ref.vector);
+        this.#num = num;
+    }
+
+    Delete() {
+        this.#ref.vector.remove();
+        this.#removed = true;
     }
 
     GetSVG() {
