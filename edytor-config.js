@@ -19,6 +19,7 @@ class Config {
         layerToolsContainer: "layertools_container",
         layerPrefix: "layer_",
         layerSelectPrefix: "layer_select_",
+        layerTypePrefix: "layer_type_",
         layerNamePrefix: "layer_name_",
         layerActionLockPrefix: "layer_lock_",
         layerActionHidePrefix: "layer_hide_",
