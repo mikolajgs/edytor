@@ -20,20 +20,129 @@ class Layout {
     #tools = [];
     #colors = {};
 
-    InitBody() {
+
+    AddVectorLayer(num) {
+        this.#addLayer('V', num);
+    }
+
+    AddPixelLayer(num) {
+        this.#addLayer('P', num);
+    }
+
+    DeleteLayers(numList) {
+        for (var j=0; j<numList; j++) {
+            var el = document.getElementById(this.#getIDFn('layerPrefix')+numList[j]);
+            if (el !== null) {
+                el.remove();
+            }
+        }
+    }
+
+
+    Init() {
+        this.#initBody();
+        this.#initContainer();
+        this.#initLayerContainer();
+    }
+
+    InitSidebars(zIndexSidebarLeft, zIndexSidebarRight, getToolIconFn, tools, colors) {
+        this.#getToolIconFn = getToolIconFn;
+        this.#tools = tools;
+        this.#colors = colors;
+        this.#initSidebars(zIndexSidebarLeft, zIndexSidebarRight);
+        this.#setScroll();
+        this.#initTools();
+        this.#initColors();
+        this.#initStroke();
+        this.#initFill();
+        this.#initLayers();
+        this.#initProperties();
+    }
+
+
+    constructor(getIDFn, doFn) {
+        this.#getIDFn = getIDFn;
+        this.#doFn = doFn;
+
+        this.#ref.container = document.getElementById(this.#getIDFn('container'));
+        if (this.#ref.container == null) {
+            alert("div with id='"+this.#getIDFn('container')+"' not found");
+            return;
+        }
+    }
+
+
+    #_arrOfNumsFromID(s) {
+        var ids = [];
+        var idArr = s.split('_');
+        ids.push(parseInt(idArr[idArr.length-1]));
+        return ids
+    }
+    #_numFromID(s) {
+        var idArr = s.split('_');
+        return parseInt(idArr[idArr.length-1]);
+    }
+    #_arrOfNumsOfSelectedLayers() {
+        var ids = [];
+        var els = this.#ref.layerListContainer.querySelectorAll("div.sidebar_layer > input.select_layer");
+        for (var i=0; i<els.length; i++) {
+            if (els[i].checked) {
+                var idArr = els[i].id.split('_');
+                ids.push(parseInt(idArr[idArr.length-1]));
+            }
+        }
+        return ids;
+    }
+
+    #addLayer(t, num) {
+        var d = document.createElement('div');
+        d.className = "sidebar_layer";
+        d.id = this.#getIDFn('layerPrefix')+num;
+        var h = '<input type="checkbox" class="select_layer" id="'+this.#getIDFn('layerSelectPrefix')+num+'"/>' +
+                '<label class="layer_type">'+t+'</label>' +
+                '<input type="text" value="Layer '+num+'" class="layer_name" id="'+this.#getIDFn('layerNamePrefix')+num+'"/>' +
+                '<button class="toggle_off layer_button" id="'+this.#getIDFn('layerActionLockPrefix')+num+'">L</button>' +
+                '<button class="toggle_off layer_button" id="'+this.#getIDFn('layerActionHidePrefix')+num+'">H</button>' +
+                '<button class="toggle_off layer_button" id="'+this.#getIDFn('layerActionMoveUpPrefix')+num+'">U</button>' +
+                '<button class="toggle_off layer_button" id="'+this.#getIDFn('layerActionMoveDownPrefix')+num+'">D</button>' +
+                '<button class="toggle_off layer_button" id="'+this.#getIDFn('layerActionDeletePrefix')+num+'">X</button>';
+        d.innerHTML = h;
+
+        this.#ref.layerListContainer.prepend(d);
+
+        var scope = this;
+        document.getElementById(this.#getIDFn('layerActionLockPrefix')+num).addEventListener('click', function(e) {
+            scope.#doFn('toggle-layers-lock', scope.#_arrOfNumsFromID(this.id));
+        });
+        document.getElementById(this.#getIDFn('layerActionHidePrefix')+num).addEventListener('click', function(e) {
+            scope.#doFn('toggle-layers-hide', scope.#_arrOfNumsFromID(this.id));
+        });
+        document.getElementById(this.#getIDFn('layerActionMoveUpPrefix')+num).addEventListener('click', function(e) {
+            scope.#doFn('move-layer-up', scope.#_numFromID(this.id));
+        });
+        document.getElementById(this.#getIDFn('layerActionMoveDownPrefix')+num).addEventListener('click', function(e) {
+            scope.#doFn('move-layer-down', scope.#_numFromID(this.id));
+        });
+        document.getElementById(this.#getIDFn('layerActionDeletePrefix')+num).addEventListener('click', function(e) {
+            scope.#doFn('delete-layers', scope.#_arrOfNumsFromID(this.id));
+        });
+    }
+
+
+    #initBody() {
         // Just in case
         document.body.style.margin = 0;
         document.body.style.padding = 0;
     }
 
-    InitContainer() {
+    #initContainer() {
         // We don't want this in the CSS
         this.#ref.container.style.margin = 0;
         this.#ref.container.style.padding = 0;
         this.#ref.container.style.position = "relative";
     }
 
-    InitLayerContainer() {
+    #initLayerContainer() {
         this.#ref.layerContainer = document.createElement('div');
         this.#ref.layerContainer.id = this.#getIDFn('layerContainer');
         // Again, we don't want the positioning to be in the CSS file
@@ -260,42 +369,10 @@ class Layout {
             scope.#doFn('toggle-layers-hide', []);
         });
         this.#addLayerToolButton('layerToolsContainer', 'X', function(e) {
-            scope.#doFn('delete-layers', []);
+            scope.#doFn('delete-layers', scope.#_arrOfNumsOfSelectedLayers());
         });
     }
 
-    constructor(getIDFn, doFn) {
-        this.#getIDFn = getIDFn;
-        this.#doFn = doFn;
-
-        this.#ref.container = document.getElementById(this.#getIDFn('container'));
-        if (this.#ref.container == null) {
-            alert("div with id='"+this.#getIDFn('container')+"' not found");
-            return;
-        }
-    }
-
-    InitSidebars(zIndexSidebarLeft, zIndexSidebarRight, getToolIconFn, tools, colors) {
-        this.#getToolIconFn = getToolIconFn;
-        this.#tools = tools;
-        this.#colors = colors;
-        this.#initSidebars(zIndexSidebarLeft, zIndexSidebarRight);
-        this.#setScroll();
-        this.#initTools();
-        this.#initColors();
-        this.#initStroke();
-        this.#initFill();
-        this.#initLayers();
-        this.#initProperties();
-    }
-
-    AddVectorLayer(num) {
-        this.AddLayer('V', num);
-    }
-
-    AddPixelLayer(num) {
-        this.AddLayer('P', num);
-    }
 
     // delete many layers
     // selecting current layer when drawing - layout.js
@@ -305,81 +382,5 @@ class Layout {
     // moving up
     // moving down
 
-    AddLayer(t, num) {
-        var d = document.createElement('div');
-        d.className = "sidebar_layer";
-        d.id = this.#getIDFn('layerPrefix')+num;
 
-        var sel = document.createElement('input');
-        sel.type = 'checkbox';
-        sel.className = 'select_layer';
-        sel.id = this.#getIDFn('layerSelect')+num;
-        d.appendChild(sel);
-
-        var typ = document.createElement('label');
-        typ.className = 'layer_type';
-        typ.innerHTML = t;
-        d.appendChild(typ);
-
-        var nam = document.createElement('input');
-        nam.type = 'text';
-        nam.value = 'Layer '+num;
-        nam.className = 'layer_name';
-        nam.id = this.#getIDFn('layerName')+num;
-        d.appendChild(nam);
-
-        var scope = this;
-        var btns = [
-            { lbl: 'L', id: this.#getIDFn('layerActionLockPrefix')+num, fn: function(e) { 
-                var ids = [];
-                var idArr = this.id.split('_');
-                ids.push(parseInt(idArr[idArr.length-1]));
-                scope.#doFn('toggle-layers-lock', ids);
-            } },
-            { lbl: 'H', id: this.#getIDFn('layerActionHidePrefix')+num, fn: function(e) {
-                var ids = [];
-                var idArr = this.id.split('_');
-                ids.push(parseInt(idArr[idArr.length-1]));
-                scope.#doFn('toggle-layers-hide', ids);
-            } },
-            { lbl: 'U', id: this.#getIDFn('layerActionMoveUpPrefix')+num, fn: function(e) {
-                var ids = [];
-                var idArr = this.id.split('_');
-                ids.push(parseInt(idArr[idArr.length-1]));
-                scope.#doFn('move-layer-up', ids);
-            } },
-            { lbl: 'D', id: this.#getIDFn('layerActionMoveDownPrefix')+num, fn: function(e) {
-                var ids = [];
-                var idArr = this.id.split('_');
-                ids.push(parseInt(idArr[idArr.length-1]));
-                scope.#doFn('move-layer-down', ids);
-            } },
-            { lbl: 'X', id: this.#getIDFn('layerActionDeletePrefix')+num, fn: function(e) {
-                var ids = [];
-                var idArr = this.id.split('_');
-                ids.push(parseInt(idArr[idArr.length-1]));
-                scope.#doFn('delete-layers', ids);
-            } }
-        ];
-
-        for (var i=0; i<btns.length; i++) {
-            var b = document.createElement('button');
-            b.className = 'toggle_off layer_button';
-            b.innerHTML = btns[i].lbl;
-            b.id = btns[i].id;
-            b.addEventListener('click', btns[i].fn)
-            d.appendChild(b);
-        }
-
-        this.#ref.layerListContainer.prepend(d);     
-    }
-
-    DeleteLayer(numList) {
-        for (var j=0; j<numList; j++) {
-            var el = document.getElementById(this.#getIDFn('layerPrefix')+numList[j]);
-            if (el !== null) {
-                el.remove();
-            }
-        }
-    }
 }

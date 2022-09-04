@@ -4,8 +4,8 @@ class Config {
         layerContainer: "layer_container",
         grid: "grid_layer",
         pad: "pad_layer",
-        pixel: "pixel_layer",
-        vector: "vector_layer",
+        pixelPrefix: "pixel_layer_",
+        vectorPrefix: "vector_layer_",
         sidebarLeft: "sidebar_left",
         sidebarRight: "sidebar_right",
         layerList: "layer_list",
@@ -18,13 +18,20 @@ class Config {
         layerListContainer: "layerlist_container",
         layerToolsContainer: "layertools_container",
         layerPrefix: "layer_",
-        layerSelectPrefix: "layer_prefix_",
+        layerSelectPrefix: "layer_select_",
         layerNamePrefix: "layer_name_",
         layerActionLockPrefix: "layer_lock_",
         layerActionHidePrefix: "layer_hide_",
         layerActionMoveUpPrefix: "layer_moveup_",
         layerActionMoveDownPrefix: "layer_movedown_",
-        layerActionDeletePrefix: "layer_delete_"
+        layerActionDeletePrefix: "layer_delete_",
+        styleStrokeOpacity: "style_stroke_opacity",
+        styleStrokeWidth: "style_stroke_width",
+        styleStrokeLinecap: "style_stroke_linecap",
+        styleStrokeLinejoin: "style_stroke_linejoin",
+        styleStrokeDasharray: "style_stroke_dasharray",
+        styleFillOpacity: "style_fill_opacity",
+        styleFillRule: "style_fill_rule"
     }
     #colors = {
         "black": "black",
