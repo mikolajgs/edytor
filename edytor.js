@@ -95,6 +95,38 @@ class Edytor {
         this.#layout.SelectLayer(-1);
     }
 
+    MoveLayerDown(num) {
+        for (var i = 0; i < this.#layersOrder.length; i++) {
+            if (this.#layersOrder[i] == num) {
+                if (i == 0)
+                    return;
+                var curZIndex = this.#layers[this.#layersOrder[i]].GetZIndex();
+                this.#layers[this.#layersOrder[i]].SetZIndex(this.#layers[this.#layersOrder[i - 1]].GetZIndex());
+                this.#layers[this.#layersOrder[i - 1]].SetZIndex(curZIndex);
+                this.#layersOrder[i] = this.#layersOrder[i - 1];
+                this.#layersOrder[i - 1] = num;
+                this.#layout.MoveLayerDown(num);
+                return;
+            }
+        }
+    }
+
+    MoveLayerUp(num) {
+        for (var i = 0; i < this.#layersOrder.length; i++) {
+            if (this.#layersOrder[i] == num) {
+                if (i == this.#layersOrder.length - 1)
+                    return;
+                var curZIndex = this.#layers[this.#layersOrder[i]].GetZIndex();
+                this.#layers[this.#layersOrder[i]].SetZIndex(this.#layers[this.#layersOrder[i + 1]].GetZIndex());
+                this.#layers[this.#layersOrder[i + 1]].SetZIndex(curZIndex);
+                this.#layersOrder[i] = this.#layersOrder[i + 1];
+                this.#layersOrder[i + 1] = num;
+                this.#layout.MoveLayerUp(num);
+                return;
+            }
+        }
+    }
+
 
     #alertMissingElement(s) {
         if (document.getElementById(s) == null) {
@@ -168,8 +200,6 @@ class Edytor {
 
     ToggleLayersHide(nums) { alert('toggle layers hide'); }
     ToggleLayersLock(nums) { alert('toggle layers lock'); }
-    MoveLayerDown(num) { alert('move layer down'); }
-    MoveLayerUp(num) { alert('move layer up'); }
 
     GetStyle(s) {
         switch (s) {

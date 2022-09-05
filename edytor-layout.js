@@ -50,6 +50,36 @@ class Layout {
         }
     }
 
+    MoveLayerDown(num) {
+        var els = this.#ref.layerListContainer.querySelectorAll("div.sidebar_layer");
+        for (var i = 0; i < els.length; i++) {
+            var idArr = els[i].id.split('_');
+            if (parseInt(idArr[idArr.length - 1]) == num) {
+                if (i == els.length - 1)
+                    return;
+                var curEl = els[i];
+                var nextEl = els[i + 1];
+                nextEl.after(curEl);
+                return;
+            }
+        }
+    }
+
+    MoveLayerUp(num) {
+        var els = this.#ref.layerListContainer.querySelectorAll("div.sidebar_layer");
+        for (var i = 0; i < els.length; i++) {
+            var idArr = els[i].id.split('_');
+            if (parseInt(idArr[idArr.length - 1]) == num) {
+                if (i == 0)
+                    return;
+                var curEl = els[i];
+                var prevEl = els[i - 1];
+                prevEl.before(curEl);
+                return;
+            }
+        }
+    }
+
 
     Init() {
         this.#initBody();
@@ -387,9 +417,4 @@ class Layout {
             scope.#doFn('delete-layers', scope.#_arrOfNumsOfSelectedLayers());
         });
     }
-
-    // moving up
-    // moving down
-
-
 }
