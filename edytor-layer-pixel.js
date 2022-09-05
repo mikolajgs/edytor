@@ -1,5 +1,4 @@
 class PixelLayer {
-    #type = "pixel";
     #zIndex = 210;
     #visible = true;
     #locked = false;
@@ -22,7 +21,7 @@ class PixelLayer {
 
         this.#ref.container = document.getElementById(this.#id.container);
         if (this.#ref.container == null) {
-            alert("div with id='"+this.#id.container+"' not found");
+            alert("div with id='" + this.#id.container + "' not found");
             return;
         }
     }
@@ -30,8 +29,8 @@ class PixelLayer {
     #resizeToWindow() {
         var w = window.innerWidth;
         var h = window.innerHeight;
-        this.#ref.pixel.width = w*2;
-        this.#ref.pixel.height = h*2;
+        this.#ref.pixel.width = w * 2;
+        this.#ref.pixel.height = h * 2;
     }
 
     SetZIndex(v) {
@@ -71,5 +70,9 @@ class PixelLayer {
 
     GetCanvas() {
         return this.#ref.pixel;
+    }
+
+    GetSVG() {
+        return null;
     }
 }

@@ -16,7 +16,7 @@ class Pad {
 
         this.#ref.container = document.getElementById(this.#id.container);
         if (this.#ref.container == null) {
-            alert("div with id='"+this.#id.container+"' not found");
+            alert("div with id='" + this.#id.container + "' not found");
             return;
         }
     }
@@ -24,39 +24,39 @@ class Pad {
     #resizeToWindow() {
         var w = window.innerWidth;
         var h = window.innerHeight;
-        this.#ref.pad.width = w*2;
-        this.#ref.pad.height = h*2;
+        this.#ref.pad.width = w * 2;
+        this.#ref.pad.height = h * 2;
         this.#ref.pad.style.display = 'none';
     }
 
     #attachEvents() {
         var scope = this;
-        this.#ref.pad.addEventListener('mousedown', function(e) {
+        this.#ref.pad.addEventListener('mousedown', function (e) {
             scope.#mouseDown = true;
-            if (!scope.#getToolFn().IsMultiClick()) {
+            if (!scope.#getToolFn().IsMultiClick) {
                 scope.#getToolFn().DrawStart(e.layerX, e.layerY);
             }
         });
-        this.#ref.pad.addEventListener('mousemove', function(e) {
-            if ((scope.#mouseDown && !scope.#getToolFn().IsMultiClick()) || scope.#getToolFn().IsMultiClick()) {
+        this.#ref.pad.addEventListener('mousemove', function (e) {
+            if ((scope.#mouseDown && !scope.#getToolFn().IsMultiClick) || scope.#getToolFn().IsMultiClick) {
                 scope.#getToolFn().DrawMove(e.layerX, e.layerY);
             }
         });
-        this.#ref.pad.addEventListener('mouseup', function(e) {
+        this.#ref.pad.addEventListener('mouseup', function (e) {
             scope.#mouseDown = false;
-            if (!scope.#getToolFn().IsMultiClick()) {
+            if (!scope.#getToolFn().IsMultiClick) {
                 scope.#getToolFn().DrawEnd(e.layerX, e.layerY);
             } else {
                 scope.#getToolFn().DrawPoint(e.layerX, e.layerY);
             }
         });
-        this.#ref.pad.addEventListener('mouseout', function(e) {
+        this.#ref.pad.addEventListener('mouseout', function (e) {
             scope.#mouseDown = false;
             scope.#getToolFn().DrawCancel();
         });
-        this.#ref.pad.addEventListener('dblclick', function(e) {
+        this.#ref.pad.addEventListener('dblclick', function (e) {
             scope.#mouseDown = false;
-            if (scope.#getToolFn().IsMultiClick()) {
+            if (scope.#getToolFn().IsMultiClick) {
                 scope.#getToolFn().DrawEnd(e.layerX, e.layerY);
             }
         });

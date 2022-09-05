@@ -1,43 +1,38 @@
 class RectangleTool {
-    #name = "Rectangle"
-    #icon = "rec"
-    #pad = true
-    #multiClick = false
-    #startPoint = [0,0];
-    #movePoint = [0,0];
-    #endPoint = [0,0];
+    Name = "Rectangle"
+    Icon = "v:rec"
+    RequiresPad = true
+    IsMultiClick = false
+
+    #startPoint = [0, 0];
+    #movePoint = [0, 0];
+    #endPoint = [0, 0];
     #refDrawedObject = null;
     #ref = {
         pad: null
     }
 
     #getSVGFunc = null;
-    #getCanvasFunc = null;
     #getStyleFunc = null;
 
-    constructor(pad, getStyleFunc, getSVGFunc, getCanvasFunc) {
+    constructor(pad, getStyleFunc, getSVGFunc) {
         this.#ref.pad = pad;
         this.#getStyleFunc = getStyleFunc;
         this.#getSVGFunc = getSVGFunc;
-        this.#getCanvasFunc = getCanvasFunc;
-    }
-
-    GetIcon() {
-        return this.#icon;
-    }
-
-    IsMultiClick() {
-        return this.#multiClick;
-    }
-
-    RequiresPad() {
-        return this.#pad;
     }
 
     DrawStart(x, y) {
+        if (this.#getSVGFunc() === null) {
+            alert('No vector layer has been selected');
+            return;
+        }
         this.#startPoint = [x, y];
     }
     DrawMove(x, y) {
+        if (this.#getSVGFunc() === null) {
+            return;
+        }
+
         this.#movePoint = [x, y];
         if (this.#movePoint[1] != this.#startPoint[1] && this.#movePoint[0] != this.#startPoint[0]) {
             if (this.#refDrawedObject == null) {
@@ -64,6 +59,10 @@ class RectangleTool {
         }
     }
     DrawEnd(x, y) {
+        if (this.#getSVGFunc() === null) {
+            return;
+        }
+
         this.#endPoint = [x, y];
         this.#refDrawedObject = null;
     }

@@ -14,6 +14,7 @@ class Edytor {
     #layersOrder = [];
     #layers = {};
     #layer = null;
+    #layerNum = 0;
     #lastLayerNum = 0;
 
     Do(cmd, arg1) {
@@ -83,12 +84,14 @@ class Edytor {
     SelectLayer(num) {
         if (this.#layers[num] !== null) {
             this.#layer = this.#layers[num];
+            this.#layerNum = num;
             this.#layout.SelectLayer(num);
         }
     }
 
     DeselectLayer() {
         this.#layer = null;
+        this.#layerNum = 0;
         this.#layout.SelectLayer(-1);
     }
 
@@ -126,7 +129,7 @@ class Edytor {
 
         var toolNames = this.#initTools();
         this.#layout.InitSidebars(this.#cfg.GetZIndex('sidebarLeft'), this.#cfg.GetZIndex('sidebarRight'), function (n) {
-            return scope.#tools[n].GetIcon();
+            return scope.#tools[n].Icon;
         }, toolNames, this.#cfg.GetColors());
     }
 
@@ -141,33 +144,26 @@ class Edytor {
 
     #initTools() {
         var scope = this;
+        var fnGetStyle = function (s) {
+            return scope.GetStyle(s);
+        }
+        var fnGetCurrentLayerSVG = function () {
+            if (scope.#layer === null)
+                return null;
+            return scope.#layer.GetSVG();
+        }
+        var fnGetCurrentLayerCanvas = function () {
+            if (scope.#layer === null)
+                return null;
+            return scope.#layer.GetCanvas();
+        }
         this.#tools = {
-            'rectangle': new RectangleTool(this.#pad.GetCanvas(), function (s) {
-                return scope.GetStyle(s);
-            }, function () {
-                return scope.#layers[0].GetSVG();
-            }, function () {
-                return scope.#layers[1].GetCanvas();
-            }),
-            'pencil': new PencilTool(this.#pad.GetCanvas(), function (s) {
-                return scope.GetStyle(s);
-            }, function () {
-                return scope.#layers[0].GetSVG();
-            }, function () {
-                return scope.#layers[1].GetCanvas();
-            }),
-            'polygon': new PolygonTool(this.#pad.GetCanvas(), function (s) {
-                return scope.GetStyle(s);
-            }, function () {
-                return scope.#layers[0].GetSVG();
-            }, function () {
-                return scope.#layers[1].GetCanvas();
-            })
+            'rectangle': new RectangleTool(this.#pad.GetCanvas(), fnGetStyle, fnGetCurrentLayerSVG),
+            'pencil': new PencilTool(this.#pad.GetCanvas(), fnGetStyle, fnGetCurrentLayerCanvas),
+            'polygon': new PolygonTool(this.#pad.GetCanvas(), fnGetStyle, fnGetCurrentLayerSVG)
         }
         return ['rectangle', 'pencil', 'polygon'];
     }
-
-
 
 
     ToggleLayersHide(nums) { alert('toggle layers hide'); }
@@ -191,7 +187,7 @@ class Edytor {
 
     SetTool(name) {
         this.#tool = name;
-        if (this.#tools[name].RequiresPad()) {
+        if (this.#tools[name].RequiresPad) {
             this.#pad.Show();
         } else {
             this.#pad.Hide();

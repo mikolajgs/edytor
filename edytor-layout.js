@@ -332,18 +332,18 @@ class Layout {
     #initStroke() {
         this.#addSidebarTitle('sidebarLeft', "Stroke");
         this.#addSidebarContainer('sidebarLeft', 'strokeContainer');
-        this.#addSidebarProperty('sidebarLeft', "Width", "stroke_width", "", "3");
-        this.#addSidebarProperty('sidebarLeft', "Opacity", "stroke_opacity", "", "100%");
-        this.#addSidebarProperty('sidebarLeft', "Linecap", "stroke_linecap", "", "", { "butt": "butt", "square": "square", "round": "round" });
-        this.#addSidebarProperty('sidebarLeft', "Linejoin", "stroke_linejoin", "", "", { "miter": "miter", "round": "round", "bevel": "bevel" });
-        this.#addSidebarProperty('sidebarLeft', "Dasharray", "stroke_dasharray", "", "5");
+        this.#addSidebarProperty('sidebarLeft', "Width", this.#getIDFn("styleStrokeWidth"), "", "3");
+        this.#addSidebarProperty('sidebarLeft', "Opacity", this.#getIDFn("styleStrokeOpacity"), "", "100%");
+        this.#addSidebarProperty('sidebarLeft', "Linecap", this.#getIDFn("styleStrokeLinecap"), "", "", { "butt": "butt", "square": "square", "round": "round" });
+        this.#addSidebarProperty('sidebarLeft', "Linejoin", this.#getIDFn("styleStrokeLinejoin"), "", "", { "miter": "miter", "round": "round", "bevel": "bevel" });
+        this.#addSidebarProperty('sidebarLeft', "Dasharray", this.#getIDFn("styleStrokeDasharray"), "", "5");
     }
 
     #initFill() {
         this.#addSidebarTitle('sidebarLeft', "Fill");
         this.#addSidebarContainer('sidebarLeft', 'fillContainer');
-        this.#addSidebarProperty('sidebarLeft', "Opacity", "fill_opacity", "", "100%");
-        this.#addSidebarProperty('sidebarLeft', "Rule", "fill_rule", "", "", { "nonzero": "nonzero", "evenodd": "evenodd", "inherit": "inherit" });
+        this.#addSidebarProperty('sidebarLeft', "Opacity", this.#getIDFn("styleFillOpacity"), "", "100%");
+        this.#addSidebarProperty('sidebarLeft', "Rule", this.#getIDFn("styleFillRule"), "", "", { "nonzero": "nonzero", "evenodd": "evenodd", "inherit": "inherit" });
     }
 
     #initProperties() {
@@ -388,9 +388,6 @@ class Layout {
         });
     }
 
-
-    // selecting current layer when drawing - layout.js
-    // selecting tool vs a type of layer + add 'v:' or 'p:' prefix for tools?
     // moving up
     // moving down
 

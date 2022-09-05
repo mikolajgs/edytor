@@ -1,5 +1,4 @@
 class VectorLayer {
-    #type = "vector";
     #zIndex = 210;
     #visible = true;
     #locked = false;
@@ -22,7 +21,7 @@ class VectorLayer {
 
         this.#ref.container = document.getElementById(this.#id.container);
         if (this.#ref.container == null) {
-            alert("div with id='"+this.#id.container+"' not found");
+            alert("div with id='" + this.#id.container + "' not found");
             return;
         }
     }
@@ -65,5 +64,9 @@ class VectorLayer {
 
     GetSVG() {
         return this.#ref.vector;
+    }
+
+    GetCanvas() {
+        return null;
     }
 }

@@ -1,10 +1,9 @@
 class PencilTool {
-    #name = "Pencil"
-    #icon = "pen"
-    #pad = true
-    #multiClick = false
+    Name = "Pencil"
+    Icon = "p:pen"
+    RequiresPad = true
+    IsMultiClick = false
 
-    #getSVGFunc = null;
     #getCanvasFunc = null;
     #getStyleFunc = null;
 
@@ -15,26 +14,18 @@ class PencilTool {
         pad: null
     }
 
-    constructor(pad, getStyleFunc, getSVGFunc, getCanvasFunc) {
+    constructor(pad, getStyleFunc, getCanvasFunc) {
         this.#ref.pad = pad;
         this.#getStyleFunc = getStyleFunc;
-        this.#getSVGFunc = getSVGFunc;
         this.#getCanvasFunc = getCanvasFunc;
     }
 
-    GetIcon() {
-        return this.#icon;
-    }
-
-    IsMultiClick() {
-        return this.#multiClick;
-    }
-
-    RequiresPad() {
-        return this.#pad;
-    }
-
     DrawStart(x, y) {
+        if (this.#getCanvasFunc() === null) {
+            alert('No pixel layer has been selected');
+            return;
+        }
+
         this.#ref.pixel = this.#getCanvasFunc();
         this.#ref.pixelCtx = this.#ref.pixel.getContext('2d');
         this.#ref.pixelCtx.strokeStyle = this.#getStyleFunc('color-fg');
@@ -47,6 +38,10 @@ class PencilTool {
         this.#ref.pixelCtx.moveTo(x, y);
     }
     DrawMove(x, y) {
+        if (this.#getCanvasFunc() === null) {
+            return;
+        }
+
         if (x < this.#topLeft[0])
             this.#topLeft[0] = x;
         if (x > this.#bottomRight[0])
@@ -65,9 +60,17 @@ class PencilTool {
         this.#prevPos[1] = y;
     }
     DrawEnd(x, y) {
+        if (this.#getCanvasFunc() === null) {
+            return;
+        }
+
         this.#ref.pixelCtx.closePath();
     }
     DrawCancel() {
+        if (this.#getCanvasFunc() === null) {
+            return;
+        }
+
         this.#ref.pixelCtx.closePath();
     }
 }
