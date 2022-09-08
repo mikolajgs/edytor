@@ -1,7 +1,8 @@
 class PixelLayer {
+    Hidden = false;
+    Locked = false;
+
     #zIndex = 210;
-    #visible = true;
-    #locked = false;
     #removed = false;
     #num = 0;
 
@@ -66,6 +67,20 @@ class PixelLayer {
     Delete() {
         this.#ref.pixel.remove();
         this.#removed = true;
+    }
+
+    ToggleHidden() {
+        if (this.Hidden) {
+            this.#ref.pixel.style.display = '';
+            this.Hidden = false;
+        } else {
+            this.#ref.pixel.style.display = 'none';
+            this.Hidden = true;
+        }
+    }
+
+    ToggleLocked() {
+        this.Locked = this.Locked ? false : true;
     }
 
     GetCanvas() {

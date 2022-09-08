@@ -127,6 +127,39 @@ class Edytor {
         }
     }
 
+    ToggleLayersHide(numList) {
+        var newValue = null;
+        for (var j = 0; j < numList.length; j++) {
+            if (this.#layers[numList[j]] !== null) {
+                if (newValue === null) {
+                    this.#layers[numList[j]].ToggleHidden();
+                    newValue = this.#layers[numList[j]].Hidden;
+                } else {
+                    if (this.#layers[numList[j]].Hidden != newValue) {
+                        this.#layers[numList[j]].ToggleHidden();
+                    }
+                }
+                this.#layout.SetLayerHidden(numList[j], newValue);
+            }
+        }
+    }
+
+    ToggleLayersLock(numList) {
+        var newValue = null;
+        for (var j = 0; j < numList.length; j++) {
+            if (this.#layers[numList[j]] !== null) {
+                if (newValue === null) {
+                    this.#layers[numList[j]].ToggleLocked();
+                    newValue = this.#layers[numList[j]].Locked;
+                } else {
+                    if (this.#layers[numList[j]].Locked != newValue) {
+                        this.#layers[numList[j]].ToggleLocked()
+                    }
+                }
+                this.#layout.SetLayerLocked(numList[j], newValue);
+            }
+        }
+    }
 
     #alertMissingElement(s) {
         if (document.getElementById(s) == null) {
@@ -179,27 +212,18 @@ class Edytor {
         var fnGetStyle = function (s) {
             return scope.GetStyle(s);
         }
-        var fnGetCurrentLayerSVG = function () {
+        var fnGetCurrentLayer = function () {
             if (scope.#layer === null)
                 return null;
-            return scope.#layer.GetSVG();
-        }
-        var fnGetCurrentLayerCanvas = function () {
-            if (scope.#layer === null)
-                return null;
-            return scope.#layer.GetCanvas();
+            return scope.#layer;
         }
         this.#tools = {
-            'rectangle': new RectangleTool(this.#pad.GetCanvas(), fnGetStyle, fnGetCurrentLayerSVG),
-            'pencil': new PencilTool(this.#pad.GetCanvas(), fnGetStyle, fnGetCurrentLayerCanvas),
-            'polygon': new PolygonTool(this.#pad.GetCanvas(), fnGetStyle, fnGetCurrentLayerSVG)
+            'rectangle': new RectangleTool(this.#pad.GetCanvas(), fnGetStyle, fnGetCurrentLayer),
+            'pencil': new PencilTool(this.#pad.GetCanvas(), fnGetStyle, fnGetCurrentLayer),
+            'polygon': new PolygonTool(this.#pad.GetCanvas(), fnGetStyle, fnGetCurrentLayer)
         }
         return ['rectangle', 'pencil', 'polygon'];
     }
-
-
-    ToggleLayersHide(nums) { alert('toggle layers hide'); }
-    ToggleLayersLock(nums) { alert('toggle layers lock'); }
 
     GetStyle(s) {
         switch (s) {
@@ -240,3 +264,12 @@ function Init() {
 }
 
 document.addEventListener("DOMContentLoaded", Init, false);
+
+// have a look on how the tools are designed - can we make them through command in the future?
+
+
+// at the bottom add an input window and log window (for now they can be visible)
+// where you could just type in commands, same way it would be done with Do
+// + abstract the commands into separate classes somehow so they can have arguments definion, and logic
+
+// how can we do the same for tools?

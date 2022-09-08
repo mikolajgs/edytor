@@ -10,20 +10,31 @@ class PolygonTool {
         pad: null
     };
 
-    #getSVGFunc = null;
+    #getLayerFunc = null;
     #getStyleFunc = null;
 
-    constructor(pad, getStyleFunc, getSVGFunc) {
+    constructor(pad, getStyleFunc, getLayerFunc) {
         this.#ref.pad = pad;
         this.#getStyleFunc = getStyleFunc;
-        this.#getSVGFunc = getSVGFunc;
+        this.#getLayerFunc = getLayerFunc;
     }
 
     DrawStart(x, y) {
     }
     DrawPoint(x, y) {
-        if (this.#getSVGFunc() === null) {
+        if (this.#getLayerFunc() === null) {
+            alert('No layer has been selected');
+            return;
+        }
+        if (this.#getLayerFunc().GetSVG() === null) {
             alert('No vector layer has been selected');
+            return;
+        }
+        if (this.#getLayerFunc().Locked) {
+            alert('Layer is locked for editing');
+            return;
+        }
+        if (this.#getLayerFunc().Hidden) {
             return;
         }
 
@@ -42,7 +53,7 @@ class PolygonTool {
                 this.#refDrawedObject.setAttribute("stroke-dasharray", this.#getStyleFunc('stroke-dasharray'));
             }
             this.#refDrawedObject.setAttribute("points", this.#points[0][0] + " " + this.#points[0][1] + " " + this.#points[1][0] + " " + this.#points[1][1]);
-            this.#getSVGFunc().appendChild(this.#refDrawedObject);
+            this.#getLayerFunc().GetSVG().appendChild(this.#refDrawedObject);
         }
         if (this.#points.length > 2 && (this.#points[this.#points.length - 1] != x && this.#points[this.#points.length - 1] != y)) {
             this.#refDrawedObject.setAttribute("points", this.#refDrawedObject.getAttribute("points") + " " + x + " " + y);
@@ -51,7 +62,16 @@ class PolygonTool {
     DrawMove(x, y) {
     }
     DrawEnd(x, y) {
-        if (this.#getSVGFunc() === null) {
+        if (this.#getLayerFunc() === null) {
+            return;
+        }
+        if (this.#getLayerFunc().GetSVG() === null) {
+            return;
+        }
+        if (this.#getLayerFunc().Locked) {
+            return;
+        }
+        if (this.#getLayerFunc().Hidden) {
             return;
         }
 

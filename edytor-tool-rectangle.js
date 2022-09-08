@@ -12,24 +12,45 @@ class RectangleTool {
         pad: null
     }
 
-    #getSVGFunc = null;
+    #getLayerFunc = null;
     #getStyleFunc = null;
 
-    constructor(pad, getStyleFunc, getSVGFunc) {
+    constructor(pad, getStyleFunc, getLayerFunc) {
         this.#ref.pad = pad;
         this.#getStyleFunc = getStyleFunc;
-        this.#getSVGFunc = getSVGFunc;
+        this.#getLayerFunc = getLayerFunc;
     }
 
     DrawStart(x, y) {
-        if (this.#getSVGFunc() === null) {
+        if (this.#getLayerFunc() === null) {
+            alert('No layer has been selected');
+            return;
+        }
+        if (this.#getLayerFunc().GetSVG() === null) {
             alert('No vector layer has been selected');
             return;
         }
+        if (this.#getLayerFunc().Locked) {
+            alert('Layer is locked for editing');
+            return;
+        }
+        if (this.#getLayerFunc().Hidden) {
+            return;
+        }
+
         this.#startPoint = [x, y];
     }
     DrawMove(x, y) {
-        if (this.#getSVGFunc() === null) {
+        if (this.#getLayerFunc() === null) {
+            return;
+        }
+        if (this.#getLayerFunc().GetSVG() === null) {
+            return;
+        }
+        if (this.#getLayerFunc().Locked) {
+            return;
+        }
+        if (this.#getLayerFunc().Hidden) {
             return;
         }
 
@@ -51,7 +72,7 @@ class RectangleTool {
             this.#refDrawedObject.setAttribute("height", (this.#startPoint[1] < this.#movePoint[1] ? this.#movePoint[1] - this.#startPoint[1] : this.#startPoint[1] - this.#movePoint[1]));
             this.#refDrawedObject.setAttribute("x", (this.#startPoint[0] < this.#movePoint[0] ? this.#startPoint[0] : this.#movePoint[0]))
             this.#refDrawedObject.setAttribute("y", (this.#startPoint[1] < this.#movePoint[1] ? this.#startPoint[1] : this.#movePoint[1]))
-            this.#getSVGFunc().appendChild(this.#refDrawedObject);
+            this.#getLayerFunc().GetSVG().appendChild(this.#refDrawedObject);
         } else {
             if (this.#refDrawedObject != null) {
                 this.#refDrawedObject.parentNode.removeChild(this.#refDrawedObject);
@@ -59,7 +80,16 @@ class RectangleTool {
         }
     }
     DrawEnd(x, y) {
-        if (this.#getSVGFunc() === null) {
+        if (this.#getLayerFunc() === null) {
+            return;
+        }
+        if (this.#getLayerFunc().GetSVG() === null) {
+            return;
+        }
+        if (this.#getLayerFunc().Locked) {
+            return;
+        }
+        if (this.#getLayerFunc().Hidden) {
             return;
         }
 

@@ -36,6 +36,7 @@ class Layout {
                 el.remove();
             }
         }
+        this.#tickTheTickAllCheckbox();
     }
 
     SelectLayer(num) {
@@ -80,6 +81,15 @@ class Layout {
         }
     }
 
+    SetLayerLocked(num, locked) {
+        document.getElementById(this.#getIDFn('layerActionLockPrefix') + num).classList.add(locked ? 'toggle_on' : 'toggle_off');
+        document.getElementById(this.#getIDFn('layerActionLockPrefix') + num).classList.remove(locked ? 'toggle_off' : 'toggle_on');
+    }
+
+    SetLayerHidden(num, hidden) {
+        document.getElementById(this.#getIDFn('layerActionHidePrefix') + num).classList.add(hidden ? 'toggle_on' : 'toggle_off');
+        document.getElementById(this.#getIDFn('layerActionHidePrefix') + num).classList.remove(hidden ? 'toggle_off' : 'toggle_on');
+    }
 
     Init() {
         this.#initBody();
@@ -126,7 +136,7 @@ class Layout {
     }
     #_arrOfNumsOfSelectedLayers() {
         var ids = [];
-        var els = this.#ref.layerListContainer.querySelectorAll("div.sidebar_layer > input.select_layer");
+        var els = this.#ref.layerListContainer.querySelectorAll("div.sidebar_layer > input.tick_layer");
         for (var i = 0; i < els.length; i++) {
             if (els[i].checked) {
                 var idArr = els[i].id.split('_');
@@ -140,7 +150,7 @@ class Layout {
         var d = document.createElement('div');
         d.className = "sidebar_layer";
         d.id = this.#getIDFn('layerPrefix') + num;
-        var h = '<input type="checkbox" class="select_layer" id="' + this.#getIDFn('layerSelectPrefix') + num + '"/>' +
+        var h = '<input type="checkbox" class="tick_layer" id="' + this.#getIDFn('layerTickPrefix') + num + '"/>' +
             '<label class="layer_type" id="' + this.#getIDFn('layerTypePrefix') + num + '">' + t + '</label>' +
             '<input type="text" value="Layer ' + num + '" class="layer_name" id="' + this.#getIDFn('layerNamePrefix') + num + '"/>' +
             '<button class="toggle_off layer_button" id="' + this.#getIDFn('layerActionLockPrefix') + num + '">L</button>' +
@@ -153,6 +163,9 @@ class Layout {
         this.#ref.layerListContainer.prepend(d);
 
         var scope = this;
+        document.getElementById(this.#getIDFn('layerTickPrefix') + num).addEventListener('click', function (e) {
+            scope.#tickTheTickAllCheckbox();
+        });
         document.getElementById(this.#getIDFn('layerTypePrefix') + num).addEventListener('click', function (e) {
             scope.#doFn('select-layer', scope.#_numFromID(this.id));
         });
@@ -171,6 +184,28 @@ class Layout {
         document.getElementById(this.#getIDFn('layerActionDeletePrefix') + num).addEventListener('click', function (e) {
             scope.#doFn('delete-layers', scope.#_arrOfNumsFromID(this.id));
         });
+    }
+
+    #tickAllLayers(check) {
+        var els = this.#ref.layerListContainer.querySelectorAll("div.sidebar_layer > input.tick_layer");
+        for (var i = 0; i < els.length; i++) {
+            els[i].checked = check;
+        }
+    }
+
+    #tickTheTickAllCheckbox() {
+        var els = this.#ref.layerListContainer.querySelectorAll("div.sidebar_layer > input.tick_layer");
+        if (els.length == 0) {
+            document.getElementById(this.#getIDFn('layerActionTickAll')).checked = false;
+            return;
+        }
+        for (var i = 0; i < els.length; i++) {
+            if (!els[i].checked) {
+                document.getElementById(this.#getIDFn('layerActionTickAll')).checked = false;
+                return;
+            }
+        }
+        document.getElementById(this.#getIDFn('layerActionTickAll')).checked = true;
     }
 
 
@@ -399,8 +434,20 @@ class Layout {
         this.#ref[ref].appendChild(b);
     }
 
+    #addLayerToolInputCheckbox(ref) {
+        var b = document.createElement('input');
+        b.type = "checkbox";
+        b.id = this.#getIDFn('layerActionTickAll');
+        var scope = this;
+        b.addEventListener('click', function () {
+            scope.#tickAllLayers(this.checked);
+        });
+        this.#ref[ref].appendChild(b);
+    }
+
     #initLayerTools() {
         var scope = this;
+        this.#addLayerToolInputCheckbox('layerToolsContainer');
         this.#addLayerToolButton('layerToolsContainer', '+V', function (e) {
             scope.#doFn('add-vector-layer', []);
         });
@@ -408,10 +455,10 @@ class Layout {
             scope.#doFn('add-pixel-layer', []);
         });
         this.#addLayerToolButton('layerToolsContainer', 'L', function (e) {
-            scope.#doFn('toggle-layers-lock', []);
+            scope.#doFn('toggle-layers-lock', scope.#_arrOfNumsOfSelectedLayers());
         });
         this.#addLayerToolButton('layerToolsContainer', 'H', function (e) {
-            scope.#doFn('toggle-layers-hide', []);
+            scope.#doFn('toggle-layers-hide', scope.#_arrOfNumsOfSelectedLayers());
         });
         this.#addLayerToolButton('layerToolsContainer', 'X', function (e) {
             scope.#doFn('delete-layers', scope.#_arrOfNumsOfSelectedLayers());

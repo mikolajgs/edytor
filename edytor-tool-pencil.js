@@ -4,7 +4,7 @@ class PencilTool {
     RequiresPad = true
     IsMultiClick = false
 
-    #getCanvasFunc = null;
+    #getLayerFunc = null;
     #getStyleFunc = null;
 
     #topLeft = [0, 0];
@@ -14,19 +14,30 @@ class PencilTool {
         pad: null
     }
 
-    constructor(pad, getStyleFunc, getCanvasFunc) {
+    constructor(pad, getStyleFunc, getLayerFunc) {
         this.#ref.pad = pad;
         this.#getStyleFunc = getStyleFunc;
-        this.#getCanvasFunc = getCanvasFunc;
+        this.#getLayerFunc = getLayerFunc;
     }
 
     DrawStart(x, y) {
-        if (this.#getCanvasFunc() === null) {
+        if (this.#getLayerFunc() === null) {
+            alert('No layer has been selected');
+            return;
+        }
+        if (this.#getLayerFunc().GetCanvas() === null) {
             alert('No pixel layer has been selected');
             return;
         }
+        if (this.#getLayerFunc().Locked) {
+            alert('Layer is locked for editing');
+            return;
+        }
+        if (this.#getLayerFunc().Hidden) {
+            return;
+        }
 
-        this.#ref.pixel = this.#getCanvasFunc();
+        this.#ref.pixel = this.#getLayerFunc().GetCanvas();
         this.#ref.pixelCtx = this.#ref.pixel.getContext('2d');
         this.#ref.pixelCtx.strokeStyle = this.#getStyleFunc('color-fg');
         this.#ref.pixelCtx.lineWidth = this.#getStyleFunc('stroke-width');
@@ -38,7 +49,16 @@ class PencilTool {
         this.#ref.pixelCtx.moveTo(x, y);
     }
     DrawMove(x, y) {
-        if (this.#getCanvasFunc() === null) {
+        if (this.#getLayerFunc() === null) {
+            return;
+        }
+        if (this.#getLayerFunc().GetCanvas() === null) {
+            return;
+        }
+        if (this.#getLayerFunc().Locked) {
+            return;
+        }
+        if (this.#getLayerFunc().Hidden) {
             return;
         }
 
@@ -60,14 +80,32 @@ class PencilTool {
         this.#prevPos[1] = y;
     }
     DrawEnd(x, y) {
-        if (this.#getCanvasFunc() === null) {
+        if (this.#getLayerFunc() === null) {
+            return;
+        }
+        if (this.#getLayerFunc().GetCanvas() === null) {
+            return;
+        }
+        if (this.#getLayerFunc().Locked) {
+            return;
+        }
+        if (this.#getLayerFunc().Hidden) {
             return;
         }
 
         this.#ref.pixelCtx.closePath();
     }
     DrawCancel() {
-        if (this.#getCanvasFunc() === null) {
+        if (this.#getLayerFunc() === null) {
+            return;
+        }
+        if (this.#getLayerFunc().GetCanvas() === null) {
+            return;
+        }
+        if (this.#getLayerFunc().Locked) {
+            return;
+        }
+        if (this.#getLayerFunc().Hidden) {
             return;
         }
 

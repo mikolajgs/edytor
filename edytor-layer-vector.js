@@ -1,7 +1,8 @@
 class VectorLayer {
+    Hidden = false;
+    Locked = false;
+
     #zIndex = 210;
-    #visible = true;
-    #locked = false;
     #num = 0;
     #removed = false;
 
@@ -60,6 +61,20 @@ class VectorLayer {
     Delete() {
         this.#ref.vector.remove();
         this.#removed = true;
+    }
+
+    ToggleHidden() {
+        if (this.Hidden) {
+            this.#ref.vector.style.display = '';
+            this.Hidden = false;
+        } else {
+            this.#ref.vector.style.display = 'none';
+            this.Hidden = true;
+        }
+    }
+
+    ToggleLocked() {
+        this.Locked = this.Locked ? false : true;
     }
 
     GetSVG() {
