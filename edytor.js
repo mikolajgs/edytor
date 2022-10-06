@@ -22,15 +22,16 @@ class Edytor {
             case 'add-vector-layer': return this.AddVectorLayer();
             case 'add-pixel-layer': return this.AddPixelLayer();
             case 'delete-layers': return this.DeleteLayers(arg1);
-            case 'toggle-layers-lock': return this.ToggleLayersLock(arg1);
-            case 'toggle-layers-hide': return this.ToggleLayersHide(arg1);
+            case 'select-layer': return this.SelectLayer(arg1);
+            case 'deselect-layer': return this.DeleteLayers();
             case 'move-layer-up': return this.MoveLayerUp(arg1);
             case 'move-layer-down': return this.MoveLayerDown(arg1);
+            case 'toggle-layers-lock': return this.ToggleLayersLock(arg1);
+            case 'toggle-layers-hide': return this.ToggleLayersHide(arg1);
             case 'set-tool': return this.SetTool(arg1);
             case 'set-fg-color': return this.SetFgColor(arg1);
             case 'set-bg-color': return this.SetBgColor(arg1);
-            case 'select-layer': return this.SelectLayer(arg1);
-            case 'deselect-layer': return this.DeselectLayer();
+            case 'get-style': return this.GetStyle(arg1);
         }
         return false;
     }
@@ -161,6 +162,37 @@ class Edytor {
         }
     }
 
+    SetTool(name) {
+        this.#tool = name;
+        if (this.#tools[name].RequiresPad) {
+            this.#pad.Show();
+        } else {
+            this.#pad.Hide();
+        }
+    }
+
+    SetFgColor(name) {
+        this.#colorFg = name;
+    }
+
+    SetBgColor(name) {
+        this.#colorBg = name;
+    }
+
+    GetStyle(s) {
+        switch (s) {
+            case 'color-fg': return this.#colorFg;
+            case 'color-bg': return this.#colorBg;
+            case 'stroke-opacity': return document.getElementById(this.#cfg.GetID("styleStrokeOpacity")).value;
+            case 'stroke-width': return document.getElementById(this.#cfg.GetID("styleStrokeWidth")).value;
+            case 'stroke-linecap': return document.getElementById(this.#cfg.GetID("styleStrokeLinecap")).value;
+            case 'stroke-linejoin': return document.getElementById(this.#cfg.GetID("styleStrokeLinejoin")).value;
+            case 'stroke-dasharray': return document.getElementById(this.#cfg.GetID("styleStrokeDasharray")).value;
+            case 'fill-opacity': return document.getElementById(this.#cfg.GetID("styleFillOpacity")).value;
+            case 'fill-rule': return document.getElementById(this.#cfg.GetID("styleFillRule")).value;
+        }
+    }
+
     #alertMissingElement(s) {
         if (document.getElementById(s) == null) {
             alert("HTML element with id='" + s + "' not found");
@@ -220,40 +252,10 @@ class Edytor {
         this.#tools = {
             'rectangle': new RectangleTool(this.#pad.GetCanvas(), fnGetStyle, fnGetCurrentLayer),
             'pencil': new PencilTool(this.#pad.GetCanvas(), fnGetStyle, fnGetCurrentLayer),
-            'polygon': new PolygonTool(this.#pad.GetCanvas(), fnGetStyle, fnGetCurrentLayer)
+            'polygon': new PolygonTool(this.#pad.GetCanvas(), fnGetStyle, fnGetCurrentLayer),
+            'testgroup': new TestGroupTool(this.#pad.GetCanvas(), fnGetStyle, fnGetCurrentLayer)
         }
-        return ['rectangle', 'pencil', 'polygon'];
-    }
-
-    GetStyle(s) {
-        switch (s) {
-            case 'color-fg': return this.#colorFg;
-            case 'color-bg': return this.#colorBg;
-            case 'stroke-opacity': return document.getElementById(this.#cfg.GetID("styleStrokeOpacity")).value;
-            case 'stroke-width': return document.getElementById(this.#cfg.GetID("styleStrokeWidth")).value;
-            case 'stroke-linecap': return document.getElementById(this.#cfg.GetID("styleStrokeLinecap")).value;
-            case 'stroke-linejoin': return document.getElementById(this.#cfg.GetID("styleStrokeLinejoin")).value;
-            case 'stroke-dasharray': return document.getElementById(this.#cfg.GetID("styleStrokeDasharray")).value;
-            case 'fill-opacity': return document.getElementById(this.#cfg.GetID("styleFillOpacity")).value;
-            case 'fill-rule': return document.getElementById(this.#cfg.GetID("styleFillRule")).value;
-        }
-    }
-
-    SetTool(name) {
-        this.#tool = name;
-        if (this.#tools[name].RequiresPad) {
-            this.#pad.Show();
-        } else {
-            this.#pad.Hide();
-        }
-    }
-
-    SetFgColor(name) {
-        this.#colorFg = name;
-    }
-
-    SetBgColor(name) {
-        this.#colorBg = name;
+        return ['rectangle', 'pencil', 'polygon', 'testgroup'];
     }
 }
 

@@ -1,7 +1,14 @@
 # edytor
 
 ### Tools
-...
+
+* select
+* move
+* edit shape
+* rotate
+* scale
+
+
 
 ### Functionality of basic tools
 
@@ -9,24 +16,30 @@
 * select many by using ctrl/cmd
 * select many by drawing a rectangle
 
+
 * move one
 * move selected
+
 
 * scale in/out
 * rotate 90, 180, 270
 * rotate freely
 
+
 * zoom in
 * zoom out
+
 
 * select a point
 * select many points with ctrl/cmd
 * select many by drawing a rectangle
 
+
 * move a point
 * move selected points
 * delete a point
 * add a point
+
 
 ### Controls
 
