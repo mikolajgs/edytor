@@ -8,6 +8,10 @@ class Config {
         vectorPrefix: "vector_layer_",
         sidebarLeft: "sidebar_left",
         sidebarRight: "sidebar_right",
+        topMenu: "top_menu",
+        bottomShell: "bottom_shell",
+        shell: "shell",
+        logs: "logs",
         layerList: "layer_list",
         toolContainer: "tool_container",
         colorFgContainer: "colorfg_container",
@@ -58,6 +62,8 @@ class Config {
         pad: 401,
         sidebarLeft: 511,
         sidebarRight: 521,
+        topMenu: 531,
+        bottomShell: 541,
         layerStart: 201
     }
 

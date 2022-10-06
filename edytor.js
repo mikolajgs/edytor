@@ -225,6 +225,10 @@ class Edytor {
         });
 
         var toolNames = this.#initTools();
+
+        this.#layout.InitTopMenu(this.#cfg.GetZIndex('topMenu'));
+        this.#layout.InitBottomShell(this.#cfg.GetZIndex('bottomShell'));
+
         this.#layout.InitSidebars(this.#cfg.GetZIndex('sidebarLeft'), this.#cfg.GetZIndex('sidebarRight'), function (n) {
             return scope.#tools[n].Icon;
         }, toolNames, this.#cfg.GetColors());

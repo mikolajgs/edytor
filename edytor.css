@@ -17,6 +17,50 @@ body {
     background: #3d3d3d;
 }
 
+.top_menu {
+    width: 100%;
+    background: #3d3d3d;
+    height: 20px;
+    padding: 0;
+    margin: 0;
+}
+
+.bottom_shell {
+    width: 100%;
+    background: #3d3d3d;
+    height: 80px;
+    padding: 0;
+    margin: 0;
+}
+
+.logs {
+    width: 100%;
+    background: #111111;
+    height: 60px;
+    padding: 0;
+    margin: 0;
+    border: solid 1px #333333;
+    color: #eeeeee;
+    font-size: 10px;
+    font-family: courier;
+}
+
+.shell {
+    background: #111111;
+    border: solid 1px #333333;
+    color: #eeeeee;
+    font-size: 10px;
+    font-family: courier;
+    height: 10px;
+    margin: 0;
+    padding: 0;
+}
+
+.logs:focus,
+.shell:focus {
+    outline: none;
+}
+
 .sidebar_title {
     font-size: 10px;
     font-family: arial;

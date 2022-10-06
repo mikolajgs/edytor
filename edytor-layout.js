@@ -111,6 +111,54 @@ class Layout {
         this.#initProperties();
     }
 
+    InitTopMenu(zIndexTopMenu) {
+        var ref = "topMenu";
+        this.#ref[ref] = document.createElement('div');
+        this.#ref[ref].className = 'top_menu';
+        this.#ref[ref].id = this.#getIDFn('topMenu');
+        this.#ref[ref].style.zIndex = zIndexTopMenu;
+        this.#ref[ref].style.position = "fixed";
+        this.#ref[ref].style.top = "0";
+        this.#ref[ref].style.left = 0;
+        this.#ref.container.appendChild(this.#ref[ref]);
+    }
+
+    InitBottomShell(zIndexBottomShell) {
+        var ref = "bottomShell";
+        this.#ref[ref] = document.createElement('div');
+        this.#ref[ref].className = 'bottom_shell';
+        this.#ref[ref].id = this.#getIDFn('bottomShell');
+        this.#ref[ref].style.zIndex = zIndexBottomShell;
+        this.#ref[ref].style.position = "fixed";
+        this.#ref[ref].style.bottom = "0";
+        this.#ref[ref].style.left = 0;
+        this.#ref.container.appendChild(this.#ref[ref]);
+
+        var ref = "shell";
+        this.#ref[ref] = document.createElement('input');
+        this.#ref[ref].type = "text";
+        this.#ref[ref].style.padding = 0;
+        this.#ref[ref].style.marginTop = "2px";
+        this.#ref[ref].style.marginLeft = "2px";
+        this.#ref[ref].style.width = (window.innerWidth - 6) + "px";
+        this.#ref[ref].style.height = (20 - 6) + "px";
+        this.#ref[ref].id = this.#getIDFn('shell');
+        this.#ref[ref].className = "shell";
+        this.#ref['bottomShell'].appendChild(this.#ref[ref]);
+
+        var ref = "logs";
+        this.#ref[ref] = document.createElement('textarea');
+        this.#ref[ref].style.padding = 0;
+        this.#ref[ref].style.marginTop = "2px";
+        this.#ref[ref].style.marginLeft = "2px";
+        this.#ref[ref].style.width = (window.innerWidth - 6) + "px";
+        this.#ref[ref].style.height = (60 - 6) + "px";
+        this.#ref[ref].id = this.#getIDFn('logs');
+        this.#ref[ref].className = "logs";
+        this.#ref['bottomShell'].appendChild(this.#ref[ref]);
+
+    }
+
 
     constructor(getIDFn, doFn) {
         this.#getIDFn = getIDFn;
@@ -244,7 +292,7 @@ class Layout {
         this.#ref[ref].id = id;
         this.#ref[ref].style.zIndex = zIndex;
         this.#ref[ref].style.position = "fixed";
-        this.#ref[ref].style.top = 0;
+        this.#ref[ref].style.top = "20px";
         if (side == "right") {
             this.#ref[ref].style.right = 0;
         } else if (side == "left") {
@@ -254,7 +302,7 @@ class Layout {
     }
 
     #resizeSidebarsToWindow() {
-        var h = window.innerHeight;
+        var h = window.innerHeight - 20 - 80;
         this.#ref.sidebarLeft.style.height = h + 'px';
         this.#ref.sidebarRight.style.height = h + 'px';
     }
