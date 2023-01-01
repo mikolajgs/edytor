@@ -118,7 +118,7 @@ edytor-colours {
     color: #ffffff;
 }
 
-.sidebar_property {
+.edytor_sidebar_property {
     font-size: 10px;
     font-family: arial;
     color: #bdbdbd;
@@ -128,24 +128,23 @@ edytor-colours {
     display: flex;
 }
 
-.sidebar_property label {
-    flex: 15px;
-    width: 15px;
+.edytor_sidebar_property label {
+    width: 32px;
     font-size: 8px;
     padding-right: 2px;
     overflow-wrap: break-word;
 }
 
-.sidebar_property input {
+.edytor_sidebar_property input {
     font-size: 10px;
     font-family: arial;
     color: #cccccc;
     background-image: linear-gradient(#191919, #2d2d2d);
     border: 0;
-    width: 40px;
+    width: 36px;
 }
 
-.sidebar_property select {
+.edytor_sidebar_property select {
     font-size: 10px;
     font-family: arial;
     color: #cccccc;

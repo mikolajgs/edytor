@@ -98,8 +98,8 @@ class EdytorLayout {
 
         //this.#initTools();
         //this.#initColors();
-        this.#initStroke();
-        this.#initFill();
+        //this.#initStroke();
+        //this.#initFill();
         this.#initLayers();
         this.#initProperties();
     }
@@ -318,7 +318,7 @@ class EdytorLayout {
         this.#doFn("set-bg-color", firstColor);
     }*/
 
-    #initStroke() {
+    /*#initStroke() {
         this.#addSidebarTitle('sidebarLeft', "Stroke");
         this.#addSidebarContainer('sidebarLeft', 'strokeContainer');
         this.#addSidebarProperty('sidebarLeft', "Width", this.#getIDFn("styleStrokeWidth"), "", "3");
@@ -333,7 +333,7 @@ class EdytorLayout {
         this.#addSidebarContainer('sidebarLeft', 'fillContainer');
         this.#addSidebarProperty('sidebarLeft', "Opacity", this.#getIDFn("styleFillOpacity"), "", "100%");
         this.#addSidebarProperty('sidebarLeft', "Rule", this.#getIDFn("styleFillRule"), "", "", { "nonzero": "nonzero", "evenodd": "evenodd", "inherit": "inherit" });
-    }
+    }*/
 
     #initProperties() {
         this.#addSidebarTitle('sidebarRight', "Properties");
