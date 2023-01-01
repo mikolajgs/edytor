@@ -1,48 +1,54 @@
-class Pad {
-    #id = {
-        pad: "",
-        container: ""
-    }
-    #ref = {
-        pad: null,
-        container: null
-    }
+class EdytorPad extends HTMLCanvasElement {
     #getToolFn = null;
     #mouseDown = false;
 
-    constructor(idContainer, idPad) {
-        this.#id.container = idContainer;
-        this.#id.pad = idPad;
-
-        this.#ref.container = document.getElementById(this.#id.container);
-        if (this.#ref.container == null) {
-            alert("div with id='" + this.#id.container + "' not found");
-            return;
-        }
+    constructor() {
+        super();
     }
 
-    #resizeToWindow() {
-        var w = window.innerWidth;
-        var h = window.innerHeight;
-        this.#ref.pad.width = w * 2;
-        this.#ref.pad.height = h * 2;
-        this.#ref.pad.style.display = 'none';
+    connectedCallback() {
+        this.id = "pad_layer";
+        this.style.margin = 0;
+        this.style.padding = 0;
+        this.style.position = "absolute";
+        this.style.top = 0;
+        this.style.left = 0;
+        this.style.zIndex = 401;
+        this.style.display = 'none';
+
+        var self = this;
+        window.addEventListener("resize", function () {
+            self.#setSize();
+        });
+
+        this.#setSize();
+
+        this.#getToolFn = function () {
+            return document.getElementById('edytor').__getCurrentTool();
+        }
+
+        this.#attachEvents();
+    }
+
+    #setSize() {
+        this.width = window.innerWidth * 2;
+        this.height = window.innerHeight * 2;
     }
 
     #attachEvents() {
         var scope = this;
-        this.#ref.pad.addEventListener('mousedown', function (e) {
+        this.addEventListener('mousedown', function (e) {
             scope.#mouseDown = true;
             if (!scope.#getToolFn().IsMultiClick) {
                 scope.#getToolFn().DrawStart(e.layerX, e.layerY);
             }
         });
-        this.#ref.pad.addEventListener('mousemove', function (e) {
+        this.addEventListener('mousemove', function (e) {
             if ((scope.#mouseDown && !scope.#getToolFn().IsMultiClick) || scope.#getToolFn().IsMultiClick) {
                 scope.#getToolFn().DrawMove(e.layerX, e.layerY);
             }
         });
-        this.#ref.pad.addEventListener('mouseup', function (e) {
+        this.addEventListener('mouseup', function (e) {
             scope.#mouseDown = false;
             if (!scope.#getToolFn().IsMultiClick) {
                 scope.#getToolFn().DrawEnd(e.layerX, e.layerY);
@@ -50,11 +56,11 @@ class Pad {
                 scope.#getToolFn().DrawPoint(e.layerX, e.layerY);
             }
         });
-        this.#ref.pad.addEventListener('mouseout', function (e) {
+        this.addEventListener('mouseout', function (e) {
             scope.#mouseDown = false;
             scope.#getToolFn().DrawCancel();
         });
-        this.#ref.pad.addEventListener('dblclick', function (e) {
+        this.addEventListener('dblclick', function (e) {
             scope.#mouseDown = false;
             if (scope.#getToolFn().IsMultiClick) {
                 scope.#getToolFn().DrawEnd(e.layerX, e.layerY);
@@ -62,32 +68,13 @@ class Pad {
         });
     }
 
-    Init(zIndex, getToolFn) {
-        this.#ref.pad = document.createElement('canvas');
-        this.#ref.pad.id = this.#id.pad;
-        this.#ref.pad.classList.add('layer');
-        this.#ref.pad.style.margin = 0;
-        this.#ref.pad.style.padding = 0;
-        this.#ref.pad.style.position = "absolute";
-        this.#ref.pad.style.top = 0;
-        this.#ref.pad.style.left = 0;
-        this.#ref.pad.style.zIndex = zIndex;
-        this.#ref.container.appendChild(this.#ref.pad);
-        this.#resizeToWindow();
-
-        this.#getToolFn = getToolFn;
-        this.#attachEvents();
+    __show() {
+        this.style.display = '';
     }
 
-    GetCanvas() {
-        return this.#ref.pad;
-    }
-
-    Show() {
-        this.#ref.pad.style.display = '';
-    }
-
-    Hide() {
-        this.#ref.pad.style.display = 'none';
+    __hide() {
+        this.style.display = 'none';
     }
 }
+
+window.customElements.define("edytor-pad", EdytorPad, { extends: 'canvas' });

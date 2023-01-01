@@ -1,4 +1,4 @@
-class Layout {
+class EdytorLayout {
     #ref = {
         container: null,
         layerContainer: null,
@@ -91,12 +91,6 @@ class Layout {
         document.getElementById(this.#getIDFn('layerActionHidePrefix') + num).classList.remove(hidden ? 'toggle_off' : 'toggle_on');
     }
 
-    Init() {
-        this.#initBody();
-        this.#initContainer();
-        this.#initLayerContainer();
-    }
-
     InitSidebars(zIndexSidebarLeft, zIndexSidebarRight, getToolIconFn, tools, colors) {
         this.#getToolIconFn = getToolIconFn;
         this.#tools = tools;
@@ -111,64 +105,10 @@ class Layout {
         this.#initProperties();
     }
 
-    InitTopMenu(zIndexTopMenu) {
-        var ref = "topMenu";
-        this.#ref[ref] = document.createElement('div');
-        this.#ref[ref].className = 'top_menu';
-        this.#ref[ref].id = this.#getIDFn('topMenu');
-        this.#ref[ref].style.zIndex = zIndexTopMenu;
-        this.#ref[ref].style.position = "fixed";
-        this.#ref[ref].style.top = "0";
-        this.#ref[ref].style.left = 0;
-        this.#ref.container.appendChild(this.#ref[ref]);
-    }
-
-    InitBottomShell(zIndexBottomShell) {
-        var ref = "bottomShell";
-        this.#ref[ref] = document.createElement('div');
-        this.#ref[ref].className = 'bottom_shell';
-        this.#ref[ref].id = this.#getIDFn('bottomShell');
-        this.#ref[ref].style.zIndex = zIndexBottomShell;
-        this.#ref[ref].style.position = "fixed";
-        this.#ref[ref].style.bottom = "0";
-        this.#ref[ref].style.left = 0;
-        this.#ref.container.appendChild(this.#ref[ref]);
-
-        var ref = "shell";
-        this.#ref[ref] = document.createElement('input');
-        this.#ref[ref].type = "text";
-        this.#ref[ref].style.padding = 0;
-        this.#ref[ref].style.marginTop = "2px";
-        this.#ref[ref].style.marginLeft = "2px";
-        this.#ref[ref].style.width = (window.innerWidth - 6) + "px";
-        this.#ref[ref].style.height = (20 - 6) + "px";
-        this.#ref[ref].id = this.#getIDFn('shell');
-        this.#ref[ref].className = "shell";
-        this.#ref['bottomShell'].appendChild(this.#ref[ref]);
-
-        var ref = "logs";
-        this.#ref[ref] = document.createElement('textarea');
-        this.#ref[ref].style.padding = 0;
-        this.#ref[ref].style.marginTop = "2px";
-        this.#ref[ref].style.marginLeft = "2px";
-        this.#ref[ref].style.width = (window.innerWidth - 6) + "px";
-        this.#ref[ref].style.height = (60 - 6) + "px";
-        this.#ref[ref].id = this.#getIDFn('logs');
-        this.#ref[ref].className = "logs";
-        this.#ref['bottomShell'].appendChild(this.#ref[ref]);
-
-    }
-
-
     constructor(getIDFn, doFn) {
         this.#getIDFn = getIDFn;
         this.#doFn = doFn;
-
         this.#ref.container = document.getElementById(this.#getIDFn('container'));
-        if (this.#ref.container == null) {
-            alert("div with id='" + this.#getIDFn('container') + "' not found");
-            return;
-        }
     }
 
 
@@ -254,36 +194,6 @@ class Layout {
             }
         }
         document.getElementById(this.#getIDFn('layerActionTickAll')).checked = true;
-    }
-
-
-    #initBody() {
-        // Just in case
-        document.body.style.margin = 0;
-        document.body.style.padding = 0;
-    }
-
-    #initContainer() {
-        // We don't want this in the CSS
-        this.#ref.container.style.margin = 0;
-        this.#ref.container.style.padding = 0;
-        this.#ref.container.style.position = "relative";
-    }
-
-    #initLayerContainer() {
-        this.#ref.layerContainer = document.createElement('div');
-        this.#ref.layerContainer.id = this.#getIDFn('layerContainer');
-        // Again, we don't want the positioning to be in the CSS file
-        this.#ref.layerContainer.style.margin = 0;
-        this.#ref.layerContainer.style.padding = 0;
-        this.#ref.layerContainer.style.position = "absolute";
-        this.#ref.layerContainer.style.top = 0;
-        this.#ref.layerContainer.style.left = 0;
-        this.#ref.container.appendChild(this.#ref.layerContainer);
-        var w = window.innerWidth;
-        var h = window.innerHeight;
-        this.#ref.layerContainer.style.width = (w * 2) + 'px';
-        this.#ref.layerContainer.style.height = (h * 2) + 'px';
     }
 
     #addSidebarDivToContainer(ref, className, id, zIndex, side) {

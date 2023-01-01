@@ -1,4 +1,4 @@
-class Config {
+class EdytorConfig {
     #id = {
         container: "edytor",
         layerContainer: "layer_container",
