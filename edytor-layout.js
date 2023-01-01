@@ -96,8 +96,8 @@ class EdytorLayout {
         this.#tools = tools;
         this.#colors = colors;
 
-        this.#initTools();
-        this.#initColors();
+        //this.#initTools();
+        //this.#initColors();
         this.#initStroke();
         this.#initFill();
         this.#initLayers();
@@ -211,7 +211,7 @@ class EdytorLayout {
         this.#ref[ref].appendChild(this.#ref[n]);
     }
 
-    #addSidebarToggle(ref, n, id, className, innerHtml, additionalFn, clickFn, addX) {
+    /*#addSidebarToggle(ref, n, id, className, innerHtml, additionalFn, clickFn, addX) {
         var t = document.createElement('div');
         t.className = "toggle_off sidebar_toggle " + className;
         t.innerHTML = innerHtml;
@@ -258,7 +258,7 @@ class EdytorLayout {
         }, function (nm) {
             scope.#doFn('set-' + fgbg + '-color', nm);
         }, true);
-    }
+    }*/
 
     #addSidebarProperty(ref, label, id, className, defval, vals) {
         var d = document.createElement('div');
@@ -287,7 +287,7 @@ class EdytorLayout {
         this.#ref[ref].appendChild(d);
     }
 
-    #initTools() {
+    /*#initTools() {
         this.#addSidebarTitle('sidebarLeft', "Tools");
         this.#addSidebarContainer('sidebarLeft', 'toolContainer');
         for (var i = 0; i < this.#tools.length; i++) {
@@ -316,7 +316,7 @@ class EdytorLayout {
 
         this.#doFn("set-fg-color", firstColor);
         this.#doFn("set-bg-color", firstColor);
-    }
+    }*/
 
     #initStroke() {
         this.#addSidebarTitle('sidebarLeft', "Stroke");
