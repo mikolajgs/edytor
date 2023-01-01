@@ -1,13 +1,130 @@
 class Edytor extends HTMLElement {
+    // do we need those?
     #cfg = null;
     #layout = null
+
+    // Tools
+    #toolNames = [];
+    #tool = "";
+
+    // Colours
+    #colourFgNames = [];
+    #colourBgNames = [];
+    #colourFg = "white";
+    #colourBg = "black";
+
+
+    constructor() {
+        super();
+        // do we need config since we started hardcoding ids and zindexes in the classes?
+        this.#cfg = new EdytorConfig();
+        var scope = this;
+        // do we need layout at all?
+        this.#layout = new EdytorLayout(
+            function (n) {
+                return scope.#cfg.GetID(n);
+            },
+            function (cmd, arg1) {
+                return scope.Do(cmd, arg1);
+            }
+        );
+    }
+
+    __initTool(s) {
+        this.#toolNames.push(s);
+    }
+
+    __initColour(t, n) {
+        if (t == "bg") {
+            this.#colourBgNames.push(n);
+        } else {
+            this.#colourFgNames.push(n);
+        }
+    }
+
+    __getCurrentTool() {
+        return document.getElementById('tool_' + this.#tool);
+    }
+
+    __getCurrentLayer() {
+        if (this.#layer === null)
+            return null;
+        return this.#layer;
+    }
+
+    __getStyle(s) {
+        // TODO: Taken the styles from the stroke and fill objects
+    }
+
+    __getPadCanvas() {
+        return document.getElementById('pad_layer').getCanvas();
+    }
+
+    __centerScroll() {
+        window.scrollTo(window.innerWidth / 2, window.innerHeight / 2);
+    }
+
+    __setCurrentTool(s) {
+        this.#tool = s;
+        for (var i = 0; i < this.#toolNames.length; i++) {
+            if (this.#toolNames[i] != s) {
+                document.getElementById('tool_' + this.#toolNames[i]).__toggleOff();
+            } else {
+                document.getElementById('tool_' + this.#toolNames[i]).__toggleOn();
+            }
+        }
+    }
+
+    __setCurrentColour(type, s) {
+        if (type == "bg") {
+            this.#colourBg = s;
+            for (var i = 0; i < this.#colourBgNames.length; i++) {
+                if (this.#colourBgNames[i] != s) {
+                    document.getElementById('colour_bg_' + this.#colourBgNames[i]).__toggleOff();
+                } else {
+                    document.getElementById('colour_bg_' + this.#colourBgNames[i]).__toggleOn();
+                }
+            }
+        } else {
+            this.#colourFg = s;
+            for (var i = 0; i < this.#colourFgNames.length; i++) {
+                if (this.#colourFgNames[i] != s) {
+                    document.getElementById('colour_fg_' + this.#colourFgNames[i]).__toggleOff();
+                } else {
+                    document.getElementById('colour_fg_' + this.#colourFgNames[i]).__toggleOn();
+                }
+            }
+        }
+    }
+
+    connectedCallback() {
+        var scope = this;
+
+        this.id = 'edytor';
+        this.style.margin = 0;
+        this.style.padding = 0;
+        this.style.position = "relative";
+
+        /*var toolNames = this.#initTools();
+
+        this.#layout.InitSidebars(
+            this.#cfg.GetZIndex('sidebarLeft'), 
+            this.#cfg.GetZIndex('sidebarRight'), 
+            function (n) {
+                return scope.#tools[n].Icon;
+        }, toolNames, this.#cfg.GetColors());*/
+    }
+
+
+
+
     #pad = null;
 
     #tools = {}
-    #toolNames = [];
-    #tool = "";
-    #colorFg = "#ffffff";
-    #colorBg = "#000000";
+
+    // TODO: Remove below
+    #colorFg = "dupa";
+    #colorBg = "dupa";
 
     #mouseDown = false;
 
@@ -200,77 +317,6 @@ class Edytor extends HTMLElement {
         }
     }
 
-    constructor() {
-        super();
-
-        this.#cfg = new EdytorConfig();
-
-        var scope = this;
-
-        this.#layout = new EdytorLayout(
-            function (n) {
-                return scope.#cfg.GetID(n);
-            },
-            function (cmd, arg1) {
-                return scope.Do(cmd, arg1);
-            }
-        );
-    }
-
-    __initTool(s) {
-        this.#toolNames.push(s);
-    }
-
-    __getCurrentTool() {
-        return document.getElementById('tool_' + this.#tool);
-    }
-
-    __getCurrentLayer() {
-        if (this.#layer === null)
-            return null;
-        return this.#layer;
-    }
-
-    __getStyle(s) {
-        // TODO: Taken the styles from the stroke and fill objects
-    }
-
-    __getPadCanvas() {
-        return document.getElementById('pad_layer').getCanvas();
-    }
-
-    __centerScroll() {
-        window.scrollTo(window.innerWidth / 2, window.innerHeight / 2);
-    }
-
-    __setCurrentTool(s) {
-        this.#tool = s;
-        for (var i = 0; i < this.#toolNames.length; i++) {
-            if (this.#toolNames[i] != s) {
-                document.getElementById('tool_' + this.#toolNames[i]).__toggleOff();
-            } else {
-                document.getElementById('tool_' + this.#toolNames[i]).__toggleOn();
-            }
-        }
-    }
-
-    connectedCallback() {
-        var scope = this;
-
-        this.id = 'edytor';
-        this.style.margin = 0;
-        this.style.padding = 0;
-        this.style.position = "relative";
-
-        /*var toolNames = this.#initTools();
-
-        this.#layout.InitSidebars(
-            this.#cfg.GetZIndex('sidebarLeft'), 
-            this.#cfg.GetZIndex('sidebarRight'), 
-            function (n) {
-                return scope.#tools[n].Icon;
-        }, toolNames, this.#cfg.GetColors());*/
-    }
 
     #getZIndexForNewLayer() {
         var zIndex = this.#cfg.GetZIndex('layerStart');

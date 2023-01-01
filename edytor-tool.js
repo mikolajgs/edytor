@@ -12,7 +12,6 @@ class EdytorTool extends HTMLElement {
     this.className = "edytor_toggle_off edytor_sidebar_toggle edytor_tool";
     this.textContent = l;
 
-    var scope = this;
     this.addEventListener('click', function () {
       document.getElementById('edytor').__setCurrentTool(n);
     });
