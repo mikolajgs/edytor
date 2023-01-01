@@ -1,0 +1,1 @@
+window.customElements.define("edytor-logs", EdytorLogs, { extends: 'textarea' });

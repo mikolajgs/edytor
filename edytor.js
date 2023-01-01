@@ -104,15 +104,6 @@ class Edytor extends HTMLElement {
         this.style.margin = 0;
         this.style.padding = 0;
         this.style.position = "relative";
-
-        /*var toolNames = this.#initTools();
-
-        this.#layout.InitSidebars(
-            this.#cfg.GetZIndex('sidebarLeft'), 
-            this.#cfg.GetZIndex('sidebarRight'), 
-            function (n) {
-                return scope.#tools[n].Icon;
-        }, toolNames, this.#cfg.GetColors());*/
     }
 
 
@@ -310,14 +301,6 @@ class Edytor extends HTMLElement {
         }
     }
 
-    #alertMissingElement(s) {
-        if (document.getElementById(s) == null) {
-            alert("HTML element with id='" + s + "' not found");
-            return;
-        }
-    }
-
-
     #getZIndexForNewLayer() {
         var zIndex = this.#cfg.GetZIndex('layerStart');
         if (this.#layersOrder.length > 0) {
@@ -326,74 +309,10 @@ class Edytor extends HTMLElement {
         }
         return zIndex
     }
-
-    #initTools() {
-        var scope = this;
-        var fnGetStyle = function (s) {
-            return scope.GetStyle(s);
-        }
-        var fnGetCurrentLayer = function () {
-            if (scope.#layer === null)
-                return null;
-            return scope.#layer;
-        }
-        this.#tools = {
-            'rectangle': new RectangleTool(this.#pad.GetCanvas(), fnGetStyle, fnGetCurrentLayer),
-            'pencil': new PencilTool(this.#pad.GetCanvas(), fnGetStyle, fnGetCurrentLayer),
-            'polygon': new PolygonTool(this.#pad.GetCanvas(), fnGetStyle, fnGetCurrentLayer),
-            'testgroup': new TestGroupTool(this.#pad.GetCanvas(), fnGetStyle, fnGetCurrentLayer)
-        }
-        return ['rectangle', 'pencil', 'polygon', 'testgroup'];
-    }
 }
 
-class EdytorLayerContainer extends HTMLElement {
-    constructor() {
-        super()
-    }
 
-    connectedCallback() {
-        this.style.margin = 0;
-        this.style.padding = 0;
-        this.style.position = "absolute";
-        this.style.top = 0;
-        this.style.left = 0;
-        this.id = "layer_container";
 
-        var self = this;
-        window.addEventListener("resize", function () {
-            self.#setSize();
-        });
-        this.#setSize();
-    }
-
-    #setSize() {
-        this.style.width = (window.innerWidth * 2) + 'px';
-        this.style.height = (window.innerHeight * 2) + 'px';
-    }
-}
-
-class EdytorShell extends HTMLInputElement {
-    constructor() {
-        super();
-        this.type = "text";
-    }
-
-    connectedCallback() {
-        this.id = "shell";
-        this.className = "edytor_shell";
-
-        var self = this;
-        window.addEventListener("resize", function () {
-            self.#setSize();
-        });
-        this.#setSize();
-    }
-
-    #setSize() {
-        this.style.width = (window.innerWidth - 6) + 'px';
-    }
-}
 
 class EdytorLogs extends HTMLTextAreaElement {
     constructor() {
@@ -416,52 +335,6 @@ class EdytorLogs extends HTMLTextAreaElement {
     }
 }
 
-class EdytorTop extends HTMLElement {
-    constructor() {
-        super()
-    }
-}
-
-class EdytorLeft extends HTMLElement {
-    constructor() {
-        super()
-    }
-
-    connectedCallback() {
-        this.id = "sidebar_left";
-
-        var self = this;
-        window.addEventListener("resize", function () {
-            self.#setSize();
-        });
-        this.#setSize();
-    }
-
-    #setSize() {
-        this.style.height = (window.innerHeight - 20 - 80) + 'px';
-    }
-}
-
-class EdytorRight extends HTMLElement {
-    constructor() {
-        super()
-    }
-
-    connectedCallback() {
-        this.id = "sidebar_right";
-
-        var self = this;
-        window.addEventListener("resize", function () {
-            self.#setSize();
-        });
-        this.#setSize();
-    }
-
-    #setSize() {
-        this.style.height = (window.innerHeight - 20 - 80) + 'px';
-    }
-}
-
 window.customElements.define("edytor-ui", Edytor);
 
 // have a look on how the tools are designed - can we make them through command in the future?
@@ -472,11 +345,3 @@ window.customElements.define("edytor-ui", Edytor);
 // + abstract the commands into separate classes somehow so they can have arguments definion, and logic
 
 // how can we do the same for tools?
-
-
-window.customElements.define("edytor-layer-container", EdytorLayerContainer);
-window.customElements.define("edytor-shell", EdytorShell, { extends: 'input' });
-window.customElements.define("edytor-logs", EdytorLogs, { extends: 'textarea' });
-window.customElements.define("edytor-top", EdytorTop);
-window.customElements.define("edytor-left", EdytorLeft);
-window.customElements.define("edytor-right", EdytorRight);
