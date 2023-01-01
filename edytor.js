@@ -220,6 +220,10 @@ class Edytor extends HTMLElement {
         return this.#tools[this.#tool];
     }
 
+    __centerScroll() {
+        window.scrollTo(window.innerWidth / 2, window.innerHeight / 2);
+    }
+
     connectedCallback() {
         var scope = this;
 
@@ -230,8 +234,11 @@ class Edytor extends HTMLElement {
 
         /*var toolNames = this.#initTools();
 
-        this.#layout.InitSidebars(this.#cfg.GetZIndex('sidebarLeft'), this.#cfg.GetZIndex('sidebarRight'), function (n) {
-            return scope.#tools[n].Icon;
+        this.#layout.InitSidebars(
+            this.#cfg.GetZIndex('sidebarLeft'), 
+            this.#cfg.GetZIndex('sidebarRight'), 
+            function (n) {
+                return scope.#tools[n].Icon;
         }, toolNames, this.#cfg.GetColors());*/
     }
 
@@ -368,6 +375,66 @@ class EdytorTop extends HTMLElement {
         this.style.position = "fixed";
         this.style.top = 0;
         this.style.left = 0;
+
+        var self = this;
+        window.addEventListener("resize", function () {
+            self.#setSize();
+        });
+        this.#setSize();
+    }
+
+    #setSize() {
+        this.style.width = window.innerWidth + 'px';
+    }
+}
+
+class EdytorLeft extends HTMLElement {
+    constructor() {
+        super()
+    }
+
+    connectedCallback() {
+        this.id = "sidebar_left";
+        this.className = "sidebar_left";
+        this.style.zIndex = 511;
+        this.style.position = "fixed";
+        this.style.top = "20px";
+        this.style.left = 0;
+
+        var self = this;
+        window.addEventListener("resize", function () {
+            self.#setSize();
+        });
+        this.#setSize();
+    }
+
+    #setSize() {
+        this.style.height = (window.innerHeight - 20 - 80) + 'px';
+    }
+}
+
+class EdytorRight extends HTMLElement {
+    constructor() {
+        super()
+    }
+
+    connectedCallback() {
+        this.id = "sidebar_right";
+        this.className = "sidebar_right";
+        this.style.zIndex = 521;
+        this.style.position = "fixed";
+        this.style.top = "20px";
+        this.style.right = 0;
+
+        var self = this;
+        window.addEventListener("resize", function () {
+            self.#setSize();
+        });
+        this.#setSize();
+    }
+
+    #setSize() {
+        this.style.height = (window.innerHeight - 20 - 80) + 'px';
     }
 }
 
@@ -388,3 +455,5 @@ window.customElements.define("edytor-bottom", EdytorBottom);
 window.customElements.define("edytor-shell", EdytorShell, { extends: 'input' });
 window.customElements.define("edytor-logs", EdytorLogs, { extends: 'textarea' });
 window.customElements.define("edytor-top", EdytorTop);
+window.customElements.define("edytor-left", EdytorLeft);
+window.customElements.define("edytor-right", EdytorRight);

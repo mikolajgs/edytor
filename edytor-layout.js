@@ -95,8 +95,7 @@ class EdytorLayout {
         this.#getToolIconFn = getToolIconFn;
         this.#tools = tools;
         this.#colors = colors;
-        this.#initSidebars(zIndexSidebarLeft, zIndexSidebarRight);
-        this.#setScroll();
+
         this.#initTools();
         this.#initColors();
         this.#initStroke();
@@ -194,39 +193,6 @@ class EdytorLayout {
             }
         }
         document.getElementById(this.#getIDFn('layerActionTickAll')).checked = true;
-    }
-
-    #addSidebarDivToContainer(ref, className, id, zIndex, side) {
-        this.#ref[ref] = document.createElement('div');
-        this.#ref[ref].className = className;
-        this.#ref[ref].id = id;
-        this.#ref[ref].style.zIndex = zIndex;
-        this.#ref[ref].style.position = "fixed";
-        this.#ref[ref].style.top = "20px";
-        if (side == "right") {
-            this.#ref[ref].style.right = 0;
-        } else if (side == "left") {
-            this.#ref[ref].style.left = 0;
-        }
-        this.#ref.container.appendChild(this.#ref[ref]);
-    }
-
-    #resizeSidebarsToWindow() {
-        var h = window.innerHeight - 20 - 80;
-        this.#ref.sidebarLeft.style.height = h + 'px';
-        this.#ref.sidebarRight.style.height = h + 'px';
-    }
-
-    #initSidebars(zIndexSidebarLeft, zIndexSidebarRight) {
-        this.#addSidebarDivToContainer('sidebarLeft', 'sidebar_left', this.#getIDFn('sidebarLeft'), zIndexSidebarLeft, 'left');
-        this.#addSidebarDivToContainer('sidebarRight', 'sidebar_right', this.#getIDFn('sidebarRight'), zIndexSidebarRight, 'right');
-        this.#resizeSidebarsToWindow();
-    }
-
-    #setScroll() {
-        var w = window.innerWidth;
-        var h = window.innerHeight;
-        window.scrollTo(w / 2, h / 2);
     }
 
     #addSidebarTitle(ref, t) {
