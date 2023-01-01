@@ -1,26 +1,31 @@
-class PencilTool {
-    Name = "Pencil"
-    Icon = "p:pen"
-    RequiresPad = true
+class EdytorPencilTool extends EdytorTool {
+    /*RequiresPad = true
     IsMultiClick = false
-
-    #getLayerFunc = null;
-    #getStyleFunc = null;
 
     #topLeft = [0, 0];
     #bottomRight = [0, 0];
     #prevPos = [-1, -1];
     #ref = {
         pad: null
+    }*/
+
+    constructor() {
+        super();
     }
 
-    constructor(pad, getStyleFunc, getLayerFunc) {
-        this.#ref.pad = pad;
-        this.#getStyleFunc = getStyleFunc;
-        this.#getLayerFunc = getLayerFunc;
+    connectedCallback() {
+        super._init('pencil', 'p:pen');
     }
 
-    DrawStart(x, y) {
+    __toggleOn() {
+        super.__toggleOn();
+    }
+
+    __toggleOff() {
+        super.__toggleOff();
+    }
+
+    /*DrawStart(x, y) {
         if (this.#getLayerFunc() === null) {
             alert('No layer has been selected');
             return;
@@ -110,5 +115,7 @@ class PencilTool {
         }
 
         this.#ref.pixelCtx.closePath();
-    }
+    }*/
 }
+
+window.customElements.define("edytor-tool-pencil", EdytorPencilTool);

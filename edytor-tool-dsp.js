@@ -1,5 +1,5 @@
-class TestGroupTool {
-    Name = "TestGroup"
+class EdytorDspTool extends EdytorTool {
+    /*Name = "TestGroup"
     Icon = "v:tgrp"
     RequiresPad = true
     IsMultiClick = false
@@ -13,15 +13,25 @@ class TestGroupTool {
     };
 
     #getLayerFunc = null;
-    #getStyleFunc = null;
+    #getStyleFunc = null;*/
 
-    constructor(pad, getStyleFunc, getLayerFunc) {
-        this.#ref.pad = pad;
-        this.#getStyleFunc = getStyleFunc;
-        this.#getLayerFunc = getLayerFunc;
+    constructor() {
+        super();
     }
 
-    DrawStart(x, y) {
+    connectedCallback() {
+        super._init('dsp', 'v:dsp');
+    }
+
+    __toggleOn() {
+        super.__toggleOn();
+    }
+
+    __toggleOff() {
+        super.__toggleOff();
+    }
+
+    /*DrawStart(x, y) {
         if (this.#getLayerFunc() === null) {
             alert('No layer has been selected');
             return;
@@ -103,5 +113,7 @@ class TestGroupTool {
 
     DrawCancel() {
 
-    }
+    }*/
 }
+
+window.customElements.define("edytor-tool-dsp", EdytorDspTool);

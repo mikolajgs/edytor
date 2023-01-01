@@ -1,5 +1,5 @@
-class PolygonTool {
-    Name = "Polygon"
+class EdytorPolygonTool extends EdytorTool {
+    /*Name = "Polygon"
     Icon = "v:pgon"
     RequiresPad = true
     IsMultiClick = true
@@ -11,15 +11,25 @@ class PolygonTool {
     };
 
     #getLayerFunc = null;
-    #getStyleFunc = null;
+    #getStyleFunc = null;*/
 
-    constructor(pad, getStyleFunc, getLayerFunc) {
-        this.#ref.pad = pad;
-        this.#getStyleFunc = getStyleFunc;
-        this.#getLayerFunc = getLayerFunc;
+    constructor() {
+        super();
     }
 
-    DrawStart(x, y) {
+    connectedCallback() {
+        super._init('polygon', 'v:pgon');
+    }
+
+    __toggleOn() {
+        super.__toggleOn();
+    }
+
+    __toggleOff() {
+        super.__toggleOff();
+    }
+
+    /*DrawStart(x, y) {
     }
     DrawPoint(x, y) {
         if (this.#getLayerFunc() === null) {
@@ -83,5 +93,7 @@ class PolygonTool {
     }
     DrawCancel() {
         //this.#refDrawedObject.parentNode.removeChild(this.#refDrawedObject);
-    }
+    }*/
 }
+
+window.customElements.define("edytor-tool-polygon", EdytorPolygonTool);
