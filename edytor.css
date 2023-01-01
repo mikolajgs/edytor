@@ -2,30 +2,45 @@ body {
     background-color: #262626;
 }
 
-.sidebar_left {
+edytor-left {
     border-right: solid 1px #222222;
     box-shadow: 2px 0 3px 0 #222222;
     position: fixed;
     width: 80px;
     background: #444444;
+    z-index: 511;
+    top: 20px;
+    left: 0;
 }
 
-.sidebar_right {
+edytor-right {
     border-left: solid 1px #222222;
     box-shadow: -2px 0 3px 0 #222222;
     width: 180px;
     background: #3d3d3d;
+    z-index: 521;
+    position: fixed;
+    top: 20px;
+    right: 0;
 }
 
-.top_menu {
+edytor-top {
     width: 100%;
     background: #3d3d3d;
     height: 20px;
     padding: 0;
     margin: 0;
+    z-index: 531;
+    position: fixed;
+    top: 0;
+    left: 0;
 }
 
 .bottom_shell {
+    z-index: 541;
+    position: fixed;
+    bottom: 0;
+    left: 0;
     width: 100%;
     background: #3d3d3d;
     height: 80px;
@@ -33,31 +48,31 @@ body {
     margin: 0;
 }
 
-.logs {
+.edytor_logs {
     width: 100%;
     background: #111111;
-    height: 60px;
+    height: 54px;
     padding: 0;
-    margin: 0;
+    margin: 2px 0 0 2px;
     border: solid 1px #333333;
     color: #eeeeee;
     font-size: 10px;
     font-family: courier;
 }
 
-.shell {
+.edytor_shell {
     background: #111111;
     border: solid 1px #333333;
     color: #eeeeee;
     font-size: 10px;
     font-family: courier;
-    height: 10px;
-    margin: 0;
+    height: 14px;
+    margin: 2px 0 0 2px;
     padding: 0;
 }
 
-.logs:focus,
-.shell:focus {
+.edytor_logs:focus,
+.edytor_shell:focus {
     outline: none;
 }
 
@@ -72,11 +87,14 @@ body {
     border-top: solid 1px #555555;
     border-right: solid 1px #212121;
     border-bottom: solid 1px #212121;
+    display: block;
 }
 
 .sidebar_container {
     padding: 0;
     margin: 0;
+    display: flex;
+    flex-flow: "row wrap;"
 }
 
 .sidebar_container .toggle_off {

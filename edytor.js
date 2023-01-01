@@ -297,21 +297,6 @@ class EdytorLayerContainer extends HTMLElement {
     }
 }
 
-class EdytorBottom extends HTMLElement {
-    constructor() {
-        super()
-    }
-
-    connectedCallback() {
-        this.id = "bottom_shell";
-        this.className = "bottom_shell";
-        this.style.zIndex = 541;
-        this.style.position = "fixed";
-        this.style.bottom = 0;
-        this.style.left = 0;
-    }
-}
-
 class EdytorShell extends HTMLInputElement {
     constructor() {
         super();
@@ -320,11 +305,7 @@ class EdytorShell extends HTMLInputElement {
 
     connectedCallback() {
         this.id = "shell";
-        this.style.padding = 0;
-        this.style.marginTop = "2px";
-        this.style.marginLeft = "2px";
-        this.style.height = "14px";
-        this.className = "shell";
+        this.className = "edytor_shell";
 
         var self = this;
         window.addEventListener("resize", function () {
@@ -345,11 +326,7 @@ class EdytorLogs extends HTMLTextAreaElement {
 
     connectedCallback() {
         this.id = "logs";
-        this.style.padding = 0;
-        this.style.marginTop = "2px";
-        this.style.marginLeft = "2px";
-        this.style.height = "54px";
-        this.className = "logs";
+        this.className = "edytor_logs";
 
         var self = this;
         window.addEventListener("resize", function () {
@@ -367,25 +344,6 @@ class EdytorTop extends HTMLElement {
     constructor() {
         super()
     }
-
-    connectedCallback() {
-        this.id = "top_menu";
-        this.className = "top_menu";
-        this.style.zIndex = 531;
-        this.style.position = "fixed";
-        this.style.top = 0;
-        this.style.left = 0;
-
-        var self = this;
-        window.addEventListener("resize", function () {
-            self.#setSize();
-        });
-        this.#setSize();
-    }
-
-    #setSize() {
-        this.style.width = window.innerWidth + 'px';
-    }
 }
 
 class EdytorLeft extends HTMLElement {
@@ -395,11 +353,6 @@ class EdytorLeft extends HTMLElement {
 
     connectedCallback() {
         this.id = "sidebar_left";
-        this.className = "sidebar_left";
-        this.style.zIndex = 511;
-        this.style.position = "fixed";
-        this.style.top = "20px";
-        this.style.left = 0;
 
         var self = this;
         window.addEventListener("resize", function () {
@@ -420,11 +373,6 @@ class EdytorRight extends HTMLElement {
 
     connectedCallback() {
         this.id = "sidebar_right";
-        this.className = "sidebar_right";
-        this.style.zIndex = 521;
-        this.style.position = "fixed";
-        this.style.top = "20px";
-        this.style.right = 0;
 
         var self = this;
         window.addEventListener("resize", function () {
@@ -451,7 +399,6 @@ window.customElements.define("edytor-ui", Edytor);
 
 
 window.customElements.define("edytor-layer-container", EdytorLayerContainer);
-window.customElements.define("edytor-bottom", EdytorBottom);
 window.customElements.define("edytor-shell", EdytorShell, { extends: 'input' });
 window.customElements.define("edytor-logs", EdytorLogs, { extends: 'textarea' });
 window.customElements.define("edytor-top", EdytorTop);
