@@ -5,8 +5,8 @@
     <title>edytor</title>
     <link rel="stylesheet" href="edytor.css">
     <script src="edytor.js"></script>
-    <script src="edytor-layout.js"></script>
     <script src="edytor-grid.js"></script>
+    <script src="edytor-layout.js"></script>
     <script src="edytor-config.js"></script>
     <script src="edytor-pad.js"></script>
     <script src="edytor-layer-pixel.js"></script>
@@ -17,8 +17,19 @@
     <script src="edytor-tool-testgroup.js"></script>
 </head>
 
-<body>
-    <div id="edytor"></div>
+<body style="margin:0; padding:0">
+    <edytor-ui>
+        <edytor-layer-container></edytor-layer-container>
+        <canvas is="edytor-grid"></canvas>
+        <canvas is="edytor-pad"></canvas>
+        <edytor-top></edytor-top>
+        <edytor-bottom>
+            <input is="edytor-shell"></input>
+            <textarea is="edytor-logs"></textarea>
+        </edytor-bottom>
+        <edytor-left-sidebar></edytor-left-sidebar>
+        <edytor-right-sidebar></edytor-right-sidebar>
+    </edytor-ui>
 </body>
 
 </html>
