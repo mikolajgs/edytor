@@ -22,12 +22,33 @@
         <edytor-layer-container></edytor-layer-container>
         <canvas is="edytor-grid"></canvas>
         <canvas is="edytor-pad"></canvas>
-        <edytor-top></edytor-top>
-        <edytor-bottom>
+        <edytor-top id="top_menu"></edytor-top>
+        <div id="bottom_shell" class="bottom_shell">
             <input is="edytor-shell"></input>
             <textarea is="edytor-logs"></textarea>
-        </edytor-bottom>
-        <edytor-left></edytor-left>
+        </div>
+        <edytor-left>
+            <div class="sidebar_title">Tools</div>
+            <div class="sidebar_container">
+                <edytor-tools></edytor-tools>
+            </div>
+            <div class="sidebar_title">Fg Color</div>
+            <div class="sidebar_container">
+                <edytor-colors type="fg"></edytor-colors>
+            </div>
+            <div class="sidebar_title">Bg Color</div>
+            <div class="sidebar_container">
+                <edytor-colors type="bg"></edytor-colors>
+            </div>
+            <div class="sidebar_title">Stroke</div>
+            <div class="sidebar_container">
+                <edytor-stroke></edytor-stroke>
+            </div>
+            <div class="sidebar_title">Fill</div>
+            <div class="sidebar_container">
+                <edytor-fill></edytor-fill>
+            </div>
+        </edytor-left>
         <edytor-right></edytor-right>
     </edytor-ui>
 </body>
