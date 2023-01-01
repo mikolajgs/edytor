@@ -4,6 +4,7 @@ class Edytor extends HTMLElement {
     #pad = null;
 
     #tools = {}
+    #toolNames = [];
     #tool = "";
     #colorFg = "#ffffff";
     #colorBg = "#000000";
@@ -216,12 +217,41 @@ class Edytor extends HTMLElement {
         );
     }
 
+    __initTool(s) {
+        this.#toolNames.push(s);
+    }
+
     __getCurrentTool() {
-        return this.#tools[this.#tool];
+        return document.getElementById('tool_' + this.#tool);
+    }
+
+    __getCurrentLayer() {
+        if (this.#layer === null)
+            return null;
+        return this.#layer;
+    }
+
+    __getStyle(s) {
+        // TODO: Taken the styles from the stroke and fill objects
+    }
+
+    __getPadCanvas() {
+        return document.getElementById('pad_layer').getCanvas();
     }
 
     __centerScroll() {
         window.scrollTo(window.innerWidth / 2, window.innerHeight / 2);
+    }
+
+    __setCurrentTool(s) {
+        this.#tool = s;
+        for (var i = 0; i < this.#toolNames.length; i++) {
+            if (this.#toolNames[i] != s) {
+                document.getElementById('tool_' + this.#toolNames[i]).__toggleOff();
+            } else {
+                document.getElementById('tool_' + this.#toolNames[i]).__toggleOn();
+            }
+        }
     }
 
     connectedCallback() {

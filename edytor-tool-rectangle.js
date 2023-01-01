@@ -1,5 +1,5 @@
-class RectangleTool {
-    Name = "Rectangle"
+class EdytorRectangleTool extends EdytorTool {
+    /*Name = "Rectangle"
     Icon = "v:rec"
     RequiresPad = true
     IsMultiClick = false
@@ -13,15 +13,25 @@ class RectangleTool {
     }
 
     #getLayerFunc = null;
-    #getStyleFunc = null;
+    #getStyleFunc = null;*/
 
-    constructor(pad, getStyleFunc, getLayerFunc) {
-        this.#ref.pad = pad;
-        this.#getStyleFunc = getStyleFunc;
-        this.#getLayerFunc = getLayerFunc;
+    constructor() {
+        super();
     }
 
-    DrawStart(x, y) {
+    connectedCallback() {
+        super._init('rectangle', 'v:rec');
+    }
+
+    __toggleOn() {
+        super.__toggleOn();
+    }
+
+    __toggleOff() {
+        super.__toggleOff();
+    }
+
+    /*DrawStart(x, y) {
         if (this.#getLayerFunc() === null) {
             alert('No layer has been selected');
             return;
@@ -98,5 +108,7 @@ class RectangleTool {
     }
     DrawCancel() {
         //this.#refDrawedObject.parentNode.removeChild(this.#refDrawedObject);
-    }
+    }*/
 }
+
+window.customElements.define("edytor-tool-rectangle", EdytorRectangleTool);
