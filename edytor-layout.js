@@ -96,11 +96,7 @@ class EdytorLayout {
         this.#tools = tools;
         this.#colors = colors;
 
-        //this.#initTools();
-        //this.#initColors();
-        //this.#initStroke();
-        //this.#initFill();
-        this.#initLayers();
+        //this.#initLayers();
         this.#initProperties();
     }
 
@@ -211,55 +207,6 @@ class EdytorLayout {
         this.#ref[ref].appendChild(this.#ref[n]);
     }
 
-    /*#addSidebarToggle(ref, n, id, className, innerHtml, additionalFn, clickFn, addX) {
-        var t = document.createElement('div');
-        t.className = "toggle_off sidebar_toggle " + className;
-        t.innerHTML = innerHtml;
-        t.id = id;
-
-        if (additionalFn != null) {
-            additionalFn(t);
-        }
-
-        var scope = this;
-        t.addEventListener('click', function () {
-            clickFn(n);
-
-            var tools = scope.#ref[ref].querySelectorAll('.' + className);
-            for (var i = 0; i < tools.length; i++) {
-                tools[i].classList.remove('toggle_on');
-                tools[i].classList.add('toggle_off');
-                if (addX) {
-                    tools[i].innerHTML = '';
-                }
-            }
-
-            this.classList.remove('toggle_off');
-            this.classList.add('toggle_on');
-            if (addX) {
-                this.innerHTML = 'X';
-            }
-        });
-
-        this.#ref[ref].appendChild(t);
-    }
-
-    #addSidebarLeftTool(ref, n) {
-        var scope = this;
-        this.#addSidebarToggle(ref, n, 'tool_' + n, 'tool', this.#getToolIconFn(n), null, function (nm) {
-            scope.#doFn('set-tool', nm);
-        }, false);
-    }
-
-    #addSidebarLeftColor(ref, fgbg, n) {
-        var scope = this;
-        this.#addSidebarToggle(ref, n, 'color_' + fgbg + '_' + n, 'color', '', function (o) {
-            o.style.background = scope.#colors[n];
-        }, function (nm) {
-            scope.#doFn('set-' + fgbg + '-color', nm);
-        }, true);
-    }*/
-
     #addSidebarProperty(ref, label, id, className, defval, vals) {
         var d = document.createElement('div');
         d.className = "sidebar_property " + className;
@@ -287,54 +234,6 @@ class EdytorLayout {
         this.#ref[ref].appendChild(d);
     }
 
-    /*#initTools() {
-        this.#addSidebarTitle('sidebarLeft', "Tools");
-        this.#addSidebarContainer('sidebarLeft', 'toolContainer');
-        for (var i = 0; i < this.#tools.length; i++) {
-            this.#addSidebarLeftTool('toolContainer', this.#tools[i]);
-        }
-    }
-
-    #initColors() {
-        this.#addSidebarTitle('sidebarLeft', "Fg Color");
-        this.#addSidebarContainer('sidebarLeft', 'colorFgContainer');
-        var i = 0;
-        var firstColor = "";
-        for (const key in this.#colors) {
-            if (i == 0) {
-                firstColor = key;
-            }
-            this.#addSidebarLeftColor('colorFgContainer', "fg", key);
-            i++;
-        }
-
-        this.#addSidebarTitle('sidebarLeft', "Bg Color");
-        this.#addSidebarContainer('sidebarLeft', 'colorBgContainer');
-        for (const key in this.#colors) {
-            this.#addSidebarLeftColor('colorBgContainer', "bg", key);
-        }
-
-        this.#doFn("set-fg-color", firstColor);
-        this.#doFn("set-bg-color", firstColor);
-    }*/
-
-    /*#initStroke() {
-        this.#addSidebarTitle('sidebarLeft', "Stroke");
-        this.#addSidebarContainer('sidebarLeft', 'strokeContainer');
-        this.#addSidebarProperty('sidebarLeft', "Width", this.#getIDFn("styleStrokeWidth"), "", "3");
-        this.#addSidebarProperty('sidebarLeft', "Opacity", this.#getIDFn("styleStrokeOpacity"), "", "100%");
-        this.#addSidebarProperty('sidebarLeft', "Linecap", this.#getIDFn("styleStrokeLinecap"), "", "", { "butt": "butt", "square": "square", "round": "round" });
-        this.#addSidebarProperty('sidebarLeft', "Linejoin", this.#getIDFn("styleStrokeLinejoin"), "", "", { "miter": "miter", "round": "round", "bevel": "bevel" });
-        this.#addSidebarProperty('sidebarLeft', "Dasharray", this.#getIDFn("styleStrokeDasharray"), "", "5");
-    }
-
-    #initFill() {
-        this.#addSidebarTitle('sidebarLeft', "Fill");
-        this.#addSidebarContainer('sidebarLeft', 'fillContainer');
-        this.#addSidebarProperty('sidebarLeft', "Opacity", this.#getIDFn("styleFillOpacity"), "", "100%");
-        this.#addSidebarProperty('sidebarLeft', "Rule", this.#getIDFn("styleFillRule"), "", "", { "nonzero": "nonzero", "evenodd": "evenodd", "inherit": "inherit" });
-    }*/
-
     #initProperties() {
         this.#addSidebarTitle('sidebarRight', "Properties");
         this.#addSidebarContainer('sidebarRight', 'propertyContainer');
@@ -343,14 +242,14 @@ class EdytorLayout {
         }
     }
 
-    #initLayers() {
+    /*#initLayers() {
         this.#addSidebarTitle('sidebarRight', "Layers");
         this.#addSidebarContainer('sidebarRight', 'layerListContainer');
         this.#addSidebarContainer('sidebarRight', 'layerToolsContainer');
         this.#initLayerTools();
-    }
+    }*/
 
-    #addLayerToolButton(ref, label, fn) {
+    /*#addLayerToolButton(ref, label, fn) {
         var b = document.createElement('button');
         b.className = 'toggle_off layer_button';
         b.innerHTML = label;
@@ -367,9 +266,9 @@ class EdytorLayout {
             scope.#tickAllLayers(this.checked);
         });
         this.#ref[ref].appendChild(b);
-    }
+    }*/
 
-    #initLayerTools() {
+    /*#initLayerTools() {
         var scope = this;
         this.#addLayerToolInputCheckbox('layerToolsContainer');
         this.#addLayerToolButton('layerToolsContainer', '+V', function (e) {
@@ -387,5 +286,5 @@ class EdytorLayout {
         this.#addLayerToolButton('layerToolsContainer', 'X', function (e) {
             scope.#doFn('delete-layers', scope.#_arrOfNumsOfSelectedLayers());
         });
-    }
+    }*/
 }
