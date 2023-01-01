@@ -97,9 +97,27 @@ class Edytor extends HTMLElement {
         }
     }
 
-    connectedCallback() {
-        var scope = this;
+    __addVectorLayer() {
 
+    }
+
+    __addPixelLayer() {
+
+    }
+
+    __toggleLayersLock() {
+
+    }
+
+    __toggleLayersHide() {
+
+    }
+
+    __deleteLayers() {
+
+    }
+
+    connectedCallback() {
         this.id = 'edytor';
         this.style.margin = 0;
         this.style.padding = 0;

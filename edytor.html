@@ -27,6 +27,8 @@
     <script src="edytor-properties.js"></script>
     <script src="edytor-stroke.js"></script>
     <script src="edytor-fill.js"></script>
+    <script src="edytor-layers.js"></script>
+    <script src="edytor-layer-tools.js"></script>
 </head>
 
 <body style="margin:0; padding:0">
@@ -64,7 +66,15 @@
                 <edytor-fill></edytor-fill>
             </div>
         </edytor-left>
-        <edytor-right></edytor-right>
+        <edytor-right>
+            <div class="sidebar_title">Layers</div>
+            <div class="sidebar_container">
+                <edytor-layers></edytor-layers>
+            </div>
+            <div class="sidebar_container">
+                <edytor-layer-tools></edytor-layer-tools>
+            </div>
+        </edytor-right>
     </edytor-ui>
 </body>
 
