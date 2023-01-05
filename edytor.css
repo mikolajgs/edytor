@@ -196,7 +196,7 @@ edytor-colour {
     width: 100px;
 }
 
-.sidebar_layer {
+edytor-layer-list-layer {
     font-size: 10px;
     font-family: arial;
     color: #bdbdbd;
@@ -208,25 +208,25 @@ edytor-colour {
     display: flex;
 }
 
-.sidebar_layer_selected {
+.edytor_sidebar_layer_selected {
     border: solid 1px #eeeeee;
     background-image: linear-gradient(#5d5d5d, #444444);
 }
 
-.sidebar_layer input[type=checkbox] {
+edytor-layer-list-layer input[type=checkbox] {
     width: 10px;
     margin: 0 0 0 2px;
     padding: 0px;
 }
 
-.sidebar_layer label {
+edytor-layer-list-layer label {
     width: 5px;
     padding: 1px 3px 0 3px;
     margin: 2px 0 0 1px;
     font-size: 9px;
 }
 
-.sidebar_layer input[type=text] {
+edytor-layer-list-layer input[type=text] {
     width: 60px;
     padding: 1px 2px 0 2px;
     margin: 0 0 0 2px;
@@ -238,7 +238,7 @@ edytor-colour {
     border: 0;
 }
 
-.sidebar_layer button {
+edytor-layer-list-layer button {
     width: 15px;
     padding: 1px 2px 0 2px;
     margin: 0 0 0 2px;
