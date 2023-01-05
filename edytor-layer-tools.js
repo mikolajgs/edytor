@@ -8,7 +8,7 @@ class EdytorLayerTools extends HTMLElement {
     b.type = "checkbox";
     b.id = "layer_tool_tickall";
     b.addEventListener('click', function () {
-      document.getElementById('layers').__tickAllLayers(this.checked);
+      document.getElementById('layer_list').__tickAllLayers(this.checked);
     });
     this.appendChild(b);
   }
@@ -20,32 +20,35 @@ class EdytorLayerTools extends HTMLElement {
     if (label == '+V') {
       b.addEventListener('click', function () {
         document.getElementById('edytor').__addVectorLayer();
+        document.getElementById("layer_tool_tickall").checked = false;
       });
     }
     if (label == '+P') {
       b.addEventListener('click', function () {
         document.getElementById('edytor').__addPixelLayer();
+        document.getElementById("layer_tool_tickall").checked = false;
       });
     }
     if (label == 'L') {
       b.addEventListener('click', function () {
-        document.getElementById('edytor').__toggleLayersLock(
-          document.getElementById('layers').__getSelectedLayers()
+        document.getElementById('edytor').__toggleLayersLocked(
+          document.getElementById('layer_list').__getSelectedLayers()
         );
       });
     }
     if (label == 'H') {
       b.addEventListener('click', function () {
-        document.getElementById('edytor').__toggleLayersHide(
-          document.getElementById('layers').__getSelectedLayers()
+        document.getElementById('edytor').__toggleLayersHidden(
+          document.getElementById('layer_list').__getSelectedLayers()
         );
       });
     }
     if (label == 'X') {
       b.addEventListener('click', function () {
         document.getElementById('edytor').__deleteLayers(
-          document.getElementById('layers').__getSelectedLayers()
+          document.getElementById('layer_list').__getSelectedLayers()
         );
+        document.getElementById("layer_tool_tickall").checked = false;
       });
     }
     this.appendChild(b);
@@ -59,6 +62,10 @@ class EdytorLayerTools extends HTMLElement {
     this.#addButton('L');
     this.#addButton('H');
     this.#addButton('X');
+  }
+
+  __setTickAll(b) {
+    document.getElementById("layer_tool_tickall").checked = b;
   }
 }
 

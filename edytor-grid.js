@@ -13,7 +13,7 @@ class EdytorGrid extends HTMLCanvasElement {
     connectedCallback() {
         this.id = "grid_layer";
         this.zIndex = 101;
-        this.classList.add('layer');
+        this.classList.add('edytor_layer');
         this.style.margin = 0;
         this.style.padding = 0;
         this.style.position = "absolute";
