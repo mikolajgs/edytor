@@ -9,8 +9,8 @@ class EdytorLayerListLayer extends HTMLElement {
     }
 
     __setLocked(l) {
-        document.getElementById("layer_locked_" + this.getAttribute("edytor-layer-id")).classList.remove((h ? 'edytor_toggle_off' : 'edytor_toggle_on'));
-        document.getElementById("layer_locked_" + this.getAttribute("edytor-layer-id")).classList.add((h ? 'edytor_toggle_on' : 'edytor_toggle_off'));
+        document.getElementById("layer_locked_" + this.getAttribute("edytor-layer-id")).classList.remove((l ? 'edytor_toggle_off' : 'edytor_toggle_on'));
+        document.getElementById("layer_locked_" + this.getAttribute("edytor-layer-id")).classList.add((l ? 'edytor_toggle_on' : 'edytor_toggle_off'));
     }
 
     __tick(b) {

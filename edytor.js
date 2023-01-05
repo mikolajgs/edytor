@@ -170,8 +170,8 @@ class Edytor extends HTMLElement {
         if (numList.length > 0) {
             var h = this.#el_layer_container().__getLayerHidden(numList[0]);
             for (var i = 0; i < numList.length; i++) {
-                this.#el_layer_container().__setLayerHidden(numList[i], !l);
-                this.#el_layer_list().__setLayerHidden(numList[i], !l);
+                this.#el_layer_container().__setLayerHidden(numList[i], !h);
+                this.#el_layer_list().__setLayerHidden(numList[i], !h);
             }
         }
     }
