@@ -101,6 +101,15 @@ class EdytorLayerContainer extends HTMLElement {
     __getLayerHidden(num) {
         return (document.getElementById('layer_' + num).style.display === 'none' ? true : false);
     }
+
+    __swapLayers(num1, num2) {
+        if (num1 == num2) {
+            return;
+        }
+        var z = document.getElementById("layer_" + num1).style.zIndex;
+        document.getElementById("layer_" + num1).style.zIndex = document.getElementById("layer_" + num2).style.zIndex;
+        document.getElementById("layer_" + num2).style.zIndex = z;
+    }
 }
 
 window.customElements.define("edytor-layer-container", EdytorLayerContainer);
