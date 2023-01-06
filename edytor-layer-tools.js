@@ -32,21 +32,21 @@ class EdytorLayerTools extends HTMLElement {
     if (label == 'L') {
       b.addEventListener('click', function () {
         document.getElementById('edytor').__toggleLayersLocked(
-          document.getElementById('layer_list').__getSelectedLayers()
+          document.getElementById('layer_list').__getTickedLayers()
         );
       });
     }
     if (label == 'H') {
       b.addEventListener('click', function () {
         document.getElementById('edytor').__toggleLayersHidden(
-          document.getElementById('layer_list').__getSelectedLayers()
+          document.getElementById('layer_list').__getTickedLayers()
         );
       });
     }
     if (label == 'X') {
       b.addEventListener('click', function () {
         document.getElementById('edytor').__deleteLayers(
-          document.getElementById('layer_list').__getSelectedLayers()
+          document.getElementById('layer_list').__getTickedLayers()
         );
         document.getElementById("layer_tool_tickall").checked = false;
       });

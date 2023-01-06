@@ -31,7 +31,7 @@ class EdytorLayerList extends HTMLElement {
         return true;
     }
 
-    __getSelectedLayers() {
+    __getTickedLayers() {
         var ls = [];
         var els = this.querySelectorAll('edytor-layer-list-layer');
         for (var i = 0; i < els.length; i++) {
@@ -94,6 +94,17 @@ class EdytorLayerList extends HTMLElement {
         }
     }
 
+    __selectLayer(num) {
+        var els = this.querySelectorAll('edytor-layer-list-layer');
+        for (var i = 0; i < els.length; i++) {
+            if (els[i].getAttribute("edytor-layer-id") == num.toString()) {
+                els[i].classList.add("edytor_sidebar_layer_selected");
+            } else {
+                els[i].classList.remove("edytor_sidebar_layer_selected");
+            }
+        }
+    }
+
     #addLayer(t, num) {
         var listItem = document.createElement('edytor-layer-list-layer');
         listItem.id = "layer_list_layer_" + num;
@@ -101,6 +112,7 @@ class EdytorLayerList extends HTMLElement {
         listItem.setAttribute("edytor-layer-type", t);
         this.prepend(listItem);
     }
+
 }
 
 window.customElements.define('edytor-layer-list', EdytorLayerList);

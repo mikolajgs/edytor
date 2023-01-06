@@ -1,4 +1,5 @@
 class EdytorRectangleTool extends EdytorTool {
+    RequiresPad = true;
     /*Name = "Rectangle"
     Icon = "v:rec"
     RequiresPad = true

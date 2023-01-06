@@ -16,7 +16,7 @@ class EdytorColour extends HTMLElement {
     this.innerHTML = '&nbsp;';
 
     this.addEventListener('click', function () {
-      document.getElementById('edytor').__setCurrentColour(type, name);
+      document.getElementById('edytor').__selectColour(type, name);
     });
 
     document.getElementById('edytor').__initColour(type, name);

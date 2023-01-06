@@ -69,6 +69,7 @@ class EdytorPad extends HTMLCanvasElement {
     }
 
     __show() {
+        console.log('pad show');
         this.style.display = '';
     }
 
