@@ -63,11 +63,35 @@ class EdytorLayerList extends HTMLElement {
     }
 
     __moveLayerUp(num) {
-
+        var els = this.querySelectorAll('edytor-layer-list-layer');
+        for (var i = 0; i < els.length; i++) {
+            if (els[i].getAttribute("edytor-layer-id") == num.toString()) {
+                if (i > 0) {
+                    els[i - 1].before(els[i]);
+                    return parseInt(els[i - 1].getAttribute("edytor-layer-id"));
+                }
+                if (i == 0) {
+                    return num;
+                }
+                return;
+            }
+        }
     }
 
     __moveLayerDown(num) {
-
+        var els = this.querySelectorAll('edytor-layer-list-layer');
+        for (var i = 0; i < els.length; i++) {
+            if (els[i].getAttribute("edytor-layer-id") == num.toString()) {
+                if (i < els.length - 1) {
+                    els[i + 1].after(els[i]);
+                    return parseInt(els[i + 1].getAttribute("edytor-layer-id"));
+                }
+                if (i == els.length - 1) {
+                    return num;
+                }
+                return;
+            }
+        }
     }
 
     #addLayer(t, num) {

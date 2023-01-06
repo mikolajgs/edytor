@@ -149,11 +149,11 @@ class Edytor extends HTMLElement {
     }
 
     __moveLayerUp(num) {
-
+        this.#el_layer_container().__swapLayers(num, this.#el_layer_list().__moveLayerUp(num));
     }
 
     __moveLayerDown(num) {
-
+        this.#el_layer_container().__swapLayers(num, this.#el_layer_list().__moveLayerDown(num));
     }
 
     __toggleLayersLocked(numList) {
@@ -226,30 +226,6 @@ class Edytor extends HTMLElement {
         return false;
     }
 
-    DeleteLayers(numList) {
-        for (var j = 0; j < numList.length; j++) {
-            if (this.#layers[numList[j]] !== null) {
-                this.#layers[numList[j]].Delete();
-                delete this.#layers[numList[j]];
-            }
-        }
-        // TODO: Refactor me
-        var newLayersOrder = [];
-        for (var i = 0; i < this.#layersOrder.length; i++) {
-            var f = false;
-            for (var j = 0; j < numList.length; j++) {
-                if (this.#layersOrder[i] == numList[j]) {
-                    f = true;
-                }
-            }
-            if (!f) {
-                newLayersOrder.push(this.#layersOrder[i]);
-            }
-        }
-        this.#layersOrder = newLayersOrder;
-        this.#layout.DeleteLayers(numList);
-    }
-
     SelectLayer(num) {
         if (this.#layers[num] !== null) {
             this.#layer = this.#layers[num];
@@ -292,40 +268,6 @@ class Edytor extends HTMLElement {
                 this.#layersOrder[i + 1] = num;
                 this.#layout.MoveLayerUp(num);
                 return;
-            }
-        }
-    }
-
-    ToggleLayersHide(numList) {
-        var newValue = null;
-        for (var j = 0; j < numList.length; j++) {
-            if (this.#layers[numList[j]] !== null) {
-                if (newValue === null) {
-                    this.#layers[numList[j]].ToggleHidden();
-                    newValue = this.#layers[numList[j]].Hidden;
-                } else {
-                    if (this.#layers[numList[j]].Hidden != newValue) {
-                        this.#layers[numList[j]].ToggleHidden();
-                    }
-                }
-                this.#layout.SetLayerHidden(numList[j], newValue);
-            }
-        }
-    }
-
-    ToggleLayersLock(numList) {
-        var newValue = null;
-        for (var j = 0; j < numList.length; j++) {
-            if (this.#layers[numList[j]] !== null) {
-                if (newValue === null) {
-                    this.#layers[numList[j]].ToggleLocked();
-                    newValue = this.#layers[numList[j]].Locked;
-                } else {
-                    if (this.#layers[numList[j]].Locked != newValue) {
-                        this.#layers[numList[j]].ToggleLocked()
-                    }
-                }
-                this.#layout.SetLayerLocked(numList[j], newValue);
             }
         }
     }
