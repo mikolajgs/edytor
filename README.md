@@ -1,5 +1,36 @@
 # edytor
 
+- add edytor-tool-config div on the top + config for pencil and other tool (already added on the list) 2d
+- add edytor-tool-info div on the bottom (and show position if possible?) 1d
+- add pixel tools first -> mid march
+    - pencil 4d
+    - line 2d
+    - existing shape: rectangle, square, oval, circle, triangle 3d
+    - custom shape 3d
+    - eraser 1d
+    - color picker 2d
+    - select existing shape 3d
+    - select custom shape 3d
+    - magic wand 3d
+    - delete selection 2d
+    - fill selection 2d
+    - move selection 3d
+    - move layer 4d
+- rotate tool -> april
+- scale tool -> april
+- zoom -> april
+
+- palette -> may
+- open -> may
+- save -> may
+- cut, copy, paste -> may
+- shell -> may
+- logs, verbose mode -> may
+
+- list basic functionality that is missing for it to become paint -> june
+- tweaking
+- release 0.1 - august/september
+
 ### Tools
 
 * select
