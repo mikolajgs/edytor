@@ -1,4 +1,5 @@
 class EdytorPolygonTool extends EdytorTool {
+    RequiresPad = true;
     /*Name = "Polygon"
     Icon = "v:pgon"
     RequiresPad = true

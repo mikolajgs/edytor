@@ -1,4 +1,5 @@
 class EdytorDspTool extends EdytorTool {
+    RequiredPad = true;
     /*Name = "TestGroup"
     Icon = "v:tgrp"
     RequiresPad = true

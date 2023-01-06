@@ -1,4 +1,5 @@
 class EdytorPencilTool extends EdytorTool {
+    RequiresPad = true;
     /*RequiresPad = true
     IsMultiClick = false
 

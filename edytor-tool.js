@@ -13,7 +13,7 @@ class EdytorTool extends HTMLElement {
     this.textContent = l;
 
     this.addEventListener('click', function () {
-      document.getElementById('edytor').__setCurrentTool(n);
+      document.getElementById('edytor').__selectTool(n);
     });
 
     document.getElementById('edytor').__initTool(n);

@@ -1,8 +1,4 @@
 class Edytor extends HTMLElement {
-    // do we need those?
-    #cfg = null;
-    #layout = null
-
     // Tools
     #toolNames = [];
     #tool = "";
@@ -15,21 +11,10 @@ class Edytor extends HTMLElement {
 
     // Layers
     #lastLayerNum = 0;
+    #layer = 0;
 
     constructor() {
         super();
-        // do we need config since we started hardcoding ids and zindexes in the classes?
-        this.#cfg = new EdytorConfig();
-        var scope = this;
-        // do we need layout at all?
-        this.#layout = new EdytorLayout(
-            function (n) {
-                return scope.#cfg.GetID(n);
-            },
-            function (cmd, arg1) {
-                return scope.Do(cmd, arg1);
-            }
-        );
     }
 
     #el_tool(n) {
@@ -68,13 +53,11 @@ class Edytor extends HTMLElement {
         }
     }
 
-    __getCurrentTool() {
-        return this.#el_tool(this.#tool);
+    __getSelectedTool() {
+        return this.#tool;
     }
 
-    __getCurrentLayer() {
-        if (this.#layer === null)
-            return null;
+    __getSelectedLayer() {
         return this.#layer;
     }
 
@@ -90,18 +73,20 @@ class Edytor extends HTMLElement {
         window.scrollTo(window.innerWidth / 2, window.innerHeight / 2);
     }
 
-    __setCurrentTool(s) {
-        this.#tool = s;
-        for (var i = 0; i < this.#toolNames.length; i++) {
-            if (this.#toolNames[i] != s) {
-                this.#el_tool(this.#toolNames[i]).__toggleOff();
-            } else {
-                this.#el_tool(this.#toolNames[i]).__toggleOn();
-            }
+    __selectTool(n) {
+        if (this.#tool != "") {
+            this.#el_tool(this.#tool).__toggleOff();
+        }
+        this.#tool = n;
+        this.#el_tool(n).__toggleOn();
+        if (this.#el_tool(n).RequiresPad) {
+            this.#el_pad_layer().__show();
+        } else {
+            this.#el_pad_layer().__hide();
         }
     }
 
-    __setCurrentColour(type, s) {
+    __selectColour(type, s) {
         if (type == "bg") {
             this.#colourBg = s;
             for (var i = 0; i < this.#colourBgNames.length; i++) {
@@ -146,6 +131,9 @@ class Edytor extends HTMLElement {
     __deleteLayer(num) {
         this.#el_layer_container().__deleteLayer(num);
         this.#el_layer_list().__deleteLayer(num);
+        if (num == this.#layer) {
+            this.__selectLayer(0);
+        }
     }
 
     __moveLayerUp(num) {
@@ -182,6 +170,11 @@ class Edytor extends HTMLElement {
         }
     }
 
+    __selectLayer(num) {
+        this.#layer = num;
+        this.#el_layer_list().__selectLayer(num);
+    }
+
     connectedCallback() {
         this.id = 'edytor';
         this.style.margin = 0;
@@ -190,119 +183,51 @@ class Edytor extends HTMLElement {
     }
 
 
-
-
-    #pad = null;
-
-    #tools = {}
-
-    // TODO: Remove below
-    #colorFg = "dupa";
-    #colorBg = "dupa";
-
-    #mouseDown = false;
-
-    #layersOrder = [];
-    #layers = {};
-    #layer = null;
-    #layerNum = 0;
-
-    Do(cmd, arg1) {
-        switch (cmd) {
-            case 'add-vector-layer': return this.AddVectorLayer();
-            case 'add-pixel-layer': return this.AddPixelLayer();
-            case 'delete-layers': return this.DeleteLayers(arg1);
-            case 'select-layer': return this.SelectLayer(arg1);
-            case 'deselect-layer': return this.DeleteLayers();
-            case 'move-layer-up': return this.MoveLayerUp(arg1);
-            case 'move-layer-down': return this.MoveLayerDown(arg1);
-            case 'toggle-layers-lock': return this.ToggleLayersLock(arg1);
-            case 'toggle-layers-hide': return this.ToggleLayersHide(arg1);
-            case 'set-tool': return this.SetTool(arg1);
-            case 'set-fg-color': return this.SetFgColor(arg1);
-            case 'set-bg-color': return this.SetBgColor(arg1);
-            case 'get-style': return this.GetStyle(arg1);
+    /*
+    
+        #pad = null;
+    
+        #tools = {}
+    
+        // TODO: Remove below
+        #colorFg = "dupa";
+        #colorBg = "dupa";
+    
+        #mouseDown = false;
+    
+        Do(cmd, arg1) {
+            switch (cmd) {
+                case 'add-vector-layer': return this.AddVectorLayer();
+                case 'add-pixel-layer': return this.AddPixelLayer();
+                case 'delete-layers': return this.DeleteLayers(arg1);
+                case 'select-layer': return this.SelectLayer(arg1);
+                case 'deselect-layer': return this.DeleteLayers();
+                case 'move-layer-up': return this.MoveLayerUp(arg1);
+                case 'move-layer-down': return this.MoveLayerDown(arg1);
+                case 'toggle-layers-lock': return this.ToggleLayersLock(arg1);
+                case 'toggle-layers-hide': return this.ToggleLayersHide(arg1);
+                case 'set-tool': return this.SetTool(arg1);
+                case 'set-fg-color': return this.SetFgColor(arg1);
+                case 'set-bg-color': return this.SetBgColor(arg1);
+                case 'get-style': return this.GetStyle(arg1);
+            }
+            return false;
         }
-        return false;
-    }
-
-    SelectLayer(num) {
-        if (this.#layers[num] !== null) {
-            this.#layer = this.#layers[num];
-            this.#layerNum = num;
-            this.#layout.SelectLayer(num);
-        }
-    }
-
-    DeselectLayer() {
-        this.#layer = null;
-        this.#layerNum = 0;
-        this.#layout.SelectLayer(-1);
-    }
-
-    MoveLayerDown(num) {
-        for (var i = 0; i < this.#layersOrder.length; i++) {
-            if (this.#layersOrder[i] == num) {
-                if (i == 0)
-                    return;
-                var curZIndex = this.#layers[this.#layersOrder[i]].GetZIndex();
-                this.#layers[this.#layersOrder[i]].SetZIndex(this.#layers[this.#layersOrder[i - 1]].GetZIndex());
-                this.#layers[this.#layersOrder[i - 1]].SetZIndex(curZIndex);
-                this.#layersOrder[i] = this.#layersOrder[i - 1];
-                this.#layersOrder[i - 1] = num;
-                this.#layout.MoveLayerDown(num);
-                return;
+    
+        GetStyle(s) {
+            switch (s) {
+                case 'color-fg': return this.#colorFg;
+                case 'color-bg': return this.#colorBg;
+                case 'stroke-opacity': return document.getElementById(this.#cfg.GetID("styleStrokeOpacity")).value;
+                case 'stroke-width': return document.getElementById(this.#cfg.GetID("styleStrokeWidth")).value;
+                case 'stroke-linecap': return document.getElementById(this.#cfg.GetID("styleStrokeLinecap")).value;
+                case 'stroke-linejoin': return document.getElementById(this.#cfg.GetID("styleStrokeLinejoin")).value;
+                case 'stroke-dasharray': return document.getElementById(this.#cfg.GetID("styleStrokeDasharray")).value;
+                case 'fill-opacity': return document.getElementById(this.#cfg.GetID("styleFillOpacity")).value;
+                case 'fill-rule': return document.getElementById(this.#cfg.GetID("styleFillRule")).value;
             }
         }
-    }
-
-    MoveLayerUp(num) {
-        for (var i = 0; i < this.#layersOrder.length; i++) {
-            if (this.#layersOrder[i] == num) {
-                if (i == this.#layersOrder.length - 1)
-                    return;
-                var curZIndex = this.#layers[this.#layersOrder[i]].GetZIndex();
-                this.#layers[this.#layersOrder[i]].SetZIndex(this.#layers[this.#layersOrder[i + 1]].GetZIndex());
-                this.#layers[this.#layersOrder[i + 1]].SetZIndex(curZIndex);
-                this.#layersOrder[i] = this.#layersOrder[i + 1];
-                this.#layersOrder[i + 1] = num;
-                this.#layout.MoveLayerUp(num);
-                return;
-            }
-        }
-    }
-
-    SetTool(name) {
-        this.#tool = name;
-        if (this.#tools[name].RequiresPad) {
-            this.#pad.Show();
-        } else {
-            this.#pad.Hide();
-        }
-    }
-
-    SetFgColor(name) {
-        this.#colorFg = name;
-    }
-
-    SetBgColor(name) {
-        this.#colorBg = name;
-    }
-
-    GetStyle(s) {
-        switch (s) {
-            case 'color-fg': return this.#colorFg;
-            case 'color-bg': return this.#colorBg;
-            case 'stroke-opacity': return document.getElementById(this.#cfg.GetID("styleStrokeOpacity")).value;
-            case 'stroke-width': return document.getElementById(this.#cfg.GetID("styleStrokeWidth")).value;
-            case 'stroke-linecap': return document.getElementById(this.#cfg.GetID("styleStrokeLinecap")).value;
-            case 'stroke-linejoin': return document.getElementById(this.#cfg.GetID("styleStrokeLinejoin")).value;
-            case 'stroke-dasharray': return document.getElementById(this.#cfg.GetID("styleStrokeDasharray")).value;
-            case 'fill-opacity': return document.getElementById(this.#cfg.GetID("styleFillOpacity")).value;
-            case 'fill-rule': return document.getElementById(this.#cfg.GetID("styleFillRule")).value;
-        }
-    }
-
+    */
 
 }
 
