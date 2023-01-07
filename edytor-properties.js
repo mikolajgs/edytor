@@ -5,9 +5,9 @@ class EdytorProperties extends HTMLElement {
 
   _addProperty(type, label, name, defval, vals) {
     var d = document.createElement('div');
-    d.className = "edytor_sidebar_property";
+    d.className = "edytor_property";
     var l = document.createElement('label');
-    l.textContent = label;
+    l.textContent = label + ":";
     var i = null;
     if (vals == null) {
       i = document.createElement('input');
@@ -29,3 +29,5 @@ class EdytorProperties extends HTMLElement {
     this.appendChild(d);
   }
 }
+
+window.customElements.define("edytor-properties", EdytorProperties);

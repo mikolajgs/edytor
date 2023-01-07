@@ -9,7 +9,7 @@ edytor-left {
     width: 80px;
     background: #444444;
     z-index: 511;
-    top: 20px;
+    top: 40px;
     left: 0;
 }
 
@@ -20,7 +20,7 @@ edytor-right {
     background: #3d3d3d;
     z-index: 521;
     position: fixed;
-    top: 20px;
+    top: 40px;
     right: 0;
 }
 
@@ -118,24 +118,21 @@ edytor-colours {
     color: #ffffff;
 }
 
-.edytor_sidebar_property {
+.edytor_property {
     font-size: 10px;
     font-family: arial;
     color: #bdbdbd;
     text-align: left;
     padding: 3px;
     background-image: linear-gradient(#3d3d3d, #333333);
-    display: flex;
+    display: inline-block;
 }
 
-.edytor_sidebar_property label {
-    width: 32px;
-    font-size: 8px;
-    padding-right: 2px;
-    overflow-wrap: break-word;
+.edytor_property label {
+    padding-right: 5px;
 }
 
-.edytor_sidebar_property input {
+.edytor_property input {
     font-size: 10px;
     font-family: arial;
     color: #cccccc;
@@ -144,7 +141,7 @@ edytor-colours {
     width: 36px;
 }
 
-.edytor_sidebar_property select {
+.edytor_property select {
     font-size: 10px;
     font-family: arial;
     color: #cccccc;
@@ -266,4 +263,25 @@ edytor-layer-list-layer button {
     width: 10px;
     margin: 0 0 0 2px;
     padding: 0px;
+}
+
+edytor-tool-config {
+    font-size: 12px;
+    font-family: arial;
+    color: #bdbdbd;
+    text-align: left;
+    padding: 3px;
+    background-image: linear-gradient(#3d3d3d, #333333);
+    height: 20px;
+    position: fixed;
+    padding: 0;
+    margin: 0;
+    top: 20px;
+    left: 0;
+    z-index: 532;
+    width: 100%;
+}
+
+edytor-tool-config .edytor_property:first-of-type {
+    margin-left: 80px;
 }
