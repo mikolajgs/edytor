@@ -11,6 +11,7 @@
     <script src="edytor-config.js"></script>
     <script src="edytor-pad.js"></script>
     <script src="edytor-top.js"></script>
+    <script src="edytor-tool-config.js"></script>
     <script src="edytor-left.js"></script>
     <script src="edytor-right.js"></script>
     <script src="edytor-shell.js"></script>
@@ -23,8 +24,8 @@
     <script src="edytor-tool-polygon.js"></script>
     <script src="edytor-tool-dsp.js"></script>
     <script src="edytor-properties.js"></script>
-    <script src="edytor-stroke.js"></script>
-    <script src="edytor-fill.js"></script>
+    <!--<script src="edytor-stroke.js"></script>
+    <script src="edytor-fill.js"></script>-->
     <script src="edytor-layer-list.js"></script>
     <script src="edytor-layer-list-layer.js"></script>
     <script src="edytor-layer-tools.js"></script>
@@ -36,7 +37,8 @@
         <edytor-layer-container></edytor-layer-container>
         <canvas is="edytor-grid"></canvas>
         <canvas is="edytor-pad"></canvas>
-        <edytor-top id="top_menu"></edytor-top>
+        <edytor-top></edytor-top>
+        <edytor-tool-config></edytor-tool-config>
         <div id="bottom_shell" class="bottom_shell">
             <input is="edytor-shell"></input>
             <textarea is="edytor-logs"></textarea>
@@ -57,14 +59,14 @@
             <div class="sidebar_container" style="display: block; flex-wrap: nowrap">
                 <edytor-colours type="bg"></edytor-colours>
             </div>
-            <div class="sidebar_title">Stroke</div>
+            <!--<div class="sidebar_title">Stroke</div>
             <div class="sidebar_container">
                 <edytor-stroke></edytor-stroke>
             </div>
             <div class="sidebar_title">Fill</div>
             <div class="sidebar_container">
                 <edytor-fill></edytor-fill>
-            </div>
+            </div>-->
         </edytor-left>
         <edytor-right>
             <div class="sidebar_title">Layers</div>
