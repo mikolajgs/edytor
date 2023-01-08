@@ -7,20 +7,20 @@ class EdytorTool extends HTMLElement {
     this._init('tool', 'lbl');
   }
 
-  _init(n, l) {
-    this.id = "tool_" + n;
-    this.setAttribute("edytor-tool-name", n);
+  _init(name, className, alt) {
+    this.id = "tool_" + name;
+    this.setAttribute("edytor-tool-name", name);
     this.className = "edytor_toggle_off edytor_sidebar_toggle edytor_tool";
-    this.textContent = l;
+    this.innerHTML = '<i class="fa-solid ' + className + '" alt="' + alt + '"></i>';
 
     this.addEventListener('click', function () {
-      document.getElementById('edytor').__selectTool(n);
+      document.getElementById('edytor').__selectTool(name);
     });
 
-    document.getElementById('edytor').__initTool(n);
+    document.getElementById('edytor').__initTool(name);
 
     var d = document.createElement('edytor-properties');
-    d.id = "tool_config_" + n;
+    d.id = "tool_config_" + name;
     d.style.display = 'none';
     document.getElementById("tool_config").appendChild(d);
   }

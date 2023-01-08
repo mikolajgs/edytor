@@ -4,6 +4,9 @@
 <head>
     <title>edytor</title>
     <link rel="stylesheet" href="edytor.css">
+    <link href="fontawesome/css/fontawesome.css" rel="stylesheet">
+    <link href="fontawesome/css/brands.css" rel="stylesheet">
+    <link href="fontawesome/css/solid.css" rel="stylesheet">
     <script src="edytor.js"></script>
     <script src="edytor-layer-container.js"></script>
     <script src="edytor-grid.js"></script>
@@ -19,10 +22,20 @@
     <script src="edytor-tool.js"></script>
     <script src="edytor-colour.js"></script>
     <script src="edytor-colours.js"></script>
+    <script src="edytor-tool-select.js"></script>
+    <script src="edytor-tool-move.js"></script>
+    <script src="edytor-tool-modify.js"></script>
+    <script src="edytor-tool-zoom.js"></script>
     <script src="edytor-tool-pencil.js"></script>
-    <script src="edytor-tool-rectangle.js"></script>
+    <script src="edytor-tool-line.js"></script>
+    <script src="edytor-tool-shape.js"></script>
+    <script src="edytor-tool-fill.js"></script>
+    <script src="edytor-tool-eraser.js"></script>
+    <script src="edytor-tool-color-picker.js"></script>
+    <script src="edytor-tool-magic-wand.js"></script>
+    <!--<script src="edytor-tool-rectangle.js"></script>
     <script src="edytor-tool-polygon.js"></script>
-    <script src="edytor-tool-dsp.js"></script>
+    <script src="edytor-tool-dsp.js"></script>-->
     <script src="edytor-properties.js"></script>
     <!--<script src="edytor-stroke.js"></script>
     <script src="edytor-fill.js"></script>-->
@@ -46,10 +59,17 @@
         <edytor-left>
             <div class="sidebar_title">Tools</div>
             <div class="sidebar_container">
+                <edytor-tool-select></edytor-tool-select>
+                <edytor-tool-move></edytor-tool-move>
+                <edytor-tool-modify></edytor-tool-modify>
+                <edytor-tool-zoom></edytor-tool-zoom>
                 <edytor-tool-pencil></edytor-tool-pencil>
-                <edytor-tool-polygon></edytor-tool-polygon>
-                <edytor-tool-rectangle></edytor-tool-rectangle>
-                <edytor-tool-dsp></edytor-tool-dsp>
+                <edytor-tool-line></edytor-tool-line>
+                <edytor-tool-shape></edytor-tool-shape>
+                <edytor-tool-fill></edytor-tool-fill>
+                <edytor-tool-eraser></edytor-tool-eraser>
+                <edytor-tool-color-picker></edytor-tool-color-picker>
+                <edytor-tool-magic-wand></edytor-tool-magic-wand>
             </div>
             <div class="sidebar_title">Fg Color</div>
             <div class="sidebar_container" style="display: block; flex-wrap: nowrap">
