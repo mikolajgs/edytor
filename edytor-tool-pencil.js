@@ -15,7 +15,7 @@ class EdytorPencilTool extends EdytorTool {
     }
 
     connectedCallback() {
-        super._init('pencil', 'p:pen');
+        super._init('pencil', 'fa-pencil', 'Pencil');
         super._addProperty("stroke", "Width", "width", "3", null);
         super._addProperty("stroke", "Opacity", "opacity", "100%", null);
         super._addProperty("stroke", "Linecap", "linecap", "", {

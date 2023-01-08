@@ -27,7 +27,7 @@ class EdytorPad extends HTMLCanvasElement {
             return document.getElementById('edytor').__getCurrentTool();
         }
 
-        this.#attachEvents();
+        //this.#attachEvents();
     }
 
     #setSize() {
@@ -35,7 +35,7 @@ class EdytorPad extends HTMLCanvasElement {
         this.height = window.innerHeight * 2;
     }
 
-    #attachEvents() {
+    /*#attachEvents() {
         var scope = this;
         this.addEventListener('mousedown', function (e) {
             scope.#mouseDown = true;
@@ -66,10 +66,9 @@ class EdytorPad extends HTMLCanvasElement {
                 scope.#getToolFn().DrawEnd(e.layerX, e.layerY);
             }
         });
-    }
+    }*/
 
     __show() {
-        console.log('pad show');
         this.style.display = '';
     }
 
