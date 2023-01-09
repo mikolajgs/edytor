@@ -1,5 +1,7 @@
 # edytor
 
+* monday: config for all the tools
+
 - add edytor-tool-config div on the top + config for pencil and other tool (already added on the list) 2d
 - add edytor-tool-info div on the bottom (and show position if possible?) 1d
 - add pixel tools first -> mid march
