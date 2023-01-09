@@ -1,7 +1,8 @@
 # edytor
 
-* monday: make it at least 2x bigger - can be use fixin somehow so it is all based on one var?
 * monday: config for all the tools
+
+* some day: in css, base all the padding and margin on variables OR remove all the padding and margin if possible (apart from the main design like top, left if possible)
 
 - add edytor-tool-config div on the top + config for pencil and other tool (already added on the list) 2d
 - add edytor-tool-info div on the bottom (and show position if possible?) 1d
