@@ -1,5 +1,6 @@
 # edytor
 
+* monday: make it at least 2x bigger - can be use fixin somehow so it is all based on one var?
 * monday: config for all the tools
 
 - add edytor-tool-config div on the top + config for pencil and other tool (already added on the list) 2d
