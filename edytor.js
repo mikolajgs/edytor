@@ -61,6 +61,14 @@ class Edytor extends HTMLElement {
         return this.#layer;
     }
 
+    __getSelectedBgColour() {
+        return this.#colourBg;
+    }
+
+    __getSelectedFgColour() {
+        return this.#colourFg;
+    }
+
     __getStyle(s) {
         // TODO: Taken the styles from the stroke and fill objects
     }

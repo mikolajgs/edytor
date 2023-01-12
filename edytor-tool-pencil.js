@@ -1,14 +1,12 @@
 class EdytorPencilTool extends EdytorTool {
     RequiresPad = true;
-    /*RequiresPad = true
-    IsMultiClick = false
+    IsMultiClick = false;
 
     #topLeft = [0, 0];
     #bottomRight = [0, 0];
     #prevPos = [-1, -1];
-    #ref = {
-        pad: null
-    }*/
+
+    #ctx = null;
 
     constructor() {
         super();
@@ -16,19 +14,17 @@ class EdytorPencilTool extends EdytorTool {
 
     connectedCallback() {
         super._init('pencil', 'fa-pencil', 'Pencil');
-        super._addProperty("stroke", "Width", "width", "3", null);
-        super._addProperty("stroke", "Opacity", "opacity", "100%", null);
-        super._addProperty("stroke", "Linecap", "linecap", "", {
+        super._addProperty("Width", "width", "3", null);
+        super._addProperty("Linecap", "linecap", "", {
             "butt": "butt",
             "square": "square",
             "round": "round"
         });
-        super._addProperty("stroke", "Linejoin", "linejoin", "", {
+        super._addProperty("Linejoin", "linejoin", "", {
             "miter": "miter",
             "round": "round",
             "bevel": "bevel"
         });
-        super._addProperty("stroke", "Dasharray", "dasharray", "5", null);
     }
 
     __toggleOn() {
@@ -39,45 +35,45 @@ class EdytorPencilTool extends EdytorTool {
         super.__toggleOff();
     }
 
-    /*DrawStart(x, y) {
-        if (this.#getLayerFunc() === null) {
+    __drawStart(x, y) {
+        var layer = document.getElementById('edytor').__getSelectedLayer();
+        if (layer === 0 || layer === null) {
             alert('No layer has been selected');
             return;
         }
-        if (this.#getLayerFunc().GetCanvas() === null) {
+        if (document.getElementById('layer_' + layer).tagName.toLowerCase() !== 'canvas') {
             alert('No pixel layer has been selected');
             return;
         }
-        if (this.#getLayerFunc().Locked) {
+        if (document.getElementById('layer_' + layer).getAttribute("locked") === "true") {
             alert('Layer is locked for editing');
             return;
         }
-        if (this.#getLayerFunc().Hidden) {
+        if (document.getElementById('layer_' + layer).style.display === 'none') {
             return;
         }
 
-        this.#ref.pixel = this.#getLayerFunc().GetCanvas();
-        this.#ref.pixelCtx = this.#ref.pixel.getContext('2d');
-        this.#ref.pixelCtx.strokeStyle = this.#getStyleFunc('color-fg');
-        this.#ref.pixelCtx.lineWidth = this.#getStyleFunc('stroke-width');
-        this.#ref.pixelCtx.lineCap = this.#getStyleFunc('stroke-linecap');
-        this.#ref.pixelCtx.lineJoin = this.#getStyleFunc('stroke-linejoin');
-        // todo
-        //this.#ref.pixelCtx.setLineDash(this.#ref.edytor.GetStrokeDasharray());
-        this.#ref.pixelCtx.beginPath();
-        this.#ref.pixelCtx.moveTo(x, y);
+        this.#ctx = document.getElementById('layer_' + layer).getContext('2d');
+
+        this.#ctx.strokeStyle = document.getElementById('edytor').__getSelectedFgColour();
+        this.#ctx.lineWidth = super._getProperty('width');
+        this.#ctx.lineCap = super._getProperty('linecap');
+        this.#ctx.lineJoin = super._getProperty('linejoin');
+        this.#ctx.beginPath();
+        this.#ctx.moveTo(x, y);
     }
-    DrawMove(x, y) {
-        if (this.#getLayerFunc() === null) {
+    __drawMove(x, y) {
+        var layer = document.getElementById('edytor').__getSelectedLayer();
+        if (layer === 0 || layer === null) {
             return;
         }
-        if (this.#getLayerFunc().GetCanvas() === null) {
+        if (document.getElementById('layer_' + layer).tagName.toLowerCase() !== 'canvas') {
             return;
         }
-        if (this.#getLayerFunc().Locked) {
+        if (document.getElementById('layer_' + layer).getAttribute("locked") === "true") {
             return;
         }
-        if (this.#getLayerFunc().Hidden) {
+        if (document.getElementById('layer_' + layer).style.display === 'none') {
             return;
         }
 
@@ -91,45 +87,47 @@ class EdytorPencilTool extends EdytorTool {
             this.#bottomRight[1] = y;
 
         if (this.#prevPos[0] != -1 && this.#prevPos[0] != x && this.#prevPos[1] != y) {
-            this.#ref.pixelCtx.lineTo(x, y);
-            this.#ref.pixelCtx.stroke();
+            this.#ctx.lineTo(x, y);
+            this.#ctx.stroke();
         }
 
         this.#prevPos[0] = x;
         this.#prevPos[1] = y;
     }
-    DrawEnd(x, y) {
-        if (this.#getLayerFunc() === null) {
+    __drawEnd(x, y) {
+        var layer = document.getElementById('edytor').__getSelectedLayer();
+        if (layer === 0 || layer === null) {
             return;
         }
-        if (this.#getLayerFunc().GetCanvas() === null) {
+        if (document.getElementById('layer_' + layer).tagName.toLowerCase() !== 'canvas') {
             return;
         }
-        if (this.#getLayerFunc().Locked) {
+        if (document.getElementById('layer_' + layer).getAttribute("locked") === "true") {
             return;
         }
-        if (this.#getLayerFunc().Hidden) {
+        if (document.getElementById('layer_' + layer).style.display === 'none') {
             return;
         }
 
-        this.#ref.pixelCtx.closePath();
+        this.#ctx.closePath();
     }
-    DrawCancel() {
-        if (this.#getLayerFunc() === null) {
+    __drawCancel() {
+        var layer = document.getElementById('edytor').__getSelectedLayer();
+        if (layer === 0 || layer === null) {
             return;
         }
-        if (this.#getLayerFunc().GetCanvas() === null) {
+        if (document.getElementById('layer_' + layer).tagName.toLowerCase() !== 'canvas') {
             return;
         }
-        if (this.#getLayerFunc().Locked) {
+        if (document.getElementById('layer_' + layer).getAttribute("locked") === "true") {
             return;
         }
-        if (this.#getLayerFunc().Hidden) {
+        if (document.getElementById('layer_' + layer).style.display === 'none') {
             return;
         }
 
-        this.#ref.pixelCtx.closePath();
-    }*/
+        this.#ctx.closePath();
+    }
 }
 
 window.customElements.define("edytor-tool-pencil", EdytorPencilTool);
