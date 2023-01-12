@@ -1,5 +1,4 @@
 class EdytorPad extends HTMLCanvasElement {
-    #getToolFn = null;
     #mouseDown = false;
 
     constructor() {
@@ -23,11 +22,7 @@ class EdytorPad extends HTMLCanvasElement {
 
         this.#setSize();
 
-        this.#getToolFn = function () {
-            return document.getElementById('edytor').__getCurrentTool();
-        }
-
-        //this.#attachEvents();
+        this.#attachEvents();
     }
 
     #setSize() {
@@ -35,38 +30,48 @@ class EdytorPad extends HTMLCanvasElement {
         this.height = window.innerHeight * 2;
     }
 
-    /*#attachEvents() {
+    #attachEvents() {
         var scope = this;
         this.addEventListener('mousedown', function (e) {
             scope.#mouseDown = true;
-            if (!scope.#getToolFn().IsMultiClick) {
-                scope.#getToolFn().DrawStart(e.layerX, e.layerY);
+            var toolName = document.getElementById('edytor').__getSelectedTool();
+            var tool = document.getElementById('tool_' + toolName);
+            if (!tool.IsMultiClick) {
+                tool.__drawStart(e.layerX, e.layerY);
             }
         });
         this.addEventListener('mousemove', function (e) {
-            if ((scope.#mouseDown && !scope.#getToolFn().IsMultiClick) || scope.#getToolFn().IsMultiClick) {
-                scope.#getToolFn().DrawMove(e.layerX, e.layerY);
+            var toolName = document.getElementById('edytor').__getSelectedTool();
+            var tool = document.getElementById('tool_' + toolName);
+            if ((scope.#mouseDown && !tool.IsMultiClick) || tool.IsMultiClick) {
+                tool.__drawMove(e.layerX, e.layerY);
             }
         });
         this.addEventListener('mouseup', function (e) {
             scope.#mouseDown = false;
-            if (!scope.#getToolFn().IsMultiClick) {
-                scope.#getToolFn().DrawEnd(e.layerX, e.layerY);
+            var toolName = document.getElementById('edytor').__getSelectedTool();
+            var tool = document.getElementById('tool_' + toolName);
+            if (!tool.IsMultiClick) {
+                tool.__drawEnd(e.layerX, e.layerY);
             } else {
-                scope.#getToolFn().DrawPoint(e.layerX, e.layerY);
+                tool.__drawPoint(e.layerX, e.layerY);
             }
         });
         this.addEventListener('mouseout', function (e) {
             scope.#mouseDown = false;
-            scope.#getToolFn().DrawCancel();
+            var toolName = document.getElementById('edytor').__getSelectedTool();
+            var tool = document.getElementById('tool_' + toolName);
+            tool.__drawCancel();
         });
         this.addEventListener('dblclick', function (e) {
             scope.#mouseDown = false;
-            if (scope.#getToolFn().IsMultiClick) {
-                scope.#getToolFn().DrawEnd(e.layerX, e.layerY);
+            var toolName = document.getElementById('edytor').__getSelectedTool();
+            var tool = document.getElementById('tool_' + toolName);
+            if (tool.IsMultiClick) {
+                tool.__drawEnd(e.layerX, e.layerY);
             }
         });
-    }*/
+    }
 
     __show() {
         this.style.display = '';
