@@ -2,38 +2,32 @@ body {
     background-color: #262626;
 }
 
-:root {
-    --base-icon-size: 40px;
-    --bottom-shell-elements-margin: 2px;
-    --property-padding: 3px;
-}
-
 edytor-left {
     border-right: solid 1px #222222;
-    box-shadow: 2px 0 3px 0 #222222;
+    box-shadow: 2px 0 2px 0 #222222;
     position: fixed;
-    width: calc(var(--base-icon-size) * 3);
+    width: 120px;
     background: #444444;
     z-index: 511;
-    top: calc(var(--base-icon-size) * 2);
+    top: 80px;
     left: 0;
 }
 
 edytor-right {
     border-left: solid 1px #222222;
-    box-shadow: -2px 0 3px 0 #222222;
-    width: calc(var(--base-icon-size) * 8);
-    background: #3d3d3d;
+    box-shadow: -2px 0 2px 0 #222222;
+    width: 320px;
+    background: #444444;
     z-index: 521;
     position: fixed;
-    top: calc(var(--base-icon-size) * 2);
+    top: 80px;
     right: 0;
 }
 
 edytor-top {
     width: 100%;
-    background: #3d3d3d;
-    height: var(--base-icon-size);
+    background: #333333;
+    height: 40px;
     padding: 0;
     margin: 0;
     z-index: 531;
@@ -48,32 +42,33 @@ edytor-top {
     bottom: 0;
     left: 0;
     width: 100%;
-    background: #3d3d3d;
-    height: calc(var(--base-icon-size) * 4 + var(--bottom-shell-elements-margin) * 2);
+    background: #333333;
+    height: 164px;
     padding: 0;
     margin: 0;
 }
 
+
 .edytor_logs {
     width: 100%;
     background: #111111;
-    height: calc(var(--base-icon-size) * 3);
+    height: 120px;
     padding: 0;
-    margin: var(--bottom-shell-elements-margin) 0 0 var(--bottom-shell-elements-margin);
+    margin: 2px 0 0 2px;
     border: solid 1px #333333;
-    color: #eeeeee;
-    font-size: calc(var(--base-icon-size) / 2);
+    color: #cccccc;
+    font-size: calc(20px);
     font-family: courier;
 }
 
 .edytor_shell {
     background: #111111;
     border: solid 1px #333333;
-    color: #eeeeee;
-    font-size: calc(var(--base-icon-size) / 2);
+    color: #cccccc;
+    font-size: calc(20px);
     font-family: courier;
-    height: var(--base-icon-size);
-    margin: var(--bottom-shell-elements-margin) 0 0 var(--bottom-shell-elements-margin);
+    height: 40px;
+    margin: 2px 0 0 2px;
     padding: 0;
 }
 
@@ -82,17 +77,18 @@ edytor-top {
     outline: none;
 }
 
+
 .sidebar_title {
-    font-size: calc(var(--base-icon-size) / 2);
+    font-size: calc(20px);
     font-family: arial;
-    color: #e8e6e6;
+    color: #cccccc;
     text-align: center;
     padding: 1px;
     background-image: linear-gradient(#444444, #333333);
-    border-left: solid 1px #555555;
-    border-top: solid 1px #555555;
-    border-right: solid 1px #212121;
-    border-bottom: solid 1px #212121;
+    border-left: solid 1px #787878;
+    border-top: solid 1px #787878;
+    border-right: solid 1px #222222;
+    border-bottom: solid 1px #222222;
     display: block;
 }
 
@@ -109,122 +105,112 @@ edytor-colours {
 }
 
 .sidebar_container .edytor_toggle_off {
-    border-left: solid 1px #555555;
-    border-top: solid 1px #555555;
-    border-right: solid 1px #212121;
-    border-bottom: solid 1px #212121;
+    border-left: solid 1px #787878;
+    border-top: solid 1px #787878;
+    border-right: solid 1px #222222;
+    border-bottom: solid 1px #222222;
 }
 
 .sidebar_container .edytor_toggle_on {
-    border-right: solid 1px #777777;
-    border-bottom: solid 1px #777777;
+    border-right: solid 1px #787878;
+    border-bottom: solid 1px #787878;
     border-top: solid 1px #222222;
     border-left: solid 1px #222222;
-    border: solid 1px #eeeeee;
-    color: #ffffff;
+    color: #cccccc;
 }
 
 .edytor_property {
-    font-size: calc(var(--base-icon-size) / 2);
+    font-size: calc(20px);
     font-family: arial;
-    color: #e8e6e6;
+    color: #cccccc;
     text-align: left;
-    padding: var(--property-padding);
-    background-image: linear-gradient(#3d3d3d, #333333);
+    padding: 2px;
+    background-image: linear-gradient(#444444, #333333);
     display: inline-block;
 }
 
 .edytor_property label {
-    margin-right:calc(var(--base-icon-size) / 4);
+    margin-right: 10px;
 }
 
 .edytor_property input {
-    font-size: calc(var(--base-icon-size) / 2);
+    font-size: calc(20px);
     font-family: arial;
     color: #cccccc;
-    background-image: linear-gradient(#191919, #2d2d2d);
+    background-image: linear-gradient(#111111, #222222);
     border: 0;
-    width: calc(var(--base-icon-size) * 2);
-    margin-right:calc(var(--base-icon-size) / 4);
+    width: 80px;
+    margin-right: 10px;
 }
 
 .edytor_property select {
-    font-size: calc(var(--base-icon-size) / 2);
+    font-size: calc(20px);
     font-family: arial;
     color: #cccccc;
-    background-image: linear-gradient(#191919, #2d2d2d);
+    background-image: linear-gradient(#111111, #222222);
     border: 0;
-    width: calc(var(--base-icon-size) * 2);
+    width: 80px;
     appearance: none;
 }
 
 .edytor_tool {
     padding: 0;
-    height: calc(var(--base-icon-size) - 2px);
-    width: calc(var(--base-icon-size) - 2px);
-    line-height: calc(var(--base-icon-size) - 2px);
+    height: 38px;
+    width: 38px;
+    line-height: 38px;
     text-align: center;
-    font-size: calc(var(--base-icon-size) - var(--base-icon-size)/2.5);
+    font-size: 20px;
     font-family: arial;
-    color: #d5d5d5;
-    background-image: linear-gradient(#3d3d3d, #333333);
+    color: #cccccc;
+    background-image: linear-gradient(#444444, #333333);
     cursor: pointer;
     display: block;
 }
 
 edytor-colour {
     padding: 0;
-    height: calc(var(--base-icon-size) - 2px);
-    width: calc(var(--base-icon-size) - 2px);
-    line-height: calc(var(--base-icon-size) - 2px);
+    height: 38px;
+    width: 38px;
+    line-height: 38px;
     text-align: center;
-    font-size: calc(var(--base-icon-size) - 2px);
+    font-size: 38px;
     font-family: arial;
-    color: #d5d5d5;
+    color: #ffffff;
     /* background-image: linear-gradient(#3d3d3d, #333333); */
     cursor: pointer;
     display: block;
 }
 
-/*.property label {
-    flex: calc(var(--base-icon-size) * 3);
-}
-
-.property input {
-    width: 100px;
-}
-
-.property select {
-    width: 100px;
-}*/
-
-edytor-layer-list-layer, edytor-layer-tools {
-    font-size: calc(var(--base-icon-size) / 2 - 2px);
-    line-height: calc(var(--base-icon-size) - var(--base-icon-size)/2);
+edytor-layer-list-layer,
+edytor-layer-tools {
+    font-size: 18px;
+    line-height: 20px;
     font-family: arial;
-    color: #bdbdbd;
+    color: #cccccc;
     text-align: left;
     padding: 0px;
     margin: 1px 0 1px 0;
-    border: solid 1px #555555;
-    background-image: linear-gradient(#3d3d3d, #333333);
+    border: solid 1px #666666;
+    background-image: linear-gradient(#444444, #333333);
     display: flex;
 }
 
 .edytor_sidebar_layer_selected {
-    border: solid 1px #eeeeee;
-    background-image: linear-gradient(#5d5d5d, #444444);
+    border: solid 1px #ffffff;
+    background-image: linear-gradient(#666666, #444444);
 }
 
-edytor-layer-list-layer input[type=checkbox], edytor-layer-tools input[type=checkbox],  {
-    width: calc(var(--base-icon-size) - var(--base-icon-size)/2);
-    margin: 0;
-    padding: 0px;
+edytor-layer-list-layer input[type=checkbox],
+edytor-layer-tools input[type=checkbox],
+{
+width: 20px;
+margin: 0;
+padding: 0px;
 }
 
 edytor-layer-list-layer label {
-    font-size: calc(var(--base-icon-size) / 2 - 6px);
-    width: calc(var(--base-icon-size) - var(--base-icon-size)/2);
+    font-size: 14px;
+    width: 20px;
     padding: 0;
     margin: 4px 0 0 0;
     text-align: center;
@@ -232,44 +218,45 @@ edytor-layer-list-layer label {
 }
 
 edytor-layer-list-layer input[type=text] {
-    width: calc(var(--base-icon-size) * 3);
+    width: 120px;
     padding: 0;
     margin: 0 0 0 4px;
-    height: calc(var(--base-icon-size) - var(--base-icon-size)/4);
+    height: 30px;
     font-family: arial;
     color: #cccccc;
-    background-image: linear-gradient(#191919, #2d2d2d);
+    background-image: linear-gradient(#222222, #111111);
     border: 0;
 }
 
-edytor-layer-list-layer button, edytor-layer-tools button {
-    width: calc(var(--base-icon-size) - var(--base-icon-size)/4);
+edytor-layer-list-layer button,
+edytor-layer-tools button {
+    width: 30px;
     padding: 0;
     margin: 0;
-    height: calc(var(--base-icon-size) - var(--base-icon-size)/4);
+    height: 30px;
     font-family: arial;
     color: #cccccc;
-    background-image: linear-gradient(#191919, #2d2d2d);
+    background-image: linear-gradient(#111111, #222222);
     border: 0;
 }
 
 edytor-tool-config {
-    font-size: calc(var(--base-icon-size) / 2 - 2px);
+    font-size: 18px;
     font-family: arial;
-    color: #bdbdbd;
+    color: #999999;
     text-align: left;
     padding: 0;
-    background-image: linear-gradient(#3d3d3d, #333333);
-    height: var(--base-icon-size);
+    background-image: linear-gradient(#444444, #333333);
+    height: 40px;
     position: fixed;
     padding: 0;
     margin: 0;
-    top: var(--base-icon-size);
+    top: 40px;
     left: 0;
-    z-index: 532;
+    z-index: 551;
     width: 100%;
 }
 
 edytor-tool-config .edytor_property:first-of-type {
-    margin-left: calc(var(--base-icon-size) * 3);
+    margin-left: 120px;
 }
