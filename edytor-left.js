@@ -14,7 +14,7 @@ class EdytorLeft extends HTMLElement {
   }
 
   #setSize() {
-    this.style.height = (window.innerHeight - 20 - 80) + 'px';
+    this.style.height = (window.innerHeight - 80) + 'px';
   }
 }
 

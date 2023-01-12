@@ -46,6 +46,7 @@ edytor-top {
     height: 164px;
     padding: 0;
     margin: 0;
+    display: none;
 }
 
 
@@ -134,7 +135,7 @@ edytor-colours {
 }
 
 .edytor_property input {
-    font-size: calc(20px);
+    font-size: 20px;
     font-family: arial;
     color: #cccccc;
     background-image: linear-gradient(#111111, #222222);
@@ -144,12 +145,12 @@ edytor-colours {
 }
 
 .edytor_property select {
-    font-size: calc(20px);
+    font-size: 20px;
     font-family: arial;
     color: #cccccc;
     background-image: linear-gradient(#111111, #222222);
     border: 0;
-    width: 80px;
+    width: 100px;
     appearance: none;
 }
 
