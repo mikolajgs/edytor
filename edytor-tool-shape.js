@@ -7,6 +7,13 @@ class EdytorShapeTool extends EdytorTool {
 
     connectedCallback() {
         super._init('shape', 'fa-shapes', 'Shape');
+        super._addProperty("Shape", "shape", "", {
+            "rectangle": "rectangle",
+            "rounded_rectangle": "rounded_rectangle",
+            "oval": "oval",
+            "free": "free",
+            "polygon": "polygon"
+        });
         super._addProperty("Style", "style", "", {
             "stroke": "stroke",
             "fill": "fill",
@@ -22,10 +29,6 @@ class EdytorShapeTool extends EdytorTool {
             "miter": "miter",
             "round": "round",
             "bevel": "bevel"
-        });
-        super._addProperty("Corners", "corners", "", {
-            "normal": "normal",
-            "rounded": "rounded",
         });
         super._addProperty("Radii", "corner_radii", "3 3 3 3", null);
     }
