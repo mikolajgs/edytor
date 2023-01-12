@@ -66,6 +66,7 @@ class EdytorPencilTool extends EdytorTool {
 
         this.#ctx = document.getElementById('layer_' + layer).getContext('2d');
 
+        this.#ctx.globalCompositeOperation = 'source-over';
         this.#ctx.strokeStyle = document.getElementById('edytor').__getSelectedFgColour();
         this.#ctx.lineWidth = super._getProperty('width');
         this.#ctx.lineCap = super._getProperty('linecap');
@@ -109,6 +110,8 @@ class EdytorPencilTool extends EdytorTool {
         if (layer === null) {
             return;
         }
+
+        this.#ctx = document.getElementById('layer_' + layer).getContext('2d');
 
         this.#ctx.closePath();
     }

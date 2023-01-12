@@ -69,10 +69,6 @@ class Edytor extends HTMLElement {
         return this.#colourFg;
     }
 
-    __getStyle(s) {
-        // TODO: Taken the styles from the stroke and fill objects
-    }
-
     __getPadCanvas() {
         return this.#el_pad_layer().getCanvas();
     }
@@ -189,54 +185,6 @@ class Edytor extends HTMLElement {
         this.style.padding = 0;
         this.style.position = "relative";
     }
-
-
-    /*
-    
-        #pad = null;
-    
-        #tools = {}
-    
-        // TODO: Remove below
-        #colorFg = "dupa";
-        #colorBg = "dupa";
-    
-        #mouseDown = false;
-    
-        Do(cmd, arg1) {
-            switch (cmd) {
-                case 'add-vector-layer': return this.AddVectorLayer();
-                case 'add-pixel-layer': return this.AddPixelLayer();
-                case 'delete-layers': return this.DeleteLayers(arg1);
-                case 'select-layer': return this.SelectLayer(arg1);
-                case 'deselect-layer': return this.DeleteLayers();
-                case 'move-layer-up': return this.MoveLayerUp(arg1);
-                case 'move-layer-down': return this.MoveLayerDown(arg1);
-                case 'toggle-layers-lock': return this.ToggleLayersLock(arg1);
-                case 'toggle-layers-hide': return this.ToggleLayersHide(arg1);
-                case 'set-tool': return this.SetTool(arg1);
-                case 'set-fg-color': return this.SetFgColor(arg1);
-                case 'set-bg-color': return this.SetBgColor(arg1);
-                case 'get-style': return this.GetStyle(arg1);
-            }
-            return false;
-        }
-    
-        GetStyle(s) {
-            switch (s) {
-                case 'color-fg': return this.#colorFg;
-                case 'color-bg': return this.#colorBg;
-                case 'stroke-opacity': return document.getElementById(this.#cfg.GetID("styleStrokeOpacity")).value;
-                case 'stroke-width': return document.getElementById(this.#cfg.GetID("styleStrokeWidth")).value;
-                case 'stroke-linecap': return document.getElementById(this.#cfg.GetID("styleStrokeLinecap")).value;
-                case 'stroke-linejoin': return document.getElementById(this.#cfg.GetID("styleStrokeLinejoin")).value;
-                case 'stroke-dasharray': return document.getElementById(this.#cfg.GetID("styleStrokeDasharray")).value;
-                case 'fill-opacity': return document.getElementById(this.#cfg.GetID("styleFillOpacity")).value;
-                case 'fill-rule': return document.getElementById(this.#cfg.GetID("styleFillRule")).value;
-            }
-        }
-    */
-
 }
 
 window.customElements.define("edytor-ui", Edytor);

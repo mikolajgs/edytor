@@ -89,6 +89,7 @@ class EdytorLineTool extends EdytorTool {
         }
 
         this.#padCtx = document.getElementById('pad_layer').getContext('2d');
+        this.#padCtx.globalCompositeOperation = 'source-over';
         this.#padCtx.strokeStyle = document.getElementById('edytor').__getSelectedFgColour();
         this.#padCtx.lineWidth = super._getProperty('width');
         this.#padCtx.lineCap = super._getProperty('linecap');
@@ -128,6 +129,7 @@ class EdytorLineTool extends EdytorTool {
 
         if (x != this.#startPos[0] || y != this.#startPos[1]) {
             this.#ctx = document.getElementById('layer_' + layer).getContext('2d');
+            this.#ctx.globalCompositeOperation = 'source-over';
             this.#ctx.strokeStyle = document.getElementById('edytor').__getSelectedFgColour();
             this.#ctx.lineWidth = super._getProperty('width');
             this.#ctx.lineCap = super._getProperty('linecap');
@@ -141,6 +143,12 @@ class EdytorLineTool extends EdytorTool {
     }
 
     __drawCancel() {
+        var layer = this.#getLayer(true);
+        if (layer === null) {
+            return;
+        }
+
+        this.#padCtx = document.getElementById('pad_layer').getContext('2d');
         this.#padCtx.clearRect(0, 0, this.width, this.height);
     }
 }
