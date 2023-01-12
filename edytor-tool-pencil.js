@@ -27,6 +27,29 @@ class EdytorPencilTool extends EdytorTool {
         });
     }
 
+    #getLayer(showAlert) {
+        var layer = document.getElementById('edytor').__getSelectedLayer();
+        if (layer === 0 || layer === null) {
+            if (showAlert === true)
+                alert('No layer has been selected');
+            return null;
+        }
+        if (document.getElementById('layer_' + layer).tagName.toLowerCase() !== 'canvas') {
+            if (showAlert === true)
+                alert('No pixel layer has been selected');
+            return null;
+        }
+        if (document.getElementById('layer_' + layer).getAttribute("locked") === "true") {
+            if (showAlert === true)
+                alert('Layer is locked for editing');
+            return null;
+        }
+        if (document.getElementById('layer_' + layer).style.display === 'none') {
+            return null;
+        }
+        return layer;
+    }
+
     __toggleOn() {
         super.__toggleOn();
     }
@@ -36,20 +59,8 @@ class EdytorPencilTool extends EdytorTool {
     }
 
     __drawStart(x, y) {
-        var layer = document.getElementById('edytor').__getSelectedLayer();
-        if (layer === 0 || layer === null) {
-            alert('No layer has been selected');
-            return;
-        }
-        if (document.getElementById('layer_' + layer).tagName.toLowerCase() !== 'canvas') {
-            alert('No pixel layer has been selected');
-            return;
-        }
-        if (document.getElementById('layer_' + layer).getAttribute("locked") === "true") {
-            alert('Layer is locked for editing');
-            return;
-        }
-        if (document.getElementById('layer_' + layer).style.display === 'none') {
+        var layer = this.#getLayer(true);
+        if (layer === null) {
             return;
         }
 
@@ -63,17 +74,8 @@ class EdytorPencilTool extends EdytorTool {
         this.#ctx.moveTo(x, y);
     }
     __drawMove(x, y) {
-        var layer = document.getElementById('edytor').__getSelectedLayer();
-        if (layer === 0 || layer === null) {
-            return;
-        }
-        if (document.getElementById('layer_' + layer).tagName.toLowerCase() !== 'canvas') {
-            return;
-        }
-        if (document.getElementById('layer_' + layer).getAttribute("locked") === "true") {
-            return;
-        }
-        if (document.getElementById('layer_' + layer).style.display === 'none') {
+        var layer = this.#getLayer(false);
+        if (layer === null) {
             return;
         }
 
@@ -95,34 +97,16 @@ class EdytorPencilTool extends EdytorTool {
         this.#prevPos[1] = y;
     }
     __drawEnd(x, y) {
-        var layer = document.getElementById('edytor').__getSelectedLayer();
-        if (layer === 0 || layer === null) {
-            return;
-        }
-        if (document.getElementById('layer_' + layer).tagName.toLowerCase() !== 'canvas') {
-            return;
-        }
-        if (document.getElementById('layer_' + layer).getAttribute("locked") === "true") {
-            return;
-        }
-        if (document.getElementById('layer_' + layer).style.display === 'none') {
+        var layer = this.#getLayer(false);
+        if (layer === null) {
             return;
         }
 
         this.#ctx.closePath();
     }
     __drawCancel() {
-        var layer = document.getElementById('edytor').__getSelectedLayer();
-        if (layer === 0 || layer === null) {
-            return;
-        }
-        if (document.getElementById('layer_' + layer).tagName.toLowerCase() !== 'canvas') {
-            return;
-        }
-        if (document.getElementById('layer_' + layer).getAttribute("locked") === "true") {
-            return;
-        }
-        if (document.getElementById('layer_' + layer).style.display === 'none') {
+        var layer = this.#getLayer(false);
+        if (layer === null) {
             return;
         }
 
