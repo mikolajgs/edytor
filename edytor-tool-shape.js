@@ -56,7 +56,7 @@ class EdytorShapeTool extends EdytorTool {
         super.__toggleOff();
     }
 
-    __drawStart(x, y) {
+    __drawStart(x, y, shiftKey) {
         var layer = super._getLayer(true);
         if (layer === null) {
             return;
@@ -74,7 +74,7 @@ class EdytorShapeTool extends EdytorTool {
         this.#startPos = [x, y];
     }
 
-    __drawMove(x, y) {
+    __drawMove(x, y, shiftKey) {
         var layer = super._getLayer(false);
         if (layer === null) {
             return;
@@ -95,7 +95,7 @@ class EdytorShapeTool extends EdytorTool {
         }
     }
 
-    __drawEnd(x, y) {
+    __drawEnd(x, y, shiftKey) {
         var layer = super._getLayer(false);
         if (layer === null) {
             return;

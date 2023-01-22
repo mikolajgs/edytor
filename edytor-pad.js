@@ -37,14 +37,14 @@ class EdytorPad extends HTMLCanvasElement {
             var toolName = document.getElementById('edytor').__getSelectedTool();
             var tool = document.getElementById('tool_' + toolName);
             if (!tool.IsMultiClick) {
-                tool.__drawStart(e.layerX, e.layerY);
+                tool.__drawStart(e.layerX, e.layerY, e.shiftKey);
             }
         });
         this.addEventListener('mousemove', function (e) {
             var toolName = document.getElementById('edytor').__getSelectedTool();
             var tool = document.getElementById('tool_' + toolName);
             if ((scope.#mouseDown && !tool.IsMultiClick) || tool.IsMultiClick) {
-                tool.__drawMove(e.layerX, e.layerY);
+                tool.__drawMove(e.layerX, e.layerY, e.shiftKey);
             }
         });
         this.addEventListener('mouseup', function (e) {
@@ -52,7 +52,7 @@ class EdytorPad extends HTMLCanvasElement {
             var toolName = document.getElementById('edytor').__getSelectedTool();
             var tool = document.getElementById('tool_' + toolName);
             if (!tool.IsMultiClick) {
-                tool.__drawEnd(e.layerX, e.layerY);
+                tool.__drawEnd(e.layerX, e.layerY, e.shiftKey);
             } else {
                 tool.__drawPoint(e.layerX, e.layerY);
             }
