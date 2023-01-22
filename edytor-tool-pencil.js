@@ -34,7 +34,7 @@ class EdytorPencilTool extends EdytorTool {
         super.__toggleOff();
     }
 
-    __drawStart(x, y) {
+    __drawStart(x, y, shiftKey) {
         var layer = super._getLayer(true);
         if (layer === null) {
             return;
@@ -52,7 +52,7 @@ class EdytorPencilTool extends EdytorTool {
         this.#ctx.beginPath();
         this.#ctx.moveTo(x, y);
     }
-    __drawMove(x, y) {
+    __drawMove(x, y, shiftKey) {
         var layer = super._getLayer(false);
         if (layer === null) {
             return;
@@ -73,7 +73,7 @@ class EdytorPencilTool extends EdytorTool {
         this.#prevPos[0] = x;
         this.#prevPos[1] = y;
     }
-    __drawEnd(x, y) {
+    __drawEnd(x, y, shiftKey) {
         var layer = super._getLayer(false);
         if (layer === null) {
             return;
