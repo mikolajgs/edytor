@@ -33,6 +33,77 @@ class EdytorTool extends HTMLElement {
     return document.getElementById("tool_property_" + this.getAttribute("edytor-tool-name") + "_" + name).value;
   }
 
+  _getLayer(showAlert) {
+    var layer = document.getElementById('edytor').__getSelectedLayer();
+    if (layer === 0 || layer === null) {
+      if (showAlert === true)
+        alert('No layer has been selected');
+      return null;
+    }
+    if (document.getElementById('layer_' + layer).tagName.toLowerCase() !== 'canvas') {
+      if (showAlert === true)
+        alert('No pixel layer has been selected');
+      return null;
+    }
+    if (document.getElementById('layer_' + layer).getAttribute("locked") === "true") {
+      if (showAlert === true)
+        alert('Layer is locked for editing');
+      return null;
+    }
+    if (document.getElementById('layer_' + layer).style.display === 'none') {
+      return null;
+    }
+    return layer;
+  }
+
+  _getLowerValue(candidate, current) {
+    if (candidate < 0) {
+      return current;
+    }
+    if (candidate < current) {
+      return candidate;
+    }
+    return current;
+  }
+
+  _getHigherValue(candidate, current, max) {
+    if (candidate > max) {
+      return max;
+    }
+    if (candidate > current) {
+      return candidate;
+    }
+    return current;
+  }
+
+  _setCorners(o, x, y, w, h, dx, dy) {
+    o['_corners'][0] = this._getLowerValue(x - dx, o['_corners'][0]);
+    o['_corners'][1] = this._getLowerValue(y - dy, o['_corners'][1]);
+    o['_corners'][2] = this._getHigherValue(x + dx, o['_corners'][2], w);
+    o['_corners'][3] = this._getHigherValue(y + dy, o['_corners'][3], h);
+  }
+
+  _resetCorners(o) {
+    o['_corners'] = [999999, 999999, 0, 0];
+  }
+
+  _clearPad(o) {
+    if (o !== undefined) {
+      document.getElementById('pad_layer').getContext('2d').clearRect(
+        o['_corners'][0],
+        o['_corners'][1],
+        o['_corners'][2] - o['_corners'][0],
+        o['_corners'][3] - o['_corners'][1]
+      );
+      return;
+    }
+    document.getElementById('pad_layer').getContext('2d').clearRect(
+      0, 0,
+      document.getElementById('pad_layer').width,
+      document.getElementById('pad_layer').height
+    );
+  }
+
   __toggleOn() {
     this.classList.remove('edytor_toggle_off');
     this.classList.add('edytor_toggle_on');
