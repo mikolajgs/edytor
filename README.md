@@ -4,12 +4,11 @@
 
 * some day: in css, base all the padding and margin on variables OR remove all the padding and margin if possible (apart from the main design like top, left if possible)
 
-- add edytor-tool-config div on the top + config for pencil and other tool (already added on the list) 2d
 - add edytor-tool-info div on the bottom (and show position if possible?) 1d
+- add ruler
 - add pixel tools first -> mid march
-    - pencil 4d
-    - line 2d
     - existing shape: rectangle, square, oval, circle, triangle 3d
+        - oval with alt key can be drawn from the centre point...
     - custom shape 3d
     - eraser 1d
     - color picker 2d
