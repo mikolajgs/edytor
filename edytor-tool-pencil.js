@@ -2,10 +2,9 @@ class EdytorPencilTool extends EdytorTool {
     RequiresPad = true;
     IsMultiClick = false;
 
-    #topLeft = [0, 0];
-    #bottomRight = [0, 0];
-    #prevPos = [-1, -1];
+    _corners = [999999, 999999, 0, 0];
 
+    #prevPos = [-1, -1];
     #ctx = null;
 
     constructor() {
@@ -27,29 +26,6 @@ class EdytorPencilTool extends EdytorTool {
         });
     }
 
-    #getLayer(showAlert) {
-        var layer = document.getElementById('edytor').__getSelectedLayer();
-        if (layer === 0 || layer === null) {
-            if (showAlert === true)
-                alert('No layer has been selected');
-            return null;
-        }
-        if (document.getElementById('layer_' + layer).tagName.toLowerCase() !== 'canvas') {
-            if (showAlert === true)
-                alert('No pixel layer has been selected');
-            return null;
-        }
-        if (document.getElementById('layer_' + layer).getAttribute("locked") === "true") {
-            if (showAlert === true)
-                alert('Layer is locked for editing');
-            return null;
-        }
-        if (document.getElementById('layer_' + layer).style.display === 'none') {
-            return null;
-        }
-        return layer;
-    }
-
     __toggleOn() {
         super.__toggleOn();
     }
@@ -59,10 +35,12 @@ class EdytorPencilTool extends EdytorTool {
     }
 
     __drawStart(x, y) {
-        var layer = this.#getLayer(true);
+        var layer = super._getLayer(true);
         if (layer === null) {
             return;
         }
+
+        super._resetCorners(this);
 
         this.#ctx = document.getElementById('layer_' + layer).getContext('2d');
 
@@ -75,19 +53,17 @@ class EdytorPencilTool extends EdytorTool {
         this.#ctx.moveTo(x, y);
     }
     __drawMove(x, y) {
-        var layer = this.#getLayer(false);
+        var layer = super._getLayer(false);
         if (layer === null) {
             return;
         }
 
-        if (x < this.#topLeft[0])
-            this.#topLeft[0] = x;
-        if (x > this.#bottomRight[0])
-            this.#bottomRight[0] = x;
-        if (y < this.#topLeft[1])
-            this.#topLeft[1] = y;
-        if (y > this.#bottomRight[1])
-            this.#bottomRight[1] = y;
+        super._setCorners(this, x, y,
+            document.getElementById('layer_' + layer).width,
+            document.getElementById('layer_' + layer).height,
+            parseInt(super._getProperty('width')),
+            parseInt(super._getProperty('width'))
+        );
 
         if (this.#prevPos[0] != -1 && this.#prevPos[0] != x && this.#prevPos[1] != y) {
             this.#ctx.lineTo(x, y);
@@ -98,7 +74,7 @@ class EdytorPencilTool extends EdytorTool {
         this.#prevPos[1] = y;
     }
     __drawEnd(x, y) {
-        var layer = this.#getLayer(false);
+        var layer = super._getLayer(false);
         if (layer === null) {
             return;
         }
@@ -106,13 +82,12 @@ class EdytorPencilTool extends EdytorTool {
         this.#ctx.closePath();
     }
     __drawCancel() {
-        var layer = this.#getLayer(false);
+        var layer = super._getLayer(false);
         if (layer === null) {
             return;
         }
 
         this.#ctx = document.getElementById('layer_' + layer).getContext('2d');
-
         this.#ctx.closePath();
     }
 }
