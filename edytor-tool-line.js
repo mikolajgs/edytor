@@ -2,7 +2,7 @@ class EdytorLineTool extends EdytorTool {
     RequiresPad = true;
     IsMultiClick = false;
 
-    _corners = [999999, 999999, 0, 0];
+    _clearArea = [999999, 999999, 0, 0];
 
     #startPos = [-1 - 1];
     #padCtx = null;
@@ -24,10 +24,16 @@ class EdytorLineTool extends EdytorTool {
             "round": "round",
             "bevel": "bevel"
         });
+        super._addProperty("Angle", "angle", "", {
+            "": "",
+            "horizontal": "horizontal",
+            "vertical": "vertical",
+            "diagonal": "diagonal"
+        });
     }
 
-    #setCorners(x, y) {
-        super._setCorners(this, x, y,
+    #setClearArea(x, y) {
+        super._setClearArea(this, x, y,
             document.getElementById('pad_layer').width,
             document.getElementById('pad_layer').height,
             parseInt(super._getProperty('width')),
@@ -43,13 +49,13 @@ class EdytorLineTool extends EdytorTool {
         super.__toggleOff();
     }
 
-    __drawStart(x, y, shiftKey) {
+    __drawStart(x, y, shiftKey, altKey) {
         var layer = super._getLayer(true);
         if (layer === null) {
             return;
         }
 
-        super._resetCorners(this);
+        super._resetClearArea(this);
 
         this.#padCtx = document.getElementById('pad_layer').getContext('2d');
         this.#padCtx.globalCompositeOperation = 'source-over';
@@ -57,20 +63,32 @@ class EdytorLineTool extends EdytorTool {
         this.#padCtx.lineWidth = super._getProperty('width');
         this.#padCtx.lineCap = super._getProperty('linecap');
         this.#padCtx.lineJoin = super._getProperty('linejoin');
-        this.#setCorners(x, y);
+        this.#setClearArea(x, y);
         this.#startPos = [x, y];
     }
 
-    __drawMove(x, y, shiftKey) {
+    __drawMove(x, y, shiftKey, altKey) {
         var layer = super._getLayer(false);
         if (layer === null) {
             return;
         }
 
-        this.#setCorners(x, y);
+        if (super._getProperty('angle') == "diagonal") {
+            if (y > this.#startPos[1]) {
+                y = this.#startPos[1] + (x - this.#startPos[0]);
+            } else {
+                y = this.#startPos[1] - (x - this.#startPos[0]);
+            }
+        } else if (super._getProperty('angle') == "horizontal") {
+            y = this.#startPos[1];
+        } else if (super._getProperty('angle') == "vertical") {
+            x = this.#startPos[0];
+        }
+
+        this.#setClearArea(x, y);
         super._clearPad(this);
 
-        if (x != this.#startPos[0] || y != this.#startPos[1]) {
+        if (this._inputArea != this.#startPos[0] || y != this.#startPos[1]) {
             this.#padCtx.beginPath();
             this.#padCtx.moveTo(this.#startPos[0], this.#startPos[1]);
             this.#padCtx.lineTo(x, y);
@@ -79,13 +97,25 @@ class EdytorLineTool extends EdytorTool {
         }
     }
 
-    __drawEnd(x, y, shiftKey) {
+    __drawEnd(x, y, shiftKey, altKey) {
         var layer = super._getLayer(false);
         if (layer === null) {
             return;
         }
 
-        this.#setCorners(x, y);
+        if (super._getProperty('angle') == "diagonal") {
+            if (y > this.#startPos[1]) {
+                y = this.#startPos[1] + (x - this.#startPos[0]);
+            } else {
+                y = this.#startPos[1] - (x - this.#startPos[0]);
+            }
+        } else if (super._getProperty('angle') == "horizontal") {
+            y = this.#startPos[1];
+        } else if (super._getProperty('angle') == "vertical") {
+            x = this.#startPos[0];
+        }
+
+        this.#setClearArea(x, y);
         super._clearPad(this);
 
         if (x != this.#startPos[0] || y != this.#startPos[1]) {

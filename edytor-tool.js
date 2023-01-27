@@ -58,7 +58,7 @@ class EdytorTool extends HTMLElement {
 
   _getLowerValue(candidate, current) {
     if (candidate < 0) {
-      return current;
+      return 0;
     }
     if (candidate < current) {
       return candidate;
@@ -76,24 +76,45 @@ class EdytorTool extends HTMLElement {
     return current;
   }
 
-  _setCorners(o, x, y, w, h, dx, dy) {
-    o['_corners'][0] = this._getLowerValue(x - dx, o['_corners'][0]);
-    o['_corners'][1] = this._getLowerValue(y - dy, o['_corners'][1]);
-    o['_corners'][2] = this._getHigherValue(x + dx, o['_corners'][2], w);
-    o['_corners'][3] = this._getHigherValue(y + dy, o['_corners'][3], h);
+  _setClearArea(o, x, y, w, h, dx, dy) {
+    o['_clearArea'][0] = this._getLowerValue(x - dx, o['_clearArea'][0]);
+    o['_clearArea'][1] = this._getLowerValue(y - dy, o['_clearArea'][1]);
+    o['_clearArea'][2] = this._getHigherValue(x + dx, o['_clearArea'][2], w);
+    o['_clearArea'][3] = this._getHigherValue(y + dy, o['_clearArea'][3], h);
   }
 
-  _resetCorners(o) {
-    o['_corners'] = [999999, 999999, 0, 0];
+  _setClearAreaFromInputArea(o, w, h, dx, dy) {
+    o['_inputArea'][0] = this._getLowerValue(o['_inputArea'][0] - dx, o['_inputArea'][0]);
+    o['_inputArea'][1] = this._getLowerValue(o['_inputArea'][1] - dy, o['_inputArea'][1]);
+    o['_inputArea'][2] = this._getHigherValue(o['_inputArea'][2] + dx, o['_inputArea'][2], w);
+    o['_inputArea'][3] = this._getHigherValue(o['_inputArea'][3] + dy, o['_inputArea'][3], h);
+  }
+
+  _resetClearArea(o) {
+    o['_clearArea'] = [999999, 999999, 0, 0];
+  }
+
+  _setInputArea(o, x1, y1, x2, y2, equalRatio) {
+    if (equalRatio) {
+      if (y2 >= y1) {
+        y2 = y1 + Math.abs(x2 - x1);
+      } else {
+        y2 = y1 - Math.abs(x2 - x1);
+      }
+    }
+    o['_inputArea'][0] = (x1 < x2 ? x1 : x2);
+    o['_inputArea'][1] = (y1 < y2 ? y1 : y2);
+    o['_inputArea'][2] = (x1 < x2 ? x2 : x1);
+    o['_inputArea'][3] = (y1 < y2 ? y2 : y1);
   }
 
   _clearPad(o) {
     if (o !== undefined) {
       document.getElementById('pad_layer').getContext('2d').clearRect(
-        o['_corners'][0],
-        o['_corners'][1],
-        o['_corners'][2] - o['_corners'][0],
-        o['_corners'][3] - o['_corners'][1]
+        o['_clearArea'][0],
+        o['_clearArea'][1],
+        o['_clearArea'][2] - o['_clearArea'][0],
+        o['_clearArea'][3] - o['_clearArea'][1]
       );
       return;
     }

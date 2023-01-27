@@ -2,10 +2,8 @@ class EdytorEraserTool extends EdytorTool {
     RequiresPad = true;
     IsMultiClick = false;
 
-    #topLeft = [0, 0];
-    #bottomRight = [0, 0];
+    #startPos = [-1, -1];
     #prevPos = [-1, -1];
-
     #ctx = null;
 
     constructor() {
@@ -25,29 +23,13 @@ class EdytorEraserTool extends EdytorTool {
             "round": "round",
             "bevel": "bevel"
         });
-    }
-
-    #getLayer(showAlert) {
-        var layer = document.getElementById('edytor').__getSelectedLayer();
-        if (layer === 0 || layer === null) {
-            if (showAlert === true)
-                alert('No layer has been selected');
-            return null;
-        }
-        if (document.getElementById('layer_' + layer).tagName.toLowerCase() !== 'canvas') {
-            if (showAlert === true)
-                alert('No pixel layer has been selected');
-            return null;
-        }
-        if (document.getElementById('layer_' + layer).getAttribute("locked") === "true") {
-            if (showAlert === true)
-                alert('Layer is locked for editing');
-            return null;
-        }
-        if (document.getElementById('layer_' + layer).style.display === 'none') {
-            return null;
-        }
-        return layer;
+        super._addProperty("Straight", "straight", "", {
+            "": "",
+            "horizontal": "horizontal",
+            "vertical": "vertical",
+            "diagonal-down": "diagonal-down",
+            "diagonal-up": "diagonal-up"
+        });
     }
 
     __toggleOn() {
@@ -59,7 +41,7 @@ class EdytorEraserTool extends EdytorTool {
     }
 
     __drawStart(x, y) {
-        var layer = this.#getLayer(true);
+        var layer = super._getLayer(true);
         if (layer === null) {
             return;
         }
@@ -72,24 +54,27 @@ class EdytorEraserTool extends EdytorTool {
         this.#ctx.lineCap = super._getProperty('linecap');
         this.#ctx.lineJoin = super._getProperty('linejoin');
         this.#ctx.beginPath();
+        this.#startPos = [x, y];
+        this.#prevPos = [-1, -1];
         this.#ctx.moveTo(x, y);
     }
-    __drawMove(x, y) {
-        var layer = this.#getLayer(false);
+    __drawMove(x, y, shiftKey, altKey) {
+        var layer = super._getLayer(false);
         if (layer === null) {
             return;
         }
 
-        if (x < this.#topLeft[0])
-            this.#topLeft[0] = x;
-        if (x > this.#bottomRight[0])
-            this.#bottomRight[0] = x;
-        if (y < this.#topLeft[1])
-            this.#topLeft[1] = y;
-        if (y > this.#bottomRight[1])
-            this.#bottomRight[1] = y;
+        if (super._getProperty('straight') == "diagonal-down") {
+            y = this.#startPos[1] + (x - this.#startPos[0]);
+        } else if (super._getProperty('straight') == "diagonal-up") {
+            y = this.#startPos[1] - (x - this.#startPos[0]);
+        } else if (super._getProperty('straight') == "vertical") {
+            y = this.#startPos[1];
+        } else if (super._getProperty('straight') == "horizontal") {
+            x = this.#startPos[0];
+        }
 
-        if (this.#prevPos[0] != -1 && this.#prevPos[0] != x && this.#prevPos[1] != y) {
+        if (this.#prevPos[0] != x || this.#prevPos[1] != y) {
             this.#ctx.lineTo(x, y);
             this.#ctx.stroke();
         }
@@ -97,8 +82,8 @@ class EdytorEraserTool extends EdytorTool {
         this.#prevPos[0] = x;
         this.#prevPos[1] = y;
     }
-    __drawEnd(x, y) {
-        var layer = this.#getLayer(false);
+    __drawEnd(x, y, shiftKey, altKey) {
+        var layer = super._getLayer(false);
         if (layer === null) {
             return;
         }
@@ -106,14 +91,12 @@ class EdytorEraserTool extends EdytorTool {
         this.#ctx.closePath();
     }
     __drawCancel() {
-        var layer = this.#getLayer(false);
+        var layer = super._getLayer(false);
         if (layer === null) {
             return;
         }
 
-        this.#ctx = document.getElementById('layer_' + layer).getContext('2d');
-
-        this.#ctx.closePath();
+        document.getElementById('layer_' + layer).getContext('2d').closePath();
     }
 }
 
