@@ -2,9 +2,10 @@ class EdytorShapeTool extends EdytorTool {
     RequiresPad = true;
     IsMultiClick = false;
 
-    _corners = [999999, 999999, 0, 0];
+    _inputArea = [999999, 999999, 0, 0];
+    _clearArea = [999999, 999999, 0, 0];
 
-    #startPos = [-1 - 1];
+    #startPos = [-1, -1];
     #padCtx = null;
 
     constructor() {
@@ -37,15 +38,35 @@ class EdytorShapeTool extends EdytorTool {
             "bevel": "bevel"
         });
         super._addProperty("Radii", "corner_radii", "3 3 3 3", null);
+        super._addProperty("Ratio", "ratio", "", {
+            "": "",
+            "1:1": "1:1"
+        });
     }
 
-    #setCorners(x, y) {
-        super._setCorners(this, x, y,
+    #setInputArea(x, y) {
+        super._setInputArea(this,
+            this.#startPos[0], this.#startPos[1],
+            x, y,
+            (super._getProperty('ratio') == "1:1" ? true : false)
+        );
+    }
+
+    #setClearArea(x, y) {
+        super._setClearAreaFromInputArea(
+            this,
             document.getElementById('pad_layer').width,
             document.getElementById('pad_layer').height,
             parseInt(super._getProperty('width')),
             parseInt(super._getProperty('width'))
         );
+    }
+
+    #shouldDraw() {
+        if (this._inputArea[0] != this._inputArea[2] || this._inputArea[1] != this._inputArea[3]) {
+            return true;
+        }
+        return false;
     }
 
     __toggleOn() {
@@ -56,13 +77,13 @@ class EdytorShapeTool extends EdytorTool {
         super.__toggleOff();
     }
 
-    __drawStart(x, y, shiftKey) {
+    __drawStart(x, y, shiftKey, altKey) {
         var layer = super._getLayer(true);
         if (layer === null) {
             return;
         }
 
-        super._resetCorners(this);
+        super._resetClearArea(this);
 
         this.#padCtx = document.getElementById('pad_layer').getContext('2d');
         this.#padCtx.globalCompositeOperation = 'source-over';
@@ -70,57 +91,65 @@ class EdytorShapeTool extends EdytorTool {
         this.#padCtx.lineWidth = super._getProperty('width');
         this.#padCtx.lineCap = super._getProperty('linecap');
         this.#padCtx.lineJoin = super._getProperty('linejoin');
-        this.#setCorners(x, y);
+
+        this.#setClearArea(x, y);
         this.#startPos = [x, y];
     }
 
-    __drawMove(x, y, shiftKey) {
+    __drawMove(x, y, shiftKey, altKey) {
         var layer = super._getLayer(false);
         if (layer === null) {
             return;
         }
 
-        this.#setCorners(x, y);
+        this.#setInputArea(x, y);
+        this.#setClearArea(x, y);
         super._clearPad(this);
 
-        if (x != this.#startPos[0] || y != this.#startPos[1]) {
-            this.#padCtx.beginPath();
-            this.#padCtx.rect(
-                (this.#startPos[0] < x ? this.#startPos[0] : x),
-                (this.#startPos[1] < y ? this.#startPos[1] : y),
-                Math.abs(x - this.#startPos[0]),
-                Math.abs(y - this.#startPos[1])
-            );
-            this.#padCtx.stroke();
+        if (!this.#shouldDraw()) {
+            return;
         }
+
+        this.#padCtx.beginPath();
+        this.#padCtx.rect(
+            this._inputArea[0],
+            this._inputArea[1],
+            Math.abs(this._inputArea[2] - this._inputArea[0]),
+            Math.abs(this._inputArea[3] - this._inputArea[1])
+        );
+        this.#padCtx.stroke();
     }
 
-    __drawEnd(x, y, shiftKey) {
+    __drawEnd(x, y, shiftKey, altKey) {
         var layer = super._getLayer(false);
         if (layer === null) {
             return;
         }
 
-        this.#setCorners(x, y);
+        this.#setInputArea(x, y);
+        this.#setClearArea(x, y);
+        super._clearPad(this);
 
-        if (x != this.#startPos[0] || y != this.#startPos[1]) {
-            var ctx = document.getElementById('layer_' + layer).getContext('2d');
-            ctx.globalCompositeOperation = 'source-over';
-            ctx.strokeStyle = document.getElementById('edytor').__getSelectedFgColour();
-            ctx.lineWidth = super._getProperty('width');
-            ctx.lineCap = super._getProperty('linecap');
-            ctx.lineJoin = super._getProperty('linejoin');
-            ctx.beginPath();
-            ctx.rect(
-                (this.#startPos[0] < x ? this.#startPos[0] : x),
-                (this.#startPos[1] < y ? this.#startPos[1] : y),
-                Math.abs(x - this.#startPos[0]),
-                Math.abs(y - this.#startPos[1])
-            );
-            ctx.stroke();
+        if (!this.#shouldDraw()) {
+            return;
         }
 
-        super._clearPad(this);
+        var ctx = document.getElementById('layer_' + layer).getContext('2d');
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.strokeStyle = document.getElementById('edytor').__getSelectedFgColour();
+        ctx.lineWidth = super._getProperty('width');
+        ctx.lineCap = super._getProperty('linecap');
+        ctx.lineJoin = super._getProperty('linejoin');
+        ctx.beginPath();
+        ctx.rect(
+            this._inputArea[0],
+            this._inputArea[1],
+            Math.abs(this._inputArea[2] - this._inputArea[0]),
+            Math.abs(this._inputArea[3] - this._inputArea[1])
+        );
+        ctx.stroke();
+
+
     }
 
     __drawCancel() {
