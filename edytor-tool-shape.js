@@ -52,7 +52,7 @@ class EdytorShapeTool extends EdytorTool {
         );
     }
 
-    #setClearArea(x, y) {
+    #setClearArea() {
         super._setClearAreaFromInputArea(
             this,
             document.getElementById('pad_layer').width,
@@ -88,11 +88,12 @@ class EdytorShapeTool extends EdytorTool {
         this.#padCtx = document.getElementById('pad_layer').getContext('2d');
         this.#padCtx.globalCompositeOperation = 'source-over';
         this.#padCtx.strokeStyle = document.getElementById('edytor').__getSelectedFgColour();
+        this.#padCtx.fillStyle = document.getElementById('edytor').__getSelectedBgColour();
         this.#padCtx.lineWidth = super._getProperty('width');
         this.#padCtx.lineCap = super._getProperty('linecap');
         this.#padCtx.lineJoin = super._getProperty('linejoin');
 
-        this.#setClearArea(x, y);
+        this.#setClearArea();
         this.#startPos = [x, y];
     }
 
@@ -103,21 +104,31 @@ class EdytorShapeTool extends EdytorTool {
         }
 
         this.#setInputArea(x, y);
-        this.#setClearArea(x, y);
+        this.#setClearArea();
         super._clearPad(this);
 
         if (!this.#shouldDraw()) {
             return;
         }
 
-        this.#padCtx.beginPath();
-        this.#padCtx.rect(
-            this._inputArea[0],
-            this._inputArea[1],
-            Math.abs(this._inputArea[2] - this._inputArea[0]),
-            Math.abs(this._inputArea[3] - this._inputArea[1])
-        );
-        this.#padCtx.stroke();
+        if (super._getProperty('style') == "stroke" || super._getProperty('style') == "stroke+fill") {
+            this.#padCtx.beginPath();
+            this.#padCtx.rect(
+                this._inputArea[0],
+                this._inputArea[1],
+                Math.abs(this._inputArea[2] - this._inputArea[0]),
+                Math.abs(this._inputArea[3] - this._inputArea[1])
+            );
+            this.#padCtx.stroke();
+        }
+        if (super._getProperty('style') == "fill" || super._getProperty('style') == "stroke+fill") {
+            this.#padCtx.fillRect(
+                this._inputArea[0],
+                this._inputArea[1],
+                Math.abs(this._inputArea[2] - this._inputArea[0]),
+                Math.abs(this._inputArea[3] - this._inputArea[1])
+            );
+        }
     }
 
     __drawEnd(x, y, shiftKey, altKey) {
@@ -127,7 +138,7 @@ class EdytorShapeTool extends EdytorTool {
         }
 
         this.#setInputArea(x, y);
-        this.#setClearArea(x, y);
+        this.#setClearArea();
         super._clearPad(this);
 
         if (!this.#shouldDraw()) {
@@ -137,19 +148,28 @@ class EdytorShapeTool extends EdytorTool {
         var ctx = document.getElementById('layer_' + layer).getContext('2d');
         ctx.globalCompositeOperation = 'source-over';
         ctx.strokeStyle = document.getElementById('edytor').__getSelectedFgColour();
+        ctx.fillStyle = document.getElementById('edytor').__getSelectedBgColour();
         ctx.lineWidth = super._getProperty('width');
         ctx.lineCap = super._getProperty('linecap');
         ctx.lineJoin = super._getProperty('linejoin');
-        ctx.beginPath();
-        ctx.rect(
-            this._inputArea[0],
-            this._inputArea[1],
-            Math.abs(this._inputArea[2] - this._inputArea[0]),
-            Math.abs(this._inputArea[3] - this._inputArea[1])
-        );
-        ctx.stroke();
-
-
+        if (super._getProperty('style') == "stroke" || super._getProperty('style') == "stroke+fill") {
+            ctx.beginPath();
+            ctx.rect(
+                this._inputArea[0],
+                this._inputArea[1],
+                Math.abs(this._inputArea[2] - this._inputArea[0]),
+                Math.abs(this._inputArea[3] - this._inputArea[1])
+            );
+            ctx.stroke();
+        }
+        if (super._getProperty('style') == "fill" || super._getProperty('style') == "stroke+fill") {
+            ctx.fillRect(
+                this._inputArea[0],
+                this._inputArea[1],
+                Math.abs(this._inputArea[2] - this._inputArea[0]),
+                Math.abs(this._inputArea[3] - this._inputArea[1])
+            );
+        }
     }
 
     __drawCancel() {
