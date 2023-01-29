@@ -94,6 +94,10 @@ class EdytorTool extends HTMLElement {
     o['_clearArea'] = [999999, 999999, 0, 0];
   }
 
+  _resetInputArea(o) {
+    o['_inputArea'] = [999999, 999999, 0, 0];
+  }
+
   _setInputArea(o, x1, y1, x2, y2, equalRatio) {
     if (equalRatio) {
       if (y2 >= y1) {

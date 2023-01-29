@@ -6,6 +6,8 @@ class EdytorShapeTool extends EdytorTool {
     _clearArea = [999999, 999999, 0, 0];
 
     #startPos = [-1, -1];
+    #prevPos = [-1, -1];
+    #ctx = null;
     #padCtx = null;
 
     constructor() {
@@ -42,6 +44,10 @@ class EdytorShapeTool extends EdytorTool {
             "": "",
             "1:1": "1:1"
         });
+        super._addProperty("Align", "align", "", {
+            "": "",
+            "straight": "straight"
+        });
     }
 
     #setInputArea(x, y) {
@@ -77,24 +83,37 @@ class EdytorShapeTool extends EdytorTool {
         super.__toggleOff();
     }
 
+    #setCtxStyle(ctx) {
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.strokeStyle = document.getElementById('edytor').__getSelectedFgColour();
+        ctx.fillStyle = document.getElementById('edytor').__getSelectedBgColour();
+        ctx.lineWidth = super._getProperty('width');
+        ctx.lineCap = super._getProperty('linecap');
+        ctx.lineJoin = super._getProperty('linejoin');
+    }
+
     __drawStart(x, y, shiftKey, altKey) {
         var layer = super._getLayer(true);
         if (layer === null) {
             return;
         }
 
+        super._resetInputArea(this);
         super._resetClearArea(this);
 
-        this.#padCtx = document.getElementById('pad_layer').getContext('2d');
-        this.#padCtx.globalCompositeOperation = 'source-over';
-        this.#padCtx.strokeStyle = document.getElementById('edytor').__getSelectedFgColour();
-        this.#padCtx.fillStyle = document.getElementById('edytor').__getSelectedBgColour();
-        this.#padCtx.lineWidth = super._getProperty('width');
-        this.#padCtx.lineCap = super._getProperty('linecap');
-        this.#padCtx.lineJoin = super._getProperty('linejoin');
-
-        this.#setClearArea();
         this.#startPos = [x, y];
+
+        if (super._getProperty("shape") == "free") {
+            this.#ctx = document.getElementById('layer_' + layer).getContext('2d');
+            this.#setCtxStyle(this.#ctx);
+            this.#ctx.beginPath();
+            this.#prevPos = [-1, -1];
+            this.#ctx.moveTo(x, y);
+        } else {
+            this.#padCtx = document.getElementById('pad_layer').getContext('2d');
+            this.#setCtxStyle(this.#padCtx);
+            this.#setClearArea();
+        }
     }
 
     #drawCtxRectangle(ctx) {
@@ -157,24 +176,47 @@ class EdytorShapeTool extends EdytorTool {
         }
     }
 
+    #drawMoveFree(x, y) {
+        if (this.#prevPos[0] != x || this.#prevPos[1] != y) {
+            this.#ctx.lineTo(x, y);
+            this.#ctx.stroke();
+        }
+
+        this.#prevPos[0] = x;
+        this.#prevPos[1] = y;
+    }
+
     __drawMove(x, y, shiftKey, altKey) {
         var layer = super._getLayer(false);
         if (layer === null) {
             return;
         }
 
-        this.#setInputArea(x, y);
-        this.#setClearArea();
-        super._clearPad(this);
+        if (super._getProperty("shape") != "free") {
+            this.#setInputArea(x, y);
+            this.#setClearArea();
+            super._clearPad(this);
 
-        if (!this.#shouldDraw()) {
-            return;
+            if (!this.#shouldDraw()) {
+                return;
+            }
         }
 
         switch (super._getProperty("shape")) {
             case "rectangle": this.#drawCtxRectangle(this.#padCtx); break;
             case "rounded_rectangle": this.#drawCtxRoundedRectangle(this.#padCtx); break;
             case "ellipse": this.#drawCtxEllipse(this.#padCtx); break;
+            case "free": this.#drawMoveFree(x, y); break;
+        }
+    }
+
+    #drawEndFree() {
+        this.#ctx.closePath();
+        if (super._getProperty('style') == "fill" || super._getProperty('style') == "stroke+fill") {
+            this.#ctx.fill();
+        }
+        if (super._getProperty('style') == "stroke" || super._getProperty('style') == "stroke+fill") {
+            this.#ctx.stroke();
         }
     }
 
@@ -184,26 +226,24 @@ class EdytorShapeTool extends EdytorTool {
             return;
         }
 
-        this.#setInputArea(x, y);
-        this.#setClearArea();
-        super._clearPad(this);
+        if (super._getProperty("shape") != "free") {
+            this.#setInputArea(x, y);
+            this.#setClearArea();
+            super._clearPad(this);
 
-        if (!this.#shouldDraw()) {
-            return;
+            if (!this.#shouldDraw()) {
+                return;
+            }
         }
 
         var ctx = document.getElementById('layer_' + layer).getContext('2d');
-        ctx.globalCompositeOperation = 'source-over';
-        ctx.strokeStyle = document.getElementById('edytor').__getSelectedFgColour();
-        ctx.fillStyle = document.getElementById('edytor').__getSelectedBgColour();
-        ctx.lineWidth = super._getProperty('width');
-        ctx.lineCap = super._getProperty('linecap');
-        ctx.lineJoin = super._getProperty('linejoin');
+        this.#setCtxStyle(ctx);
 
         switch (super._getProperty("shape")) {
             case "rectangle": this.#drawCtxRectangle(ctx); break;
             case "rounded_rectangle": this.#drawCtxRoundedRectangle(ctx); break;
             case "ellipse": this.#drawCtxEllipse(ctx); break;
+            case "free": this.#drawEndFree(); break;
         }
     }
 
@@ -213,7 +253,12 @@ class EdytorShapeTool extends EdytorTool {
             return;
         }
 
-        super._clearPad();
+        if (super._getProperty("shape") != "free") {
+            super._clearPad();
+        } else {
+            this.#ctx = document.getElementById('layer_' + layer).getContext('2d');
+            this.#ctx.closePath();
+        }
     }
 }
 
