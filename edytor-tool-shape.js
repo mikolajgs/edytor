@@ -98,22 +98,18 @@ class EdytorShapeTool extends EdytorTool {
     }
 
     #drawCtxRectangle(ctx) {
+        ctx.beginPath();
+        ctx.rect(
+            this._inputArea[0],
+            this._inputArea[1],
+            Math.abs(this._inputArea[2] - this._inputArea[0]),
+            Math.abs(this._inputArea[3] - this._inputArea[1])
+        );
+        ctx.closePath();
         if (super._getProperty('style') == "fill" || super._getProperty('style') == "stroke+fill") {
-            ctx.fillRect(
-                this._inputArea[0],
-                this._inputArea[1],
-                Math.abs(this._inputArea[2] - this._inputArea[0]),
-                Math.abs(this._inputArea[3] - this._inputArea[1])
-            );
+            ctx.fill();
         }
         if (super._getProperty('style') == "stroke" || super._getProperty('style') == "stroke+fill") {
-            ctx.beginPath();
-            ctx.rect(
-                this._inputArea[0],
-                this._inputArea[1],
-                Math.abs(this._inputArea[2] - this._inputArea[0]),
-                Math.abs(this._inputArea[3] - this._inputArea[1])
-            );
             ctx.stroke();
         }
     }
@@ -150,7 +146,9 @@ class EdytorShapeTool extends EdytorTool {
         var y = this._inputArea[1];
         var cx = x + (w / 2);
         var cy = y + (h / 2);
+        ctx.beginPath();
         ctx.ellipse(cx, cy, (w / 2), (h / 2), 0, 0, 2 * Math.PI);
+        ctx.closePath();
         if (super._getProperty('style') == "fill" || super._getProperty('style') == "stroke+fill") {
             ctx.fill();
         }
@@ -205,6 +203,7 @@ class EdytorShapeTool extends EdytorTool {
         switch (super._getProperty("shape")) {
             case "rectangle": this.#drawCtxRectangle(ctx); break;
             case "rounded_rectangle": this.#drawCtxRoundedRectangle(ctx); break;
+            case "ellipse": this.#drawCtxEllipse(ctx); break;
         }
     }
 
