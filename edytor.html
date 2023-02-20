@@ -43,8 +43,8 @@
     <script src="edytor-layer-pixel.js"></script>
 </head>
 
-<body style="margin:0; padding:0">
-    <edytor-ui>
+<body style="margin:0; padding:0" onload="document.getElementById('edytor').__addPixelLayer();">
+    <edytor-ui id="edytor">
         <edytor-layer-container></edytor-layer-container>
         <canvas is="edytor-grid"></canvas>
         <canvas is="edytor-pad"></canvas>

@@ -1,8 +1,25 @@
 # edytor
 
-* monday: config for all the tools
+* check existing stuff and ensure it works 
+* check if drawing oval from centre works (instead of key, make a checkbox)
+* change ratio (and similar like straight) to be checkboxes
+* add logic to properties so that properties can be visible only when another property has a certain value (eg. shape == 'rounded_rectangle')
+* color picker:
+  - left to be 2 columns
+  - new tab called colors with two boxes (probably new .js file)
+  - when box clicked - show a div next to it with color picker - when color selected, a hidden input is changed, background is changed and a function is called 
+    (on the edytor object to set the color)
+  - ability to switch colors (link below the colors)
+* color picker tool
+* remove unused javascript files
 
-* some day: in css, base all the padding and margin on variables OR remove all the padding and margin if possible (apart from the main design like top, left if possible)
+* size:
+  - change the position of layer container, grid, pad etc. so they are not under the left and right windows
+  - new-document tool with link at the top instead of on the left, when clicked it shows options in the tool-config window
+    - unlimited size
+      - make 3x window size
+      - automatically expand when something is as close as 200 px from the edge
+      - 
 
 - add edytor-tool-info div on the bottom (and show position if possible?) 1d
 - add ruler

@@ -1,6 +1,5 @@
 class EdytorEraserTool extends EdytorTool {
     RequiresPad = true;
-    IsMultiClick = false;
 
     #startPos = [-1, -1];
     #prevPos = [-1, -1];
@@ -8,6 +7,10 @@ class EdytorEraserTool extends EdytorTool {
 
     constructor() {
         super();
+    }
+
+    __isMultiClick() {
+        return false;
     }
 
     connectedCallback() {

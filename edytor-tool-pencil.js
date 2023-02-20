@@ -1,6 +1,5 @@
 class EdytorPencilTool extends EdytorTool {
     RequiresPad = true;
-    IsMultiClick = false;
 
     #startPos = [-1, -1];
     #prevPos = [-1, -1];
@@ -8,6 +7,10 @@ class EdytorPencilTool extends EdytorTool {
 
     constructor() {
         super();
+    }
+
+    __isMultiClick() {
+        return false;
     }
 
     connectedCallback() {

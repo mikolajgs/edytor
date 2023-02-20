@@ -1,6 +1,5 @@
 class EdytorLineTool extends EdytorTool {
     RequiresPad = true;
-    IsMultiClick = false;
 
     _clearArea = [999999, 999999, 0, 0];
 
@@ -9,6 +8,10 @@ class EdytorLineTool extends EdytorTool {
 
     constructor() {
         super();
+    }
+
+    __isMultiClick() {
+        return false;
     }
 
     connectedCallback() {

@@ -122,6 +122,7 @@ class Edytor extends HTMLElement {
         this.#lastLayerNum++;
         this.#el_layer_container().__addPixelLayer(this.#lastLayerNum);
         this.#el_layer_list().__addPixelLayer(this.#lastLayerNum);
+        this.__selectLayer(this.#lastLayerNum);
     }
 
     __toggleLayerHidden(num) {
