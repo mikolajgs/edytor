@@ -1,17 +1,25 @@
 class EdytorShapeTool extends EdytorTool {
     RequiresPad = true;
-    IsMultiClick = false;
 
     _inputArea = [999999, 999999, 0, 0];
     _clearArea = [999999, 999999, 0, 0];
 
     #startPos = [-1, -1];
     #prevPos = [-1, -1];
+    #points = [];
+
     #ctx = null;
     #padCtx = null;
 
     constructor() {
         super();
+    }
+
+    __isMultiClick() {
+        if (super._getProperty("shape") == "polygon") {
+            return true;
+        }
+        return false;
     }
 
     connectedCallback() {
@@ -100,6 +108,9 @@ class EdytorShapeTool extends EdytorTool {
 
         super._resetInputArea(this);
         super._resetClearArea(this);
+        super._clearPad();
+
+        // polygon does not use __drawStart
 
         this.#startPos = [x, y];
 
@@ -108,11 +119,41 @@ class EdytorShapeTool extends EdytorTool {
             this.#setCtxStyle(this.#ctx);
             this.#ctx.beginPath();
             this.#prevPos = [-1, -1];
-            this.#ctx.moveTo(x, y);
         } else {
             this.#padCtx = document.getElementById('pad_layer').getContext('2d');
             this.#setCtxStyle(this.#padCtx);
             this.#setClearArea();
+        }
+    }
+
+    __drawPoint(x, y) {
+        var layer = super._getLayer(true);
+        if (layer === null) {
+            return;
+        }
+
+        if (this.#points.length == 0) {
+            super._resetInputArea(this);
+            super._resetClearArea(this);
+            super._clearPad();
+        }
+
+        this.#setInputArea(x, y);
+        this.#setClearArea();
+
+        this.#points.push([x, y]);
+
+        if (this.#points.length == 2) {
+            this.#padCtx = document.getElementById('layer_' + layer).getContext('2d');
+            this.#setCtxStyle(this.#ctx);
+            this.#padCtx.beginPath();
+            this.#padCtx.moveTo(this.#points[0][0], this.#points[0][1]);
+            this.#padCtx.lineTo(x, y);
+            this.#padCtx.stroke();
+        }
+        if (this.#points.length > 2) {
+            this.#padCtx.lineTo(x, y);
+            this.#padCtx.stroke();
         }
     }
 
@@ -187,6 +228,10 @@ class EdytorShapeTool extends EdytorTool {
     }
 
     __drawMove(x, y, shiftKey, altKey) {
+        if (super._getProperty("shape") == "polygon") {
+            return;
+        }
+
         var layer = super._getLayer(false);
         if (layer === null) {
             return;
@@ -220,6 +265,21 @@ class EdytorShapeTool extends EdytorTool {
         }
     }
 
+    #drawCtxPolygon(ctx) {
+        ctx.beginPath();
+        ctx.moveTo(this.#points[0][0], this.#points[0][1]);
+        for (var i = 1; i < this.#points.length; i++) {
+            ctx.lineTo(this.#points[i][0], this.#points[i][1]);
+        }
+        ctx.closePath();
+        if (super._getProperty('style') == "fill" || super._getProperty('style') == "stroke+fill") {
+            ctx.fill();
+        }
+        if (super._getProperty('style') == "stroke" || super._getProperty('style') == "stroke+fill") {
+            ctx.stroke();
+        }
+    }
+
     __drawEnd(x, y, shiftKey, altKey) {
         var layer = super._getLayer(false);
         if (layer === null) {
@@ -231,8 +291,10 @@ class EdytorShapeTool extends EdytorTool {
             this.#setClearArea();
             super._clearPad(this);
 
-            if (!this.#shouldDraw()) {
-                return;
+            if (super._getProperty("shape") != "polygon") {
+                if (!this.#shouldDraw()) {
+                    return;
+                }
             }
         }
 
@@ -244,6 +306,10 @@ class EdytorShapeTool extends EdytorTool {
             case "rounded_rectangle": this.#drawCtxRoundedRectangle(ctx); break;
             case "ellipse": this.#drawCtxEllipse(ctx); break;
             case "free": this.#drawEndFree(); break;
+            case "polygon":
+                this.#drawCtxPolygon(ctx);
+                this.#points = [];
+                break;
         }
     }
 
@@ -253,11 +319,15 @@ class EdytorShapeTool extends EdytorTool {
             return;
         }
 
-        if (super._getProperty("shape") != "free") {
-            super._clearPad();
-        } else {
+        super._clearPad();
+
+        if (super._getProperty("shape") == "free") {
             this.#ctx = document.getElementById('layer_' + layer).getContext('2d');
             this.#ctx.closePath();
+        }
+
+        if (super._getProperty("shape") == "polygon") {
+            this.#points = [];
         }
     }
 }

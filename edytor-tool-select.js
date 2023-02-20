@@ -5,6 +5,10 @@ class EdytorSelectTool extends EdytorTool {
         super();
     }
 
+    __isMultiClick() {
+        return false;
+    }
+
     connectedCallback() {
         super._init('select', 'fa-expand', "Select");
         super._addProperty("stroke", "Width", "width", "3", null);
