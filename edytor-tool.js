@@ -30,7 +30,11 @@ class EdytorTool extends HTMLElement {
   }
 
   _getProperty(name) {
-    return document.getElementById("tool_property_" + this.getAttribute("edytor-tool-name") + "_" + name).value;
+    var p = document.getElementById("tool_property_" + this.getAttribute("edytor-tool-name") + "_" + name);
+    if (p.tagName.toLowerCase() == "input" && p.getAttribute("type").toLowerCase() == "checkbox") {
+      return (p.checked ? "true" : "false");
+    }
+    return p.value;
   }
 
   _getLayer(showAlert) {
@@ -98,7 +102,17 @@ class EdytorTool extends HTMLElement {
     o['_inputArea'] = [999999, 999999, 0, 0];
   }
 
-  _setInputArea(o, x1, y1, x2, y2, equalRatio) {
+  _setInputArea(o, x1, y1, x2, y2, equalRatio, drawFromCenter) {
+    if (drawFromCenter) {
+      var w = Math.abs(x2 - x1);
+      var h = (equalRatio ? Math.abs(x2 - x1) : Math.abs(y2 - y1));
+      o['_inputArea'][0] = x1 - w;
+      o['_inputArea'][1] = y1 - h;
+      o['_inputArea'][2] = x1 + w;
+      o['_inputArea'][3] = y1 + h;
+      return;
+    }
+
     if (equalRatio) {
       if (y2 >= y1) {
         y2 = y1 + Math.abs(x2 - x1);
