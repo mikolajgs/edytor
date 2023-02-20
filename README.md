@@ -1,8 +1,5 @@
 # edytor
 
-* check existing stuff and ensure it works 
-* check if drawing oval from centre works (instead of key, make a checkbox)
-* change ratio (and similar like straight) to be checkboxes
 * add logic to properties so that properties can be visible only when another property has a certain value (eg. shape == 'rounded_rectangle')
 * color picker:
   - left to be 2 columns

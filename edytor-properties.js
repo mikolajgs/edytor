@@ -11,8 +11,15 @@ class EdytorProperties extends HTMLElement {
     var i = null;
     if (vals == null) {
       i = document.createElement('input');
-      i.type = "text";
-      i.value = defval;
+      if (defval === false || defval === true) {
+        i.type = "checkbox";
+        if (defval === true) {
+          i.checked = true;
+        }
+      } else {
+        i.type = "text";
+        i.value = defval;
+      }
       i.id = type + "_" + name;
     } else {
       i = document.createElement('select');

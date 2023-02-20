@@ -48,21 +48,20 @@ class EdytorShapeTool extends EdytorTool {
             "bevel": "bevel"
         });
         super._addProperty("Radius", "corner_radius", "3", null);
-        super._addProperty("Ratio", "ratio", "", {
-            "": "",
-            "1:1": "1:1"
-        });
-        super._addProperty("Align", "align", "", {
-            "": "",
-            "straight": "straight"
-        });
+        super._addProperty("1:1", "1_to_1", false, null);
+        super._addProperty("Draw from center", "draw_from_center", false, null);
     }
 
     #setInputArea(x, y) {
+        var draw_from_center = false;
+        if (super._getProperty("shape") == "rectangle" || super._getProperty("shape") == "rounded_rectangle" || super._getProperty("shape") == "ellipse") {
+            draw_from_center = (super._getProperty('draw_from_center') == "true" ? true : false);
+        }
         super._setInputArea(this,
             this.#startPos[0], this.#startPos[1],
             x, y,
-            (super._getProperty('ratio') == "1:1" ? true : false)
+            (super._getProperty('1_to_1') == "true" ? true : false),
+            draw_from_center
         );
     }
 
