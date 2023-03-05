@@ -90,6 +90,14 @@ class Edytor extends HTMLElement {
         }
     }
 
+    __setColour(type, s) {
+        if (type == "bg") {
+            this.#colourBg = s;
+        } else {
+            this.#colourFg = s;
+        }
+    }
+
     __selectColour(type, s) {
         if (type == "bg") {
             this.#colourBg = s;
