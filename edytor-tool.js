@@ -25,8 +25,8 @@ class EdytorTool extends HTMLElement {
     document.getElementById("tool_config").appendChild(d);
   }
 
-  _addProperty(label, name, defval, vals) {
-    document.getElementById("tool_config_" + this.getAttribute("edytor-tool-name"))._addProperty("tool_property_" + this.getAttribute("edytor-tool-name"), label, name, defval, vals);
+  _addProperty(label, name, defval, vals, onchange, hiddenOnStart) {
+    document.getElementById("tool_config_" + this.getAttribute("edytor-tool-name"))._addProperty("tool_property_" + this.getAttribute("edytor-tool-name"), label, name, defval, vals, onchange, hiddenOnStart);
   }
 
   _getProperty(name) {

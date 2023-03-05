@@ -30,26 +30,35 @@ class EdytorShapeTool extends EdytorTool {
             "ellipse": "ellipse",
             "free": "free",
             "polygon": "polygon"
-        });
+        }, {
+            "rounded_rectangle": ["corner_radius", "1_to_1", "draw_from_center"],
+            "rectangle": ["1_to_1", "draw_from_center"],
+            "ellipse": ["1_to_1", "draw_from_center"],
+            "_": ["corner_radius", "1_to_1", "draw_from_center"]
+        }, false);
         super._addProperty("Style", "style", "", {
             "stroke": "stroke",
             "fill": "fill",
             "stroke+fill": "stroke+fill"
-        });
-        super._addProperty("Width", "width", "3", null);
+        }, {
+            "stroke": ["width", "linecap", "linejoin"],
+            "stroke+fill": ["width", "linecap", "linejoin"],
+            "_": ["width", "linecap", "linejoin"]
+        }, false);
+        super._addProperty("Width", "width", "3", null, null, false);
         super._addProperty("Linecap", "linecap", "", {
             "butt": "butt",
             "square": "square",
             "round": "round"
-        });
+        }, null, false);
         super._addProperty("Linejoin", "linejoin", "", {
             "miter": "miter",
             "round": "round",
             "bevel": "bevel"
-        });
-        super._addProperty("Radius", "corner_radius", "3", null);
-        super._addProperty("1:1", "1_to_1", false, null);
-        super._addProperty("Draw from center", "draw_from_center", false, null);
+        }, null, false);
+        super._addProperty("Radius", "corner_radius", "3", null, null, true);
+        super._addProperty("1:1", "1_to_1", false, null, null, false);
+        super._addProperty("Draw from center", "draw_from_center", false, null, null, false);
     }
 
     #setInputArea(x, y) {

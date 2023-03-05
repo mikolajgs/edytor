@@ -3,7 +3,7 @@ class EdytorProperties extends HTMLElement {
     super();
   }
 
-  _addProperty(type, label, name, defval, vals) {
+  _addProperty(type, label, name, defval, vals, onchange, hiddenOnStart) {
     var d = document.createElement('div');
     d.className = "edytor_property";
     var l = document.createElement('label');
@@ -29,10 +29,31 @@ class EdytorProperties extends HTMLElement {
         o.value = key;
         o.innerHTML = vals[key];
         i.appendChild(o);
+        if (onchange != undefined && onchange !== null) {
+          if (onchange[o.value] !== undefined && onchange[o.value] !== null) {
+            o.setAttribute("show-parents-of-ids", onchange[o.value].map(x => type + "_" + x).join(","));
+          }
+          if (onchange["_"] !== undefined && onchange["_"] !== null) {
+            o.setAttribute("hide-parents-of-ids", onchange["_"].map(x => type + "_" + x).join(","));
+          }
+        }
+      }
+      i.onchange = function () {
+        var toHide = this.options[this.selectedIndex].getAttribute("hide-parents-of-ids");
+        if (toHide !== null && toHide != "") {
+          toHide.split(',').forEach(x => { document.getElementById(x).parentElement.style.display = 'none'; });
+        }
+        var toShow = this.options[this.selectedIndex].getAttribute("show-parents-of-ids");
+        if (toShow !== null && toShow != "") {
+          toShow.split(',').forEach(x => { document.getElementById(x).parentElement.style.display = 'inline'; });
+        }
       }
     }
     d.appendChild(l);
     d.appendChild(i);
+    if (hiddenOnStart) {
+      d.style.display = 'none';
+    }
     this.appendChild(d);
   }
 }
