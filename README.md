@@ -1,13 +1,6 @@
 # edytor
 
-* color picker:
-  - left to be 2 columns
-  - new tab called colors with two boxes (probably new .js file)
-  - when box clicked - show a div next to it with color picker - when color selected, a hidden input is changed, background is changed and a function is called 
-    (on the edytor object to set the color)
-  - ability to switch colors (link below the colors)
-* color picker tool
-* remove unused javascript files
+* add a button to switch colours
 
 * size:
   - change the position of layer container, grid, pad etc. so they are not under the left and right windows
