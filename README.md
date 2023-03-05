@@ -1,6 +1,5 @@
 # edytor
 
-* add logic to properties so that properties can be visible only when another property has a certain value (eg. shape == 'rounded_rectangle')
 * color picker:
   - left to be 2 columns
   - new tab called colors with two boxes (probably new .js file)
