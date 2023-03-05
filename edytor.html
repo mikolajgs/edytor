@@ -18,6 +18,7 @@
     <script src="edytor-shell.js"></script>
     <script src="edytor-logs.js"></script>
     <script src="edytor-tool.js"></script>
+    <script src="edytor-colour-pickers.js"></script>
     <script src="edytor-colour.js"></script>
     <script src="edytor-colours.js"></script>
     <script src="edytor-tool-select.js"></script>
@@ -69,13 +70,12 @@
                 <edytor-tool-color-picker></edytor-tool-color-picker>
                 <edytor-tool-magic-wand></edytor-tool-magic-wand>
             </div>
-            <div class="sidebar_title">Foreground</div>
+            <div class="sidebar_title">Colors</div>
+            <div class="sidebar_container">
+                <edytor-colour-pickers></edytor-colour-pickers>
+            </div>
             <div class="sidebar_container" style="display: block; flex-wrap: nowrap">
                 <edytor-colours type="fg"></edytor-colours>
-            </div>
-            <div class="sidebar_title">Background</div>
-            <div class="sidebar_container" style="display: block; flex-wrap: nowrap">
-                <edytor-colours type="bg"></edytor-colours>
             </div>
             <!--<div class="sidebar_title">Stroke</div>
             <div class="sidebar_container">
