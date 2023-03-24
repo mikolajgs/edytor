@@ -193,6 +193,14 @@ edytor-colour-pickers>input {
     cursor: pointer;
 }
 
+edytor-colour-pickers>button {
+    padding: 0;
+    font-size: 12px;
+    text-align: center;
+    display: block;
+    cursor: pointer;
+}
+
 edytor-layer-list-layer,
 edytor-layer-tools {
     font-size: 18px;
