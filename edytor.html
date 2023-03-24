@@ -8,6 +8,8 @@
     <link href="fontawesome/css/brands.css" rel="stylesheet">
     <link href="fontawesome/css/solid.css" rel="stylesheet">
     <script src="edytor.js"></script>
+    <script src="edytor-workspace.js"></script>
+    <script src="edytor-workspace-container.js"></script>
     <script src="edytor-layer-container.js"></script>
     <script src="edytor-grid.js"></script>
     <script src="edytor-pad.js"></script>
@@ -41,9 +43,13 @@
 
 <body style="margin:0; padding:0" onload="document.getElementById('edytor').__addPixelLayer();">
     <edytor-ui id="edytor">
-        <edytor-layer-container></edytor-layer-container>
-        <canvas is="edytor-grid"></canvas>
-        <canvas is="edytor-pad"></canvas>
+        <edytor-workspace>
+            <edytor-workspace-container>
+                <edytor-layer-container></edytor-layer-container>
+                <canvas is="edytor-grid"></canvas>
+                <canvas is="edytor-pad"></canvas>
+            </edytor-workspace-container>
+        </edytor-workspace>
         <edytor-top></edytor-top>
         <edytor-tool-config></edytor-tool-config>
         <div id="bottom_shell" class="bottom_shell">
