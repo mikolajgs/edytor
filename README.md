@@ -1,7 +1,6 @@
 # edytor
 
 * size:
-  - change the position of layer container, grid, pad etc. so they are not under the left and right windows
   - new-document tool with link at the top instead of on the left, when clicked it shows options in the tool-config window
     - unlimited size
       - make 3x window size

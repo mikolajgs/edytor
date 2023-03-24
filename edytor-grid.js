@@ -16,9 +16,13 @@ class EdytorGrid extends HTMLCanvasElement {
         this.classList.add('edytor_layer');
         this.style.margin = 0;
         this.style.padding = 0;
+        this.style.display = "block";
         this.style.position = "absolute";
         this.style.top = 0;
         this.style.left = 0;
+        this.style.boxSizing = "border-box";
+        this.style.width = "100%";
+        this.style.border = "0";
 
         var self = this;
         window.addEventListener("resize", function () {

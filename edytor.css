@@ -2,6 +2,10 @@ body {
     background-color: #262626;
 }
 
+edytor-workspace-container {
+    outline: solid 30px #444444;
+}
+
 edytor-left {
     border-right: solid 1px #222222;
     box-shadow: 2px 0 2px 0 #222222;
