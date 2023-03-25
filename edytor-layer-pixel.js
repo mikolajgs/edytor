@@ -10,18 +10,6 @@ class EdytorPixelLayer extends HTMLCanvasElement {
         this.style.position = "absolute";
         this.style.top = 0;
         this.style.left = 0;
-
-        var self = this;
-        window.addEventListener("resize", function () {
-            self.#setSize();
-        });
-
-        this.#setSize();
-    }
-
-    #setSize() {
-        this.width = window.innerWidth * 2;
-        this.height = window.innerHeight * 2;
     }
 }
 

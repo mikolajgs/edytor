@@ -1,4 +1,7 @@
 class EdytorLayerContainer extends HTMLElement {
+    #imageWidth = 0;
+    #imageHeight = 0;
+
     constructor() {
         super()
     }
@@ -14,17 +17,13 @@ class EdytorLayerContainer extends HTMLElement {
         this.style.width = "100%";
         this.style.border = "0";
         this.id = "layer_container";
-
-        var self = this;
-        window.addEventListener("resize", function () {
-            self.#setSize();
-        });
-        this.#setSize();
     }
 
-    #setSize() {
-        this.style.width = (window.innerWidth * 2) + 'px';
-        this.style.height = (window.innerHeight * 2) + 'px';
+    SetSize(w, h) {
+        this.style.width = w + 'px';
+        this.style.height = h + 'px';
+        this.#imageWidth = w;
+        this.#imageHeight = h;
     }
 
     #getZIndexForNewLayer() {
@@ -61,6 +60,8 @@ class EdytorLayerContainer extends HTMLElement {
         var p = document.createElement('canvas', { is: "edytor-layer-pixel" });
         p.id = "layer_" + num;
         p.style.zIndex = this.#getZIndexForNewLayer();
+        p.width = this.#imageWidth;
+        p.height = this.#imageHeight;
         this.appendChild(p);
     }
 

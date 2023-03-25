@@ -7,13 +7,10 @@
       - automatically expand when something is as close as 200 px from the edge
       - 
 
-- add edytor-tool-info div on the bottom (and show position if possible?) 1d
-- add ruler
+N add edytor-tool-info div on the bottom (and show position if possible?) 1d
+N add ruler
+
 - add pixel tools first -> mid march
-    - existing shape: rectangle, square, oval, circle, triangle 3d
-        - oval with alt key can be drawn from the centre point...
-    - custom shape 3d
-    - eraser 1d
     - color picker 2d
     - select existing shape 3d
     - select custom shape 3d

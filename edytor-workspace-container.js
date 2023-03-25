@@ -8,20 +8,32 @@ class EdytorWorkspaceContainer extends HTMLElement {
         this.style.padding = 0;
         this.style.display = "block";
         this.style.position = "absolute";
-        this.style.top = "400px";
-        this.style.left = "400px";
-        this.id = "workspace";
+        this.style.top = "0";
+        this.style.left = "0";
+        this.id = "workspace_container";
 
-        var self = this;
-        window.addEventListener("resize", function () {
-            self.#setSize();
-        });
-        this.#setSize();
+        var layerContainer = document.createElement("edytor-layer-container");
+        this.appendChild(layerContainer);
+
+        var grid = document.createElement('canvas', { is: "edytor-grid" });
+        this.appendChild(grid);
+
+        var pad = document.createElement('canvas', { is: "edytor-pad" });
+        this.appendChild(pad);
     }
 
-    #setSize() {
-        this.style.width = (window.innerWidth * 2) + 'px';
-        this.style.height = (window.innerHeight * 2) + 'px';
+    SetPosition(v) {
+        this.style.top = v + "px";
+        this.style.left = v + "px";
+    }
+
+    SetSize(w, h) {
+        this.style.width = w + "px";
+        this.style.height = h + "px";
+
+        document.getElementById("layer_container").SetSize(w, h);
+        document.getElementById("grid_layer").SetSize(w, h);
+        document.getElementById("pad_layer").SetSize(w, h);
     }
 }
 

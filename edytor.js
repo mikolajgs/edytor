@@ -53,6 +53,20 @@ class Edytor extends HTMLElement {
         }
     }
 
+    __newWorkspace(w, h, m) {
+        var ws = document.getElementById("workspace");
+        if (ws != null) {
+            ws.remove();
+        }
+        var newWS = document.createElement("edytor-workspace");
+        newWS.setAttribute("container-margin", m.toString());
+        newWS.setAttribute("image-width", w.toString());
+        newWS.setAttribute("image-height", h.toString());
+        this.prepend(newWS);
+
+        this.__addPixelLayer();
+    }
+
     __getSelectedTool() {
         return this.#tool;
     }

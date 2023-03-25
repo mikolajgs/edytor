@@ -41,15 +41,8 @@
     <script src="edytor-layer-pixel.js"></script>
 </head>
 
-<body style="margin:0; padding:0" onload="document.getElementById('edytor').__addPixelLayer();">
+<body style="margin:0; padding:0" onload="document.getElementById('edytor').__newWorkspace(1920, 1080, 400);">
     <edytor-ui id="edytor">
-        <edytor-workspace>
-            <edytor-workspace-container>
-                <edytor-layer-container></edytor-layer-container>
-                <canvas is="edytor-grid"></canvas>
-                <canvas is="edytor-pad"></canvas>
-            </edytor-workspace-container>
-        </edytor-workspace>
         <edytor-top></edytor-top>
         <edytor-tool-config></edytor-tool-config>
         <div id="bottom_shell" class="bottom_shell">

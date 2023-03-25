@@ -23,20 +23,12 @@ class EdytorGrid extends HTMLCanvasElement {
         this.style.boxSizing = "border-box";
         this.style.width = "100%";
         this.style.border = "0";
-
-        var self = this;
-        window.addEventListener("resize", function () {
-            self.#setSize();
-            self.#draw();
-        });
-
-        this.#setSize();
-        this.#draw();
     }
 
-    #setSize() {
-        this.width = window.innerWidth * 2;
-        this.height = window.innerHeight * 2;
+    SetSize(w, h) {
+        this.width = w;
+        this.height = h;
+        this.#draw();
     }
 
     #draw() {
