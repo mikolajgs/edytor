@@ -19,19 +19,12 @@ class EdytorPad extends HTMLCanvasElement {
         this.style.zIndex = 401;
         this.style.display = 'none';
 
-        var self = this;
-        window.addEventListener("resize", function () {
-            self.#setSize();
-        });
-
-        this.#setSize();
-
         this.#attachEvents();
     }
 
-    #setSize() {
-        this.width = window.innerWidth * 2;
-        this.height = window.innerHeight * 2;
+    SetSize(w, h) {
+        this.width = w;
+        this.height = h;
     }
 
     #attachEvents() {
