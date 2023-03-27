@@ -56,6 +56,14 @@ class EdytorProperties extends HTMLElement {
     }
     this.appendChild(d);
   }
+
+  _addButton(type, label, fn) {
+    var b = document.createElement('button');
+    b.className = 'edytor_property';
+    b.innerHTML = label;
+    b.addEventListener("click", fn);
+    this.appendChild(b);
+  }
 }
 
 window.customElements.define("edytor-properties", EdytorProperties);

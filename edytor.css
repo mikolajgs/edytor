@@ -281,6 +281,7 @@ edytor-tool-config {
     width: 100%;
 }
 
-edytor-tool-config .edytor_property:first-of-type {
-    margin-left: 120px;
+edytor-tool-config .edytor_property_title {
+    width: 120px;
+    font-weight: bold;
 }

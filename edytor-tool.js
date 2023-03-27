@@ -23,10 +23,19 @@ class EdytorTool extends HTMLElement {
     d.id = "tool_config_" + name;
     d.style.display = 'none';
     document.getElementById("tool_config").appendChild(d);
+
+    var title = document.createElement('div');
+    title.className = "edytor_property edytor_property_title";
+    title.innerHTML = alt;
+    d.appendChild(title);
   }
 
   _addProperty(label, name, defval, vals, onchange, hiddenOnStart) {
     document.getElementById("tool_config_" + this.getAttribute("edytor-tool-name"))._addProperty("tool_property_" + this.getAttribute("edytor-tool-name"), label, name, defval, vals, onchange, hiddenOnStart);
+  }
+
+  _addButton(label, fn) {
+    document.getElementById("tool_config_" + this.getAttribute("edytor-tool-name"))._addButton("tool_property_" + this.getAttribute("edytor-tool-name"), label, fn);
   }
 
   _getProperty(name) {

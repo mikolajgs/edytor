@@ -56,8 +56,14 @@ class Edytor extends HTMLElement {
     __newWorkspace(w, h, m) {
         var ws = document.getElementById("workspace");
         if (ws != null) {
+            for (var i = 0; i <= this.#lastLayerNum; i++) {
+                this.__deleteLayer(i);
+            }
             ws.remove();
         }
+        this.#lastLayerNum = 0;
+        this.#layer = 0;
+
         var newWS = document.createElement("edytor-workspace");
         newWS.setAttribute("container-margin", m.toString());
         newWS.setAttribute("image-width", w.toString());

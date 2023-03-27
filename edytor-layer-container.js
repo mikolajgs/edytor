@@ -96,7 +96,10 @@ class EdytorLayerContainer extends HTMLElement {
     }
 
     __deleteLayer(num) {
-        document.getElementById('layer_' + num).remove();
+        var l = document.getElementById('layer_' + num);
+        if (l != null) {
+            l.remove();
+        }
     }
 
     __getLayerLocked(num) {
