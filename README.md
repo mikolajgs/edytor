@@ -1,14 +1,18 @@
 # edytor
 
 * size:
-  - new-document tool with link at the top instead of on the left, when clicked it shows options in the tool-config window
-    - unlimited size
-      - make 3x window size
-      - automatically expand when something is as close as 200 px from the edge
-      - 
+  - quicker solution for now:
+      - simple extend and shrink of the side where a percentage value or pixels can be passed
+          - make __extendWorkspaceSide(side, value)
+              - make __extendSide(side, value) on all the items
+      - scale everything to specific size
+          - make __scaleWorkspace(newWidth, newHeight)
+              - make __scale(newWidth, newHeight) on all the items
 
 N add edytor-tool-info div on the bottom (and show position if possible?) 1d
 N add ruler
+
+- log window for error messages
 
 - add pixel tools first -> mid march
     - color picker 2d
