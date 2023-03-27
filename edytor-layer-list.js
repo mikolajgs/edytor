@@ -59,7 +59,10 @@ class EdytorLayerList extends HTMLElement {
     }
 
     __deleteLayer(num) {
-        this.#el_layer(num).remove();
+        var l = this.#el_layer(num);
+        if (l != null) {
+            l.remove();
+        }
     }
 
     __moveLayerUp(num) {

@@ -23,6 +23,7 @@
     <script src="edytor-colour-pickers.js"></script>
     <script src="edytor-colour.js"></script>
     <script src="edytor-colours.js"></script>
+    <script src="edytor-tool-new-workspace.js"></script>
     <script src="edytor-tool-select.js"></script>
     <script src="edytor-tool-move.js"></script>
     <script src="edytor-tool-modify.js"></script>
@@ -43,8 +44,10 @@
 
 <body style="margin:0; padding:0" onload="document.getElementById('edytor').__newWorkspace(1920, 1080, 400);">
     <edytor-ui id="edytor">
-        <edytor-top></edytor-top>
         <edytor-tool-config></edytor-tool-config>
+        <edytor-top>
+            <edytor-tool-new-workspace></edytor-tool-new-workspace>
+        </edytor-top>
         <div id="bottom_shell" class="bottom_shell">
             <input is="edytor-shell"></input>
             <textarea is="edytor-logs"></textarea>
