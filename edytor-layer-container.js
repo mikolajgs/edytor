@@ -102,6 +102,27 @@ class EdytorLayerContainer extends HTMLElement {
         }
     }
 
+    __scaleLayer(num, w, h) {
+        var l = document.getElementById('layer_' + num);
+        if (l != null) {
+            l.Scale(w, h);
+        }
+    }
+
+    __extendLayerSide(num, side, val) {
+        var l = document.getElementById('layer_' + num);
+        if (l != null) {
+            l.ExtendSide(side, val);
+        }
+    }
+
+    __shrinkLayerSide(num, side, val) {
+        var l = document.getElementById('layer_' + num);
+        if (l != null) {
+            l.ShrinkSide(side, val);
+        }
+    }
+
     __getLayerLocked(num) {
         return (document.getElementById('layer_' + num).getAttribute("locked") === "true" ? true : false);
     }

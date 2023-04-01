@@ -13,11 +13,11 @@ class EdytorResizeWorkspaceTool extends EdytorTool {
         super._init('resize-workspace', 'fa-arrows-left-right', 'Resize');
         super._addProperty("Operation", "operation", "", {
             "extend_side": "extend",
-            "shrink_size": "shrink",
+            "shrink_side": "shrink",
             "scale": "scale"
         }, {
             "extend_side": ["side", "value"],
-            "shrink_size": ["side", "value"],
+            "shrink_side": ["side", "value"],
             "scale": ["width", "height"],
             "_": ["side", "value", "width", "height"]
         }, false);
@@ -32,6 +32,23 @@ class EdytorResizeWorkspaceTool extends EdytorTool {
         super._addProperty("Height", "height", "1080", null, null, true);
         var self = this;
         super._addButton("Resize", function () {
+            var v = parseInt(self.__getProperty("value"));
+            var w = parseInt(self.__getProperty("width"));
+            var h = parseInt(self.__getProperty("height"));
+            var s = self.__getProperty("side");
+            if (self.__getProperty("operation") == "extend_side") {
+                if (!isNaN(v)) {
+                    document.getElementById('edytor').__extendWorkspaceSide(s, v);
+                }
+            } else if (self.__getProperty("operation") == "shrink_side") {
+                if (!isNaN(v)) {
+                    document.getElementById('edytor').__shrinkWorkspaceSide(s, v);
+                }
+            } else {
+                if (!isNaN(w) && !isNaN(h)) {
+                    document.getElementById('edytor').__scaleWorkspace(w, h);
+                }
+            }
         });
     }
 
