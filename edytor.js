@@ -73,6 +73,68 @@ class Edytor extends HTMLElement {
         this.__addPixelLayer();
     }
 
+    __scaleWorkspace(w, h) {
+        var ws = document.getElementById("workspace");
+        if (ws != null) {
+            for (var i = 0; i <= this.#lastLayerNum; i++) {
+                this.__scaleLayer(i, w, h);
+            }
+            ws.setAttribute("image-width", w.toString());
+            ws.setAttribute("image-height", h.toString());
+            ws.SetSize();
+        }
+    }
+
+    __extendWorkspaceSide(s, v) {
+        var ws = document.getElementById("workspace");
+        if (ws != null) {
+            for (var i = 0; i <= this.#lastLayerNum; i++) {
+                this.__extendLayerSide(i, s, v);
+            }
+            var nw = parseInt(ws.getAttribute("image-width"));
+            var nh = parseInt(ws.getAttribute("image-height"));
+            if (s == "left" || s == "right") {
+                nw = nw + v;
+            } else {
+                nh = nh + v;
+            }
+            ws.setAttribute("image-width", nw.toString());
+            ws.setAttribute("image-height", nh.toString());
+            ws.SetSize();
+        }
+    }
+
+    __shrinkWorkspaceSide(s, v) {
+        var ws = document.getElementById("workspace");
+        if (ws != null) {
+            var nw = parseInt(ws.getAttribute("image-width"));
+            var nh = parseInt(ws.getAttribute("image-height"));
+            var valsOk = false;
+            if (s == "left" && nw > v) {
+                valsOk = true;
+            } else if (s == "right" && nw > v) {
+                valsOk = true;
+            } else if (s == "top" && nh > v) {
+                valsOk = true;
+            } else if (s == "bottom" && nh > v) {
+                valsOk = true;
+            }
+            if (valsOk) {
+                for (var i = 0; i <= this.#lastLayerNum; i++) {
+                    this.__shrinkLayerSide(i, s, v);
+                }
+                if (s == "left" || s == "right") {
+                    nw = nw - v;
+                } else {
+                    nh = nh - v;
+                }
+                ws.setAttribute("image-width", nw.toString());
+                ws.setAttribute("image-height", nh.toString());
+                ws.SetSize();
+            }
+        }
+    }
+
     __getSelectedTool() {
         return this.#tool;
     }
@@ -167,6 +229,18 @@ class Edytor extends HTMLElement {
         if (num == this.#layer) {
             this.__selectLayer(0);
         }
+    }
+
+    __extendLayerSide(num, side, val) {
+        this.#el_layer_container().__extendLayerSide(num, side, val);
+    }
+
+    __shrinkLayerSide(num, side, val) {
+        this.#el_layer_container().__shrinkLayerSide(num, side, val);
+    }
+
+    __scaleLayer(num, width, height) {
+        this.#el_layer_container().__scaleLayer(num, width, height);
     }
 
     __moveLayerUp(num) {

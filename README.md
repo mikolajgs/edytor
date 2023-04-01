@@ -1,20 +1,11 @@
 # edytor
 
-* size:
-  - quicker solution for now:
-      - simple extend and shrink of the side where a percentage value or pixels can be passed
-          - make __extendWorkspaceSide(side, value)
-              - make __extendSide(side, value) on all the items
-      - scale everything to specific size
-          - make __scaleWorkspace(newWidth, newHeight)
-              - make __scale(newWidth, newHeight) on all the items
-
 N add edytor-tool-info div on the bottom (and show position if possible?) 1d
 N add ruler
 
 - log window for error messages
 
-- add pixel tools first -> mid march
+- add pixel tools first -> mid april
     - color picker 2d
     - select existing shape 3d
     - select custom shape 3d
