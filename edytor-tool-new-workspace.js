@@ -1,5 +1,5 @@
 class EdytorNewWorkspaceTool extends EdytorTool {
-    RequiresPad = false;
+    RequiresPad = true;
 
     constructor() {
         super();
