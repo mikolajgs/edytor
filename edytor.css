@@ -86,7 +86,7 @@ edytor-top {
 
 
 .sidebar_title {
-    font-size: calc(20px);
+    font-size: 20px;
     font-family: arial;
     color: #cccccc;
     text-align: center;
@@ -226,12 +226,37 @@ edytor-layer-tools {
     background-image: linear-gradient(#666666, #444444);
 }
 
+edytor-edit-info p {
+    font-size: 12px;
+    font-family: arial;
+    color: #cccccc;
+    padding: 0;
+    margin: 1px 0 0 4px;
+}
+
+edytor-edit-info label {
+    font-size: 12px;
+    width: 40px;
+    padding: 0;
+    margin: 1px 0 0 0;
+    text-align: left;
+    display: inline-block;
+}
+
+edytor-edit-info span {
+    font-size: 12px;
+    width: 30px;
+    padding: 0;
+    margin: 1px 0 0 0;
+    text-align: left;
+    display: inline-block;
+}
+
 edytor-layer-list-layer input[type=checkbox],
-edytor-layer-tools input[type=checkbox],
-{
-width: 20px;
-margin: 0;
-padding: 0px;
+edytor-layer-tools input[type=checkbox] {
+    width: 20px;
+    margin: 0;
+    padding: 0px;
 }
 
 edytor-layer-list-layer label {

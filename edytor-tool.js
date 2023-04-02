@@ -14,6 +14,7 @@ class EdytorTool extends HTMLElement {
     this.innerHTML = '<i class="fa-solid ' + className + '" alt="' + alt + '"></i>';
 
     this.addEventListener('click', function () {
+      document.getElementById("edit_info").SetPosition(0, 0);
       document.getElementById('edytor').__selectTool(name);
     });
 

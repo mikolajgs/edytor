@@ -1,6 +1,5 @@
 # edytor
 
-N add edytor-tool-info div on the bottom (and show position if possible?) 1d
 N add ruler
 
 - log window for error messages

@@ -26,6 +26,8 @@ class EdytorWorkspace extends HTMLElement {
         this.style.width = (2 * containerMargin + imageWidth) + 'px';
         this.style.height = (2 * containerMargin + imageHeight) + 'px';
 
+        document.getElementById("edit_info").SetSize(imageWidth, imageHeight);
+
         document.getElementById("workspace_container").SetPosition(containerMargin);
         document.getElementById("workspace_container").SetSize(imageWidth, imageHeight);
     }

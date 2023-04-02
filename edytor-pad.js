@@ -43,6 +43,7 @@ class EdytorPad extends HTMLCanvasElement {
             if ((scope.#mouseDown && !tool.__isMultiClick()) || tool.__isMultiClick()) {
                 tool.__drawMove(e.layerX, e.layerY, e.shiftKey, e.altKey);
             }
+            document.getElementById("edit_info").SetPosition(e.offsetX, e.offsetY);
         });
         this.addEventListener('mouseup', function (e) {
             scope.#mouseDown = false;

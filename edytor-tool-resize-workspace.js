@@ -1,5 +1,5 @@
 class EdytorResizeWorkspaceTool extends EdytorTool {
-    RequiresPad = false;
+    RequiresPad = true;
 
     constructor() {
         super();
