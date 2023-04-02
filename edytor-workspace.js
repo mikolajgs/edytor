@@ -11,10 +11,14 @@ class EdytorWorkspace extends HTMLElement {
         this.style.top = 0;
         this.style.left = 0;
         this.style.border = "0";
+        this.style.zIndex = 91;
         this.id = "workspace";
 
         var container = document.createElement("edytor-workspace-container");
         this.appendChild(container);
+
+        var rulers = document.createElement("edytor-workspace-rulers");
+        this.appendChild(rulers);
 
         this.SetSize();
     }
@@ -30,6 +34,9 @@ class EdytorWorkspace extends HTMLElement {
 
         document.getElementById("workspace_container").SetPosition(containerMargin);
         document.getElementById("workspace_container").SetSize(imageWidth, imageHeight);
+
+        document.getElementById("workspace_rulers").SetPosition(containerMargin);
+        document.getElementById("workspace_rulers").SetSize(imageWidth, imageHeight);
     }
 }
 
