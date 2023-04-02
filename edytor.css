@@ -2,8 +2,8 @@ body {
     background-color: #262626;
 }
 
-edytor-workspace-container {
-    outline: solid 30px #444444;
+edytor-workspace-rulers {
+    outline: solid 1px #000000;
 }
 
 edytor-left {
