@@ -35,7 +35,7 @@ class EdytorWorkspace extends HTMLElement {
         document.getElementById("workspace_container").SetPosition(containerMargin);
         document.getElementById("workspace_container").SetSize(imageWidth, imageHeight);
 
-        document.getElementById("workspace_rulers").SetPosition(containerMargin);
+        document.getElementById("workspace_rulers").SetPosition(containerMargin, imageWidth, imageHeight);
         document.getElementById("workspace_rulers").SetSize(imageWidth, imageHeight);
     }
 }
