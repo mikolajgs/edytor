@@ -19,29 +19,37 @@ class EdytorWorkspaceRulers extends HTMLElement {
 
         var bottom = document.createElement('canvas', { is: "edytor-ruler-horizontal" });
         bottom.id = "ruler_bottom";
+        bottom.setAttribute("flip", "true");
         this.appendChild(bottom);
 
-        var left = document.createElement('canvas', { is: "edytor-ruler-horizontal" });
+        var left = document.createElement('canvas', { is: "edytor-ruler-vertical" });
         left.id = "ruler_left";
         this.appendChild(left);
 
-        var right = document.createElement('canvas', { is: "edytor-ruler-horizontal" });
+        var right = document.createElement('canvas', { is: "edytor-ruler-vertical" });
         right.id = "ruler_right";
+        right.setAttribute("flip", "true");
         this.appendChild(right);
     }
 
-    SetPosition(v) {
+    SetPosition(v, w, h) {
         this.style.top = (v - 30) + "px";
         this.style.left = (v - 30) + "px";
+
+        document.getElementById("ruler_top").SetPosition(30, 0);
+        document.getElementById("ruler_bottom").SetPosition(30, 30+h);
+        document.getElementById("ruler_left").SetPosition(0, 30);
+        document.getElementById("ruler_right").SetPosition(30+w, 30);
     }
 
     SetSize(w, h) {
         this.style.width = (w + 2 * 30) + "px";
         this.style.height = (h + 2 * 30) + "px";
 
-        /*document.getElementById("layer_container").SetSize(w, h);
-        document.getElementById("grid_layer").SetSize(w, h);
-        document.getElementById("pad_layer").SetSize(w, h);*/
+        document.getElementById("ruler_top").SetSize(w, 30);
+        document.getElementById("ruler_bottom").SetSize(w, 30);
+        document.getElementById("ruler_left").SetSize(30, h);
+        document.getElementById("ruler_right").SetSize(30, h);
     }
 }
 

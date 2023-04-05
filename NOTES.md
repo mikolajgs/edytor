@@ -1,8 +1,6 @@
 # edytor
 
 ### TODO
-N add ruler
-
 N log window for error messages
 
 - add pixel tools first -> mid april

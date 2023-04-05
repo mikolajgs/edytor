@@ -33,7 +33,7 @@ class EdytorGrid extends HTMLCanvasElement {
 
     #draw() {
         var ctx = this.getContext("2d");
-        ctx.fillStyle = this.#colors.gridBackground;
+        ctx.fillStyle = this.#colors.bg;
         ctx.fillRect(0, 0, this.width, this.height);
         ctx.lineWidth = 1;
         ctx.strokeStyle = this.#colors.ln2;
