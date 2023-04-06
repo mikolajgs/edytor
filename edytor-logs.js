@@ -12,10 +12,15 @@ class EdytorLogs extends HTMLTextAreaElement {
             self.#setSize();
         });
         this.#setSize();
+        this.value = '';
     }
 
     #setSize() {
         this.style.width = (window.innerWidth - 6) + 'px';
+    }
+
+    AddError(e) {
+        this.value = "❗" + e + "\n" + this.value;
     }
 }
 

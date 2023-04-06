@@ -50,18 +50,21 @@ class EdytorTool extends HTMLElement {
   _getLayer(showAlert) {
     var layer = document.getElementById('edytor').__getSelectedLayer();
     if (layer === 0 || layer === null) {
-      if (showAlert === true)
-        alert('No layer has been selected');
+      if (showAlert === true) {
+        document.getElementById("edytor").__showError("No layer has been selected");
+      }
       return null;
     }
     if (document.getElementById('layer_' + layer).tagName.toLowerCase() !== 'canvas') {
-      if (showAlert === true)
-        alert('No pixel layer has been selected');
+      if (showAlert === true) {
+        document.getElementById("edytor").__showError("No pixel layer has been selected");
+      }
       return null;
     }
     if (document.getElementById('layer_' + layer).getAttribute("locked") === "true") {
-      if (showAlert === true)
-        alert('Layer is locked for editing');
+      if (showAlert === true) {
+        document.getElementById("edytor").__showError("Layer is locked for editing");
+      }
       return null;
     }
     if (document.getElementById('layer_' + layer).style.display === 'none') {

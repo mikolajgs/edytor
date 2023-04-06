@@ -39,14 +39,20 @@ class EdytorResizeWorkspaceTool extends EdytorTool {
             if (self.__getProperty("operation") == "extend_side") {
                 if (!isNaN(v)) {
                     document.getElementById('edytor').__extendWorkspaceSide(s, v);
+                } else {
+                    document.getElementById("edytor").__showError("Invalid value");
                 }
             } else if (self.__getProperty("operation") == "shrink_side") {
                 if (!isNaN(v)) {
                     document.getElementById('edytor').__shrinkWorkspaceSide(s, v);
+                } else {
+                    document.getElementById("edytor").__showError("Invalid value");
                 }
             } else {
                 if (!isNaN(w) && !isNaN(h)) {
                     document.getElementById('edytor').__scaleWorkspace(w, h);
+                } else {
+                    document.getElementById("edytor").__showError("Invalid width or height");
                 }
             }
         });

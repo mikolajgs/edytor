@@ -282,6 +282,10 @@ class Edytor extends HTMLElement {
         this.#el_layer_list().__selectLayer(num);
     }
 
+    __showError(e) {
+        document.getElementById("logs").AddError(e);
+    }
+
     connectedCallback() {
         this.id = 'edytor';
         this.style.margin = 0;
