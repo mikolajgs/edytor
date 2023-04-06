@@ -19,6 +19,8 @@ class EdytorNewWorkspaceTool extends EdytorTool {
             var h = parseInt(self.__getProperty("height"));
             if (!isNaN(w) && !isNaN(h)) {
                 document.getElementById('edytor').__newWorkspace(w, h, 400);
+            } else {
+                document.getElementById("edytor").__showError("Invalid width or height");
             }
         });
     }
