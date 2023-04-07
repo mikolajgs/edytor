@@ -61,6 +61,14 @@ class EdytorPixelLayer extends HTMLCanvasElement {
             }
         }
     }
+
+    GetColourFromXY(x, y) {
+        var c = this.getContext('2d').getImageData(x, y, 1, 1).data;
+        if (c[3] > 0) {
+            return "#"+c[0].toString(16)+c[1].toString(16)+c[2].toString(16);
+        }
+        return "";
+    }
 }
 
 window.customElements.define("edytor-layer-pixel", EdytorPixelLayer, { extends: 'canvas' });

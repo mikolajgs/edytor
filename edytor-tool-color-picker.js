@@ -7,19 +7,10 @@ class EdytorColorPickerTool extends EdytorTool {
 
     connectedCallback() {
         super._init('color_picker', 'fa-eye-dropper', 'Color Picker');
-        super._addProperty("stroke", "Width", "width", "3", null);
-        super._addProperty("stroke", "Opacity", "opacity", "100%", null);
-        super._addProperty("stroke", "Linecap", "linecap", "", {
-            "butt": "butt",
-            "square": "square",
-            "round": "round"
-        });
-        super._addProperty("stroke", "Linejoin", "linejoin", "", {
-            "miter": "miter",
-            "round": "round",
-            "bevel": "bevel"
-        });
-        super._addProperty("stroke", "Dasharray", "dasharray", "5", null);
+    }
+
+    __isMultiClick() {
+        return false;
     }
 
     __toggleOn() {
@@ -28,6 +19,17 @@ class EdytorColorPickerTool extends EdytorTool {
 
     __toggleOff() {
         super.__toggleOff();
+    }
+
+    __drawStart(x, y) {
+        document.getElementById("edytor").__selectColourFromXY("fg", x, y);
+    }
+    __drawMove(x, y, shiftKey, altKey) {
+        document.getElementById("edytor").__selectColourFromXY("fg", x, y);
+    }
+    __drawEnd(x, y, shiftKey, altKey) {
+    }
+    __drawCancel() {
     }
 }
 
