@@ -202,6 +202,16 @@ class Edytor extends HTMLElement {
         }
     }
 
+    __selectColourFromXY(type, x, y) {
+        for (var i = this.#lastLayerNum; i > 0; i--) {
+            var c = this.#el_layer_container().__getColourFromXY(i, x, y);
+            if (c != "") {
+                this.__selectColour(type, c);
+                document.getElementById('colour_picker_' + type).value = c;
+            }
+        }
+    }
+
     __addVectorLayer() {
         this.#lastLayerNum++;
         this.#el_layer_container().__addVectorLayer(this.#lastLayerNum);

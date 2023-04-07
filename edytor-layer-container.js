@@ -139,6 +139,18 @@ class EdytorLayerContainer extends HTMLElement {
         document.getElementById("layer_" + num1).style.zIndex = document.getElementById("layer_" + num2).style.zIndex;
         document.getElementById("layer_" + num2).style.zIndex = z;
     }
+
+    __getColourFromXY(num, x, y) {
+        var l = document.getElementById('layer_' + num);
+        if (l != null) {
+            var c = l.GetColourFromXY(x, y);
+            if (c != "") {
+                return c;
+            }
+            return "";
+        }
+        return "";
+    }
 }
 
 window.customElements.define("edytor-layer-container", EdytorLayerContainer);

@@ -1,10 +1,7 @@
 # edytor
 
 ### TODO
-N log window for error messages
-
 - add pixel tools first -> mid april
-    - color picker 2d
     - select existing shape 3d
     - select custom shape 3d
     - magic wand 3d
