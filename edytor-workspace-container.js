@@ -18,6 +18,9 @@ class EdytorWorkspaceContainer extends HTMLElement {
         var grid = document.createElement('canvas', { is: "edytor-grid" });
         this.appendChild(grid);
 
+        var select = document.createElement('canvas', { is: "edytor-select" });
+        this.appendChild(select);
+
         var pad = document.createElement('canvas', { is: "edytor-pad" });
         this.appendChild(pad);
     }
@@ -33,6 +36,7 @@ class EdytorWorkspaceContainer extends HTMLElement {
 
         document.getElementById("layer_container").SetSize(w, h);
         document.getElementById("grid_layer").SetSize(w, h);
+        document.getElementById("select_layer").SetSize(w, h);
         document.getElementById("pad_layer").SetSize(w, h);
     }
 }

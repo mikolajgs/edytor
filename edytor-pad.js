@@ -16,7 +16,7 @@ class EdytorPad extends HTMLCanvasElement {
         this.style.boxSizing = "border-box";
         this.style.width = "100%";
         this.style.border = "0";
-        this.style.zIndex = 401;
+        this.style.zIndex = 403;
         this.style.display = 'none';
 
         this.#attachEvents();
