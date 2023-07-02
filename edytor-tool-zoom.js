@@ -22,12 +22,12 @@ class EdytorZoomTool extends EdytorTool {
         super._addProperty("stroke", "Dasharray", "dasharray", "5", null);
     }
 
-    __toggleOn() {
-        super.__toggleOn();
+    toggleOn() {
+        super.toggleOn();
     }
 
-    __toggleOff() {
-        super.__toggleOff();
+    toggleOff() {
+        super.toggleOff();
     }
 }
 

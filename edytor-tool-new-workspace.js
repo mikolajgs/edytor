@@ -29,12 +29,12 @@ class EdytorNewWorkspaceTool extends EdytorTool {
         return super._getProperty(name);
     }
 
-    __toggleOn() {
-        super.__toggleOn();
+    toggleOn() {
+        super.toggleOn();
     }
 
-    __toggleOff() {
-        super.__toggleOff();
+    toggleOff() {
+        super.toggleOff();
     }
 
     __drawStart(x, y, shiftKey, altKey) {

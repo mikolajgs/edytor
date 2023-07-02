@@ -20,23 +20,23 @@ class EdytorWorkspace extends HTMLElement {
         var rulers = document.createElement("edytor-workspace-rulers");
         this.appendChild(rulers);
 
-        this.SetSize();
+        this.setSize();
     }
 
-    SetSize() {
+    setSize() {
         var containerMargin = parseInt(this.getAttribute("container-margin"));
         var imageWidth = parseInt(this.getAttribute("image-width"));
         var imageHeight = parseInt(this.getAttribute("image-height"));
         this.style.width = (2 * containerMargin + imageWidth) + 'px';
         this.style.height = (2 * containerMargin + imageHeight) + 'px';
 
-        document.getElementById("edit_info").SetSize(imageWidth, imageHeight);
+        document.getElementById("edit_info").setSize(imageWidth, imageHeight);
 
-        document.getElementById("workspace_container").SetPosition(containerMargin);
-        document.getElementById("workspace_container").SetSize(imageWidth, imageHeight);
+        document.getElementById("workspace_container").setPosition(containerMargin);
+        document.getElementById("workspace_container").setSize(imageWidth, imageHeight);
 
-        document.getElementById("workspace_rulers").SetPosition(containerMargin, imageWidth, imageHeight);
-        document.getElementById("workspace_rulers").SetSize(imageWidth, imageHeight);
+        document.getElementById("workspace_rulers").setPosition(containerMargin, imageWidth, imageHeight);
+        document.getElementById("workspace_rulers").setSize(imageWidth, imageHeight);
     }
 }
 

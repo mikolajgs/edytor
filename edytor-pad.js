@@ -5,28 +5,6 @@ class EdytorPad extends HTMLCanvasElement {
         super();
     }
 
-    connectedCallback() {
-        this.id = "pad_layer";
-        this.style.margin = 0;
-        this.style.padding = 0;
-        this.style.display = "block";
-        this.style.position = "absolute";
-        this.style.top = 0;
-        this.style.left = 0;
-        this.style.boxSizing = "border-box";
-        this.style.width = "100%";
-        this.style.border = "0";
-        this.style.zIndex = 403;
-        this.style.display = 'none';
-
-        this.#attachEvents();
-    }
-
-    SetSize(w, h) {
-        this.width = w;
-        this.height = h;
-    }
-
     #attachEvents() {
         var scope = this;
         this.addEventListener('mousedown', function (e) {
@@ -43,7 +21,7 @@ class EdytorPad extends HTMLCanvasElement {
             if ((scope.#mouseDown && !tool.__isMultiClick()) || tool.__isMultiClick()) {
                 tool.__drawMove(e.layerX, e.layerY, e.shiftKey, e.altKey);
             }
-            document.getElementById("edit_info").SetPosition(e.offsetX, e.offsetY);
+            document.getElementById("edit_info").setPosition(e.offsetX, e.offsetY);
         });
         this.addEventListener('mouseup', function (e) {
             scope.#mouseDown = false;
@@ -71,11 +49,33 @@ class EdytorPad extends HTMLCanvasElement {
         });
     }
 
-    __show() {
+    connectedCallback() {
+        this.id = "pad_layer";
+        this.style.margin = 0;
+        this.style.padding = 0;
+        this.style.display = "block";
+        this.style.position = "absolute";
+        this.style.top = 0;
+        this.style.left = 0;
+        this.style.boxSizing = "border-box";
+        this.style.width = "100%";
+        this.style.border = "0";
+        this.style.zIndex = 403;
+        this.style.display = 'none';
+
+        this.#attachEvents();
+    }
+
+    setSize(w, h) {
+        this.width = w;
+        this.height = h;
+    }
+
+    show() {
         this.style.display = '';
     }
 
-    __hide() {
+    hide() {
         this.style.display = 'none';
     }
 }

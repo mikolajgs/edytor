@@ -12,7 +12,7 @@ class EdytorPixelLayer extends HTMLCanvasElement {
         this.style.left = 0;
     }
 
-    Scale(w, h) {
+    scale(w, h) {
         var img = new Image();
         img.src = this.toDataURL("image/png");
         var self = this;
@@ -23,7 +23,7 @@ class EdytorPixelLayer extends HTMLCanvasElement {
         }
     }
 
-    ExtendSide(side, val) {
+    extendSide(side, val) {
         var img = new Image();
         img.src = this.toDataURL("image/png");
         var self = this;
@@ -37,7 +37,7 @@ class EdytorPixelLayer extends HTMLCanvasElement {
         }
     }
 
-    ShrinkSide(side, val) {
+    shrinkSide(side, val) {
         var shrink = true;
         if ((side == "left" || side == "right") && val > this.width) {
             shrink = false;
@@ -62,7 +62,7 @@ class EdytorPixelLayer extends HTMLCanvasElement {
         }
     }
 
-    GetColourFromXY(x, y) {
+    getColourFromXY(x, y) {
         var c = this.getContext('2d').getImageData(x, y, 1, 1).data;
         if (c[3] > 0) {
             return "#"+c[0].toString(16)+c[1].toString(16)+c[2].toString(16);

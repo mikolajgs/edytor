@@ -21,13 +21,13 @@ class EdytorRulerVertical extends HTMLCanvasElement {
         this.style.zIndex = 83;
     }
 
-    SetSize(w, h) {
+    setSize(w, h) {
         this.width = w;
         this.height = h;
         this.#draw();
     }
 
-    SetPosition(l, t) {
+    setPosition(l, t) {
         this.style.top = t + "px";
         this.style.left = l + "px";
     }

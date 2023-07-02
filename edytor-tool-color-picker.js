@@ -13,12 +13,12 @@ class EdytorColorPickerTool extends EdytorTool {
         return false;
     }
 
-    __toggleOn() {
-        super.__toggleOn();
+    toggleOn() {
+        super.toggleOn();
     }
 
-    __toggleOff() {
-        super.__toggleOff();
+    toggleOff() {
+        super.toggleOff();
     }
 
     __drawStart(x, y) {

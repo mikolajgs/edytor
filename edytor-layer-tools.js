@@ -8,7 +8,7 @@ class EdytorLayerTools extends HTMLElement {
     b.type = "checkbox";
     b.id = "layer_tool_tickall";
     b.addEventListener('click', function () {
-      document.getElementById('layer_list').__tickAllLayers(this.checked);
+      document.getElementById('layer_list').tickAllLayers(this.checked);
     });
     this.appendChild(b);
   }
@@ -19,34 +19,34 @@ class EdytorLayerTools extends HTMLElement {
     b.innerHTML = '<i class="fa-solid ' + className + '" alt="' + alt + '"></i>';
     if (name == '+V') {
       b.addEventListener('click', function () {
-        document.getElementById('edytor').__addVectorLayer();
+        document.getElementById('edytor').addVectorLayer();
         document.getElementById("layer_tool_tickall").checked = false;
       });
     }
     if (name == '+P') {
       b.addEventListener('click', function () {
-        document.getElementById('edytor').__addPixelLayer();
+        document.getElementById('edytor').addPixelLayer();
         document.getElementById("layer_tool_tickall").checked = false;
       });
     }
     if (name == 'L') {
       b.addEventListener('click', function () {
-        document.getElementById('edytor').__toggleLayersLocked(
-          document.getElementById('layer_list').__getTickedLayers()
+        document.getElementById('edytor').toggleLayersLocked(
+          document.getElementById('layer_list').getTickedLayers()
         );
       });
     }
     if (name == 'H') {
       b.addEventListener('click', function () {
-        document.getElementById('edytor').__toggleLayersHidden(
-          document.getElementById('layer_list').__getTickedLayers()
+        document.getElementById('edytor').toggleLayersHidden(
+          document.getElementById('layer_list').getTickedLayers()
         );
       });
     }
     if (name == 'X') {
       b.addEventListener('click', function () {
-        document.getElementById('edytor').__deleteLayers(
-          document.getElementById('layer_list').__getTickedLayers()
+        document.getElementById('edytor').deleteLayers(
+          document.getElementById('layer_list').getTickedLayers()
         );
         document.getElementById("layer_tool_tickall").checked = false;
       });
@@ -64,7 +64,7 @@ class EdytorLayerTools extends HTMLElement {
     this.#addButton('X', 'fa-trash', 'Delete layer');
   }
 
-  __setTickAll(b) {
+  setTickAll(b) {
     document.getElementById("layer_tool_tickall").checked = b;
   }
 }

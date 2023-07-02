@@ -18,18 +18,18 @@ class EdytorColour extends HTMLElement {
 
     this.addEventListener('click', function () {
       document.getElementById('colour_picker_' + type).value = val;
-      document.getElementById('edytor').__selectColour(type, val);
+      document.getElementById('edytor').selectColour(type, val);
     });
 
-    document.getElementById('edytor').__initColour(type, name);
+    document.getElementById('edytor').initColour(type, name);
   }
 
-  __toggleOn() {
+  toggleOn() {
     this.classList.remove('edytor_toggle_off');
     this.classList.add('edytor_toggle_on');
   }
 
-  __toggleOff() {
+  toggleOff() {
     this.classList.remove('edytor_toggle_on');
     this.classList.add('edytor_toggle_off');
   }

@@ -25,7 +25,7 @@ class EdytorGrid extends HTMLCanvasElement {
         this.style.border = "0";
     }
 
-    SetSize(w, h) {
+    setSize(w, h) {
         this.width = w;
         this.height = h;
         this.#draw();

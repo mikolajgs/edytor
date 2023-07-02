@@ -19,13 +19,6 @@ class EdytorLayerContainer extends HTMLElement {
         this.id = "layer_container";
     }
 
-    SetSize(w, h) {
-        this.style.width = w + 'px';
-        this.style.height = h + 'px';
-        this.#imageWidth = w;
-        this.#imageHeight = h;
-    }
-
     #getZIndexForNewLayer() {
         var zIndex = 201;
         var els = this.querySelectorAll('canvas, svg');
@@ -41,7 +34,14 @@ class EdytorLayerContainer extends HTMLElement {
         return zIndex + 1;
     }
 
-    __addVectorLayer(num) {
+    setSize(w, h) {
+        this.style.width = w + 'px';
+        this.style.height = h + 'px';
+        this.#imageWidth = w;
+        this.#imageHeight = h;
+    }
+
+    addVectorLayer(num) {
         var v = document.createElementNS("http://www.w3.org/2000/svg", 'svg', { is: 'edytor-layer-vector' });
         v.id = "layer_" + num;
         v.style.zIndex = this.#getZIndexForNewLayer();
@@ -56,7 +56,7 @@ class EdytorLayerContainer extends HTMLElement {
         this.appendChild(v);
     }
 
-    __addPixelLayer(num) {
+    addPixelLayer(num) {
         var p = document.createElement('canvas', { is: "edytor-layer-pixel" });
         p.id = "layer_" + num;
         p.style.zIndex = this.#getZIndexForNewLayer();
@@ -65,7 +65,7 @@ class EdytorLayerContainer extends HTMLElement {
         this.appendChild(p);
     }
 
-    __toggleLayerHidden(num) {
+    toggleLayerHidden(num) {
         var d = document.getElementById('layer_' + num);
         if (d.style.display == 'none') {
             d.style.display = '';
@@ -76,7 +76,7 @@ class EdytorLayerContainer extends HTMLElement {
         }
     }
 
-    __toggleLayerLocked(num) {
+    toggleLayerLocked(num) {
         var d = document.getElementById('layer_' + num);
         if (d.getAttribute("locked") == "true") {
             d.setAttribute("locked", "false");
@@ -87,51 +87,51 @@ class EdytorLayerContainer extends HTMLElement {
         }
     }
 
-    __setLayerHidden(num, h) {
+    setLayerHidden(num, h) {
         document.getElementById('layer_' + num).style.display = (h ? 'none' : '');
     }
 
-    __setLayerLocked(num, l) {
+    setLayerLocked(num, l) {
         document.getElementById('layer_' + num).setAttribute("locked", (l ? "true" : "false"));
     }
 
-    __deleteLayer(num) {
+    deleteLayer(num) {
         var l = document.getElementById('layer_' + num);
         if (l != null) {
             l.remove();
         }
     }
 
-    __scaleLayer(num, w, h) {
+    scaleLayer(num, w, h) {
         var l = document.getElementById('layer_' + num);
         if (l != null) {
-            l.Scale(w, h);
+            l.scale(w, h);
         }
     }
 
-    __extendLayerSide(num, side, val) {
+    extendLayerSide(num, side, val) {
         var l = document.getElementById('layer_' + num);
         if (l != null) {
-            l.ExtendSide(side, val);
+            l.extendSide(side, val);
         }
     }
 
-    __shrinkLayerSide(num, side, val) {
+    shrinkLayerSide(num, side, val) {
         var l = document.getElementById('layer_' + num);
         if (l != null) {
-            l.ShrinkSide(side, val);
+            l.shrinkSide(side, val);
         }
     }
 
-    __getLayerLocked(num) {
+    getLayerLocked(num) {
         return (document.getElementById('layer_' + num).getAttribute("locked") === "true" ? true : false);
     }
 
-    __getLayerHidden(num) {
+    getLayerHidden(num) {
         return (document.getElementById('layer_' + num).style.display === 'none' ? true : false);
     }
 
-    __swapLayers(num1, num2) {
+    swapLayers(num1, num2) {
         if (num1 == num2) {
             return;
         }
@@ -140,10 +140,10 @@ class EdytorLayerContainer extends HTMLElement {
         document.getElementById("layer_" + num2).style.zIndex = z;
     }
 
-    __getColourFromXY(num, x, y) {
+    getColourFromXY(num, x, y) {
         var l = document.getElementById('layer_' + num);
         if (l != null) {
-            var c = l.GetColourFromXY(x, y);
+            var c = l.getColourFromXY(x, y);
             if (c != "") {
                 return c;
             }

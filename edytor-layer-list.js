@@ -7,65 +7,69 @@ class EdytorLayerList extends HTMLElement {
         this.id = "layer_list"
     }
 
-    #el_layer(num) {
-        return document.getElementById("layer_list_layer_" + num);
+    #addLayer(t, num) {
+        var listItem = document.createElement('edytor-layer-list-layer');
+        listItem.id = "layer_list_layer_" + num;
+        listItem.setAttribute("edytor-layer-id", num.toString());
+        listItem.setAttribute("edytor-layer-type", t);
+        this.prepend(listItem);
     }
 
-    __tickAllLayers(b) {
+    tickAllLayers(b) {
         var els = this.querySelectorAll('edytor-layer-list-layer');
         for (var i = 0; i < els.length; i++) {
-            els[i].__tick(b);
+            els[i].tick(b);
         }
     }
 
-    __getTickAll() {
+    getTickAll() {
         var els = this.querySelectorAll('edytor-layer-list-layer');
         if (els.length == 0) {
             return false;
         }
         for (var i = 0; i < els.length; i++) {
-            if (!els[i].__getTick()) {
+            if (!els[i].getTick()) {
                 return false;
             }
         }
         return true;
     }
 
-    __getTickedLayers() {
+    getTickedLayers() {
         var ls = [];
         var els = this.querySelectorAll('edytor-layer-list-layer');
         for (var i = 0; i < els.length; i++) {
-            if (els[i].__getTick()) {
+            if (els[i].getTick()) {
                 ls.push(els[i].getAttribute("edytor-layer-id"));
             }
         }
         return ls;
     }
 
-    __addVectorLayer(num) {
+    addVectorLayer(num) {
         this.#addLayer('V', num);
     }
 
-    __addPixelLayer(num) {
+    addPixelLayer(num) {
         this.#addLayer('P', num);
     }
 
-    __setLayerHidden(num, h) {
-        this.#el_layer(num).__setHidden(h);
+    setLayerHidden(num, h) {
+        document.getElementById("layer_list_layer_" + num).setHidden(h);
     }
 
-    __setLayerLocked(num, l) {
-        this.#el_layer(num).__setLocked(l);
+    setLayerLocked(num, l) {
+        document.getElementById("layer_list_layer_" + num).setLocked(l);
     }
 
-    __deleteLayer(num) {
-        var l = this.#el_layer(num);
+    deleteLayer(num) {
+        var l = document.getElementById("layer_list_layer_" + num);
         if (l != null) {
             l.remove();
         }
     }
 
-    __moveLayerUp(num) {
+    moveLayerUp(num) {
         var els = this.querySelectorAll('edytor-layer-list-layer');
         for (var i = 0; i < els.length; i++) {
             if (els[i].getAttribute("edytor-layer-id") == num.toString()) {
@@ -81,7 +85,7 @@ class EdytorLayerList extends HTMLElement {
         }
     }
 
-    __moveLayerDown(num) {
+    moveLayerDown(num) {
         var els = this.querySelectorAll('edytor-layer-list-layer');
         for (var i = 0; i < els.length; i++) {
             if (els[i].getAttribute("edytor-layer-id") == num.toString()) {
@@ -97,7 +101,7 @@ class EdytorLayerList extends HTMLElement {
         }
     }
 
-    __selectLayer(num) {
+    selectLayer(num) {
         var els = this.querySelectorAll('edytor-layer-list-layer');
         for (var i = 0; i < els.length; i++) {
             if (els[i].getAttribute("edytor-layer-id") == num.toString()) {
@@ -107,15 +111,6 @@ class EdytorLayerList extends HTMLElement {
             }
         }
     }
-
-    #addLayer(t, num) {
-        var listItem = document.createElement('edytor-layer-list-layer');
-        listItem.id = "layer_list_layer_" + num;
-        listItem.setAttribute("edytor-layer-id", num.toString());
-        listItem.setAttribute("edytor-layer-type", t);
-        this.prepend(listItem);
-    }
-
 }
 
 window.customElements.define('edytor-layer-list', EdytorLayerList);

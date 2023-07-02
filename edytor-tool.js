@@ -14,7 +14,7 @@ class EdytorTool extends HTMLElement {
     this.innerHTML = '<i class="fa-solid ' + className + '" alt="' + alt + '"></i>';
 
     this.addEventListener('click', function () {
-      document.getElementById("edit_info").SetPosition(0, 0);
+      document.getElementById("edit_info").setPosition(0, 0);
       document.getElementById('edytor').__selectTool(name);
     });
 
@@ -156,13 +156,13 @@ class EdytorTool extends HTMLElement {
     );
   }
 
-  __toggleOn() {
+  toggleOn() {
     this.classList.remove('edytor_toggle_off');
     this.classList.add('edytor_toggle_on');
     document.getElementById("tool_config_" + this.getAttribute("edytor-tool-name")).style.display = '';
   }
 
-  __toggleOff() {
+  toggleOff() {
     this.classList.remove('edytor_toggle_on');
     this.classList.add('edytor_toggle_off');
     document.getElementById("tool_config_" + this.getAttribute("edytor-tool-name")).style.display = 'none';

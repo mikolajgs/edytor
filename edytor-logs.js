@@ -19,7 +19,7 @@ class EdytorLogs extends HTMLTextAreaElement {
         this.style.width = (window.innerWidth - 6) + 'px';
     }
 
-    AddError(e) {
+    addError(e) {
         this.value = "❗" + e + "\n" + this.value;
     }
 }

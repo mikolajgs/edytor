@@ -25,19 +25,19 @@ class EdytorWorkspaceContainer extends HTMLElement {
         this.appendChild(pad);
     }
 
-    SetPosition(v) {
+    setPosition(v) {
         this.style.top = v + "px";
         this.style.left = v + "px";
     }
 
-    SetSize(w, h) {
+    setSize(w, h) {
         this.style.width = w + "px";
         this.style.height = h + "px";
 
-        document.getElementById("layer_container").SetSize(w, h);
-        document.getElementById("grid_layer").SetSize(w, h);
-        document.getElementById("select_layer").SetSize(w, h);
-        document.getElementById("pad_layer").SetSize(w, h);
+        document.getElementById("layer_container").setSize(w, h);
+        document.getElementById("grid_layer").setSize(w, h);
+        document.getElementById("select_layer").setSize(w, h);
+        document.getElementById("pad_layer").setSize(w, h);
     }
 }
 

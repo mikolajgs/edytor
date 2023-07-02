@@ -22,12 +22,12 @@ class EdytorShapeTool extends EdytorTool {
         return false;
     }
 
-    __toggleOn() {
-        super.__toggleOn();
+    toggleOn() {
+        super.toggleOn();
     }
 
-    __toggleOff() {
-        super.__toggleOff();
+    toggleOff() {
+        super.toggleOff();
     }
     
     connectedCallback() {

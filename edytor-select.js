@@ -20,16 +20,16 @@ class EdytorSelect extends HTMLCanvasElement {
         this.style.display = 'none';
     }
 
-    SetSize(w, h) {
+    setSize(w, h) {
         this.width = w;
         this.height = h;
     }
 
-    __show() {
+    show() {
         this.style.display = '';
     }
 
-    __hide() {
+    hide() {
         this.style.display = 'none';
     }
 }

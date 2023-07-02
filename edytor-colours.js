@@ -45,7 +45,7 @@ class EdytorColours extends HTMLElement {
     }
 
     document.getElementById('colour_picker_' + type).value = firstColor;
-    document.getElementById('edytor').__selectColour(type, firstColor);
+    document.getElementById('edytor').selectColour(type, firstColor);
   }
 }
 

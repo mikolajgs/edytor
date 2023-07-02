@@ -45,7 +45,7 @@ class Edytor extends HTMLElement {
         this.#toolNames.push(s);
     }
 
-    __initColour(t, n) {
+    initColour(t, n) {
         if (t == "bg") {
             this.#colourBgNames.push(n);
         } else {
@@ -57,7 +57,7 @@ class Edytor extends HTMLElement {
         var ws = document.getElementById("workspace");
         if (ws != null) {
             for (var i = 0; i <= this.#lastLayerNum; i++) {
-                this.__deleteLayer(i);
+                this.deleteLayer(i);
             }
             ws.remove();
         }
@@ -70,18 +70,18 @@ class Edytor extends HTMLElement {
         newWS.setAttribute("image-height", h.toString());
         this.prepend(newWS);
 
-        this.__addPixelLayer();
+        this.addPixelLayer();
     }
 
     __scaleWorkspace(w, h) {
         var ws = document.getElementById("workspace");
         if (ws != null) {
             for (var i = 0; i <= this.#lastLayerNum; i++) {
-                this.__scaleLayer(i, w, h);
+                this.scaleLayer(i, w, h);
             }
             ws.setAttribute("image-width", w.toString());
             ws.setAttribute("image-height", h.toString());
-            ws.SetSize();
+            ws.setSize();
         }
     }
 
@@ -89,7 +89,7 @@ class Edytor extends HTMLElement {
         var ws = document.getElementById("workspace");
         if (ws != null) {
             for (var i = 0; i <= this.#lastLayerNum; i++) {
-                this.__extendLayerSide(i, s, v);
+                this.extendLayerSide(i, s, v);
             }
             var nw = parseInt(ws.getAttribute("image-width"));
             var nh = parseInt(ws.getAttribute("image-height"));
@@ -100,7 +100,7 @@ class Edytor extends HTMLElement {
             }
             ws.setAttribute("image-width", nw.toString());
             ws.setAttribute("image-height", nh.toString());
-            ws.SetSize();
+            ws.setSize();
         }
     }
 
@@ -121,7 +121,7 @@ class Edytor extends HTMLElement {
             }
             if (valsOk) {
                 for (var i = 0; i <= this.#lastLayerNum; i++) {
-                    this.__shrinkLayerSide(i, s, v);
+                    this.shrinkLayerSide(i, s, v);
                 }
                 if (s == "left" || s == "right") {
                     nw = nw - v;
@@ -130,7 +130,7 @@ class Edytor extends HTMLElement {
                 }
                 ws.setAttribute("image-width", nw.toString());
                 ws.setAttribute("image-height", nh.toString());
-                ws.SetSize();
+                ws.setSize();
             }
         }
     }
@@ -161,14 +161,14 @@ class Edytor extends HTMLElement {
 
     __selectTool(n) {
         if (this.#tool != "") {
-            this.#el_tool(this.#tool).__toggleOff();
+            this.#el_tool(this.#tool).toggleOff();
         }
         this.#tool = n;
-        this.#el_tool(n).__toggleOn();
+        this.#el_tool(n).toggleOn();
         if (this.#el_tool(n).RequiresPad) {
-            this.#el_pad_layer().__show();
+            this.#el_pad_layer().show();
         } else {
-            this.#el_pad_layer().__hide();
+            this.#el_pad_layer().hide();
         }
     }
 
@@ -180,23 +180,23 @@ class Edytor extends HTMLElement {
         }
     }
 
-    __selectColour(type, s) {
+    selectColour(type, s) {
         if (type == "bg") {
             this.#colourBg = s;
             for (var i = 0; i < this.#colourBgNames.length; i++) {
                 if (this.#colourBgNames[i] != s) {
-                    this.#el_colour_bg(this.#colourBgNames[i]).__toggleOff();
+                    document.getElementById('colour_bg_' + this.#colourBgNames[i]).toggleOff();
                 } else {
-                    this.#el_colour_bg(this.#colourBgNames[i]).__toggleOn();
+                    document.getElementById('colour_bg_' + this.#colourBgNames[i]).toggleOn();
                 }
             }
         } else {
             this.#colourFg = s;
             for (var i = 0; i < this.#colourFgNames.length; i++) {
                 if (this.#colourFgNames[i] != s) {
-                    this.#el_colour_fg(this.#colourFgNames[i]).__toggleOff();
+                    document.getElementById('colour_fg_' + this.#colourFgNames[i]).toggleOff();
                 } else {
-                    this.#el_colour_fg(this.#colourFgNames[i]).__toggleOn();
+                    document.getElementById('colour_fg_' + this.#colourFgNames[i]).toggleOn();
                 }
             }
         }
@@ -204,96 +204,96 @@ class Edytor extends HTMLElement {
 
     __selectColourFromXY(type, x, y) {
         for (var i = this.#lastLayerNum; i > 0; i--) {
-            var c = this.#el_layer_container().__getColourFromXY(i, x, y);
+            var c = this.#el_layer_container().getColourFromXY(i, x, y);
             if (c != "") {
-                this.__selectColour(type, c);
+                this.selectColour(type, c);
                 document.getElementById('colour_picker_' + type).value = c;
             }
         }
     }
 
-    __addVectorLayer() {
+    addVectorLayer() {
         this.#lastLayerNum++;
-        this.#el_layer_container().__addVectorLayer(this.#lastLayerNum);
-        this.#el_layer_list().__addVectorLayer(this.#lastLayerNum);
+        this.#el_layer_container().addVectorLayer(this.#lastLayerNum);
+        this.#el_layer_list().addVectorLayer(this.#lastLayerNum);
     }
 
-    __addPixelLayer() {
+    addPixelLayer() {
         this.#lastLayerNum++;
-        this.#el_layer_container().__addPixelLayer(this.#lastLayerNum);
-        this.#el_layer_list().__addPixelLayer(this.#lastLayerNum);
-        this.__selectLayer(this.#lastLayerNum);
+        this.#el_layer_container().addPixelLayer(this.#lastLayerNum);
+        this.#el_layer_list().addPixelLayer(this.#lastLayerNum);
+        this.selectLayer(this.#lastLayerNum);
     }
 
-    __toggleLayerHidden(num) {
-        this.#el_layer_list().__setLayerHidden(num, this.#el_layer_container().__toggleLayerHidden(num));
+    toggleLayerHidden(num) {
+        this.#el_layer_list().setLayerHidden(num, this.#el_layer_container().toggleLayerHidden(num));
     }
 
-    __toggleLayerLocked(num) {
-        this.#el_layer_list().__setLayerLocked(num, this.#el_layer_container().__toggleLayerLocked(num));
+    toggleLayerLocked(num) {
+        this.#el_layer_list().setLayerLocked(num, this.#el_layer_container().toggleLayerLocked(num));
     }
 
-    __deleteLayer(num) {
-        this.#el_layer_container().__deleteLayer(num);
-        this.#el_layer_list().__deleteLayer(num);
+    deleteLayer(num) {
+        this.#el_layer_container().deleteLayer(num);
+        this.#el_layer_list().deleteLayer(num);
         if (num == this.#layer) {
-            this.__selectLayer(0);
+            this.selectLayer(0);
         }
     }
 
-    __extendLayerSide(num, side, val) {
-        this.#el_layer_container().__extendLayerSide(num, side, val);
+    extendLayerSide(num, side, val) {
+        this.#el_layer_container().extendLayerSide(num, side, val);
     }
 
-    __shrinkLayerSide(num, side, val) {
-        this.#el_layer_container().__shrinkLayerSide(num, side, val);
+    shrinkLayerSide(num, side, val) {
+        this.#el_layer_container().shrinkLayerSide(num, side, val);
     }
 
-    __scaleLayer(num, width, height) {
-        this.#el_layer_container().__scaleLayer(num, width, height);
+    scaleLayer(num, width, height) {
+        this.#el_layer_container().scaleLayer(num, width, height);
     }
 
-    __moveLayerUp(num) {
-        this.#el_layer_container().__swapLayers(num, this.#el_layer_list().__moveLayerUp(num));
+    moveLayerUp(num) {
+        this.#el_layer_container().swapLayers(num, this.#el_layer_list().moveLayerUp(num));
     }
 
-    __moveLayerDown(num) {
-        this.#el_layer_container().__swapLayers(num, this.#el_layer_list().__moveLayerDown(num));
+    moveLayerDown(num) {
+        this.#el_layer_container().swapLayers(num, this.#el_layer_list().moveLayerDown(num));
     }
 
-    __toggleLayersLocked(numList) {
+    toggleLayersLocked(numList) {
         if (numList.length > 0) {
-            var l = this.#el_layer_container().__getLayerLocked(numList[0]);
+            var l = this.#el_layer_container().getLayerLocked(numList[0]);
             for (var i = 0; i < numList.length; i++) {
-                this.#el_layer_container().__setLayerLocked(numList[i], !l);
-                this.#el_layer_list().__setLayerLocked(numList[i], !l);
+                this.#el_layer_container().setLayerLocked(numList[i], !l);
+                this.#el_layer_list().setLayerLocked(numList[i], !l);
             }
         }
     }
 
-    __toggleLayersHidden(numList) {
+    toggleLayersHidden(numList) {
         if (numList.length > 0) {
-            var h = this.#el_layer_container().__getLayerHidden(numList[0]);
+            var h = this.#el_layer_container().getLayerHidden(numList[0]);
             for (var i = 0; i < numList.length; i++) {
-                this.#el_layer_container().__setLayerHidden(numList[i], !h);
-                this.#el_layer_list().__setLayerHidden(numList[i], !h);
+                this.#el_layer_container().setLayerHidden(numList[i], !h);
+                this.#el_layer_list().setLayerHidden(numList[i], !h);
             }
         }
     }
 
-    __deleteLayers(numList) {
+    deleteLayers(numList) {
         for (var i = 0; i < numList.length; i++) {
-            this.__deleteLayer(numList[i]);
+            this.deleteLayer(numList[i]);
         }
     }
 
-    __selectLayer(num) {
+    selectLayer(num) {
         this.#layer = num;
-        this.#el_layer_list().__selectLayer(num);
+        this.#el_layer_list().selectLayer(num);
     }
 
     __showError(e) {
-        document.getElementById("logs").AddError(e);
+        document.getElementById("logs").addError(e);
     }
 
     connectedCallback() {

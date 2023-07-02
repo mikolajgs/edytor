@@ -9,12 +9,12 @@ class EdytorEditInfo extends HTMLElement {
             + '<p><label>Y:</label> <span id="position_y">0</span><label>Height:</label> <span id="size_height">0</span></p>';
     }
 
-    SetSize(w, h) {
+    setSize(w, h) {
         document.getElementById("size_width").innerHTML = w.toString();
         document.getElementById("size_height").innerHTML = h.toString();
     }
 
-    SetPosition(x, y) {
+    setPosition(x, y) {
         document.getElementById("position_x").innerHTML = x.toString();
         document.getElementById("position_y").innerHTML = y.toString();
     }

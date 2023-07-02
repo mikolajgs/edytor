@@ -32,24 +32,24 @@ class EdytorWorkspaceRulers extends HTMLElement {
         this.appendChild(right);
     }
 
-    SetPosition(v, w, h) {
+    setPosition(v, w, h) {
         this.style.top = (v - 30) + "px";
         this.style.left = (v - 30) + "px";
 
-        document.getElementById("ruler_top").SetPosition(30, 0);
-        document.getElementById("ruler_bottom").SetPosition(30, 30+h);
-        document.getElementById("ruler_left").SetPosition(0, 30);
-        document.getElementById("ruler_right").SetPosition(30+w, 30);
+        document.getElementById("ruler_top").setPosition(30, 0);
+        document.getElementById("ruler_bottom").setPosition(30, 30+h);
+        document.getElementById("ruler_left").setPosition(0, 30);
+        document.getElementById("ruler_right").setPosition(30+w, 30);
     }
 
-    SetSize(w, h) {
+    setSize(w, h) {
         this.style.width = (w + 2 * 30) + "px";
         this.style.height = (h + 2 * 30) + "px";
 
-        document.getElementById("ruler_top").SetSize(w, 30);
-        document.getElementById("ruler_bottom").SetSize(w, 30);
-        document.getElementById("ruler_left").SetSize(30, h);
-        document.getElementById("ruler_right").SetSize(30, h);
+        document.getElementById("ruler_top").setSize(w, 30);
+        document.getElementById("ruler_bottom").setSize(w, 30);
+        document.getElementById("ruler_left").setSize(30, h);
+        document.getElementById("ruler_right").setSize(30, h);
     }
 }
 
