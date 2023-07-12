@@ -9,7 +9,7 @@ class EdytorColorPickerTool extends EdytorTool {
         super._init('color_picker', 'fa-eye-dropper', 'Color Picker');
     }
 
-    __isMultiClick() {
+    isMultiClick() {
         return false;
     }
 
@@ -20,6 +20,7 @@ class EdytorColorPickerTool extends EdytorTool {
     toggleOff() {
         super.toggleOff();
     }
+
 
     __drawStart(x, y) {
         document.getElementById("edytor").__selectColourFromXY("fg", x, y);

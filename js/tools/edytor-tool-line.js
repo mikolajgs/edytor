@@ -10,10 +10,6 @@ class EdytorLineTool extends EdytorTool {
         super();
     }
 
-    __isMultiClick() {
-        return false;
-    }
-
     connectedCallback() {
         super._init('line', 'fa-minus', 'Line');
         super._addProperty("Width", "width", "3", null);
@@ -35,13 +31,8 @@ class EdytorLineTool extends EdytorTool {
         });
     }
 
-    #setClearArea(x, y) {
-        super._setClearArea(this, x, y,
-            document.getElementById('pad_layer').width,
-            document.getElementById('pad_layer').height,
-            parseInt(super._getProperty('width')),
-            parseInt(super._getProperty('width'))
-        );
+    isMultiClick() {
+        return false;
     }
 
     toggleOn() {
@@ -50,6 +41,16 @@ class EdytorLineTool extends EdytorTool {
 
     toggleOff() {
         super.toggleOff();
+    }
+
+
+    #setClearArea(x, y) {
+        super._setClearArea(this, x, y,
+            document.getElementById('pad_layer').width,
+            document.getElementById('pad_layer').height,
+            parseInt(super._getProperty('width')),
+            parseInt(super._getProperty('width'))
+        );
     }
 
     __drawStart(x, y, shiftKey, altKey) {

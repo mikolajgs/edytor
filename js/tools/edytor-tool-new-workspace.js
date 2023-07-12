@@ -5,10 +5,6 @@ class EdytorNewWorkspaceTool extends EdytorTool {
         super();
     }
 
-    __isMultiClick() {
-        return false;
-    }
-
     connectedCallback() {
         super._init('new-workspace', 'fa-file', 'New');
         super._addProperty("Width", "width", "1920", null, null, false);
@@ -25,8 +21,8 @@ class EdytorNewWorkspaceTool extends EdytorTool {
         });
     }
 
-    __getProperty(name) {
-        return super._getProperty(name);
+    isMultiClick() {
+        return false;
     }
 
     toggleOn() {
@@ -35,6 +31,10 @@ class EdytorNewWorkspaceTool extends EdytorTool {
 
     toggleOff() {
         super.toggleOff();
+    }
+
+    __getProperty(name) {
+        return super._getProperty(name);
     }
 
     __drawStart(x, y, shiftKey, altKey) {

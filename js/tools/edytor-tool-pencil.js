@@ -9,10 +9,6 @@ class EdytorPencilTool extends EdytorTool {
         super();
     }
 
-    __isMultiClick() {
-        return false;
-    }
-
     connectedCallback() {
         super._init('pencil', 'fa-pencil', 'Pencil');
         super._addProperty("Width", "width", "3", null);
@@ -35,6 +31,10 @@ class EdytorPencilTool extends EdytorTool {
         });
     }
 
+    isMultiClick() {
+        return false;
+    }
+
     toggleOn() {
         super.toggleOn();
     }
@@ -42,6 +42,7 @@ class EdytorPencilTool extends EdytorTool {
     toggleOff() {
         super.toggleOff();
     }
+
 
     __drawStart(x, y, shiftKey, altKey) {
         var layer = super._getLayer(true);

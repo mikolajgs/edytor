@@ -5,10 +5,6 @@ class EdytorResizeWorkspaceTool extends EdytorTool {
         super();
     }
 
-    __isMultiClick() {
-        return false;
-    }
-
     connectedCallback() {
         super._init('resize-workspace', 'fa-arrows-left-right', 'Resize');
         super._addProperty("Operation", "operation", "", {
@@ -58,8 +54,8 @@ class EdytorResizeWorkspaceTool extends EdytorTool {
         });
     }
 
-    __getProperty(name) {
-        return super._getProperty(name);
+    isMultiClick() {
+        return false;
     }
 
     toggleOn() {
@@ -68,6 +64,11 @@ class EdytorResizeWorkspaceTool extends EdytorTool {
 
     toggleOff() {
         super.toggleOff();
+    }
+
+
+    __getProperty(name) {
+        return super._getProperty(name);
     }
 
     __drawStart(x, y, shiftKey, altKey) {

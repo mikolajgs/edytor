@@ -15,21 +15,6 @@ class EdytorShapeTool extends EdytorTool {
         super();
     }
 
-    __isMultiClick() {
-        if (super._getProperty("shape") == "polygon") {
-            return true;
-        }
-        return false;
-    }
-
-    toggleOn() {
-        super.toggleOn();
-    }
-
-    toggleOff() {
-        super.toggleOff();
-    }
-    
     connectedCallback() {
         super._init('shape', 'fa-shapes', 'Shape');
         super._addProperty("Shape", "shape", "", {
@@ -68,6 +53,22 @@ class EdytorShapeTool extends EdytorTool {
         super._addProperty("1:1", "1_to_1", false, null, null, false);
         super._addProperty("Draw from center", "draw_from_center", false, null, null, false);
     }
+
+    isMultiClick() {
+        if (super._getProperty("shape") == "polygon") {
+            return true;
+        }
+        return false;
+    }
+
+    toggleOn() {
+        super.toggleOn();
+    }
+
+    toggleOff() {
+        super.toggleOff();
+    }
+    
 
     #setInputArea(x, y) {
         var draw_from_center = false;

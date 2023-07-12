@@ -9,10 +9,6 @@ class EdytorEraserTool extends EdytorTool {
         super();
     }
 
-    __isMultiClick() {
-        return false;
-    }
-
     connectedCallback() {
         super._init('eraser', 'fa-eraser', "Eraser");
         super._addProperty("Width", "width", "3", null);
@@ -33,6 +29,10 @@ class EdytorEraserTool extends EdytorTool {
             "diagonal-down": "diagonal-down",
             "diagonal-up": "diagonal-up"
         });
+    }
+
+    isMultiClick() {
+        return false;
     }
 
     toggleOn() {
