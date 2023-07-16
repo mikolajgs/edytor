@@ -1,29 +1,36 @@
 class EdytorLineTool extends EdytorTool {
     RequiresPad = true;
 
-    _clearArea = [999999, 999999, 0, 0];
+    isMultiClick() {
+        return false;
+    }
 
-    #startPos = [-1 - 1];
-    #padCtx = null;
+
+    #dirtyArea = [];
+    #startPos = [];
+
 
     constructor() {
         super();
     }
 
     connectedCallback() {
-        super._init('line', 'fa-minus', 'Line');
-        super._addProperty("Width", "width", "3", null);
-        super._addProperty("Linecap", "linecap", "", {
+        this.#resetDirtyArea();
+        this.#resetStartPos();
+
+        super.init('line', 'fa-minus', 'Line');
+        super.addProperty("Width", "width", "3", null);
+        super.addProperty("Linecap", "linecap", "", {
             "butt": "butt",
             "square": "square",
             "round": "round"
         });
-        super._addProperty("Linejoin", "linejoin", "", {
+        super.addProperty("Linejoin", "linejoin", "", {
             "miter": "miter",
             "round": "round",
             "bevel": "bevel"
         });
-        super._addProperty("Angle", "angle", "", {
+        super.addProperty("Angle", "angle", "", {
             "": "",
             "horizontal": "horizontal",
             "vertical": "vertical",
@@ -31,9 +38,6 @@ class EdytorLineTool extends EdytorTool {
         });
     }
 
-    isMultiClick() {
-        return false;
-    }
 
     toggleOn() {
         super.toggleOn();
@@ -44,106 +48,123 @@ class EdytorLineTool extends EdytorTool {
     }
 
 
-    #setClearArea(x, y) {
-        super._setClearArea(this, x, y,
+    #updateDirtyArea(x, y) {
+        this.#dirtyArea = super.calculateDirtyArea(
+            this.#dirtyArea,
+            x,
+            y,
+            x,
+            y,
             document.getElementById('pad_layer').width,
             document.getElementById('pad_layer').height,
-            parseInt(super._getProperty('width')),
-            parseInt(super._getProperty('width'))
+            parseInt(super.getProperty('width')),
+            parseInt(super.getProperty('width'))
         );
     }
 
-    __drawStart(x, y, shiftKey, altKey) {
-        var layer = super._getLayer(true);
-        if (layer === null) {
+    #resetDirtyArea() {
+        this.#dirtyArea = [999999, 999999, 0, 0];
+    }
+
+    #resetStartPos() {
+        this.#startPos = [-1, -1];
+    }
+
+
+    #setCtxStyle(ctx) {
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.strokeStyle = document.getElementById('edytor').getSelectedFgColour();
+        ctx.lineWidth   = super.getProperty('width');
+        ctx.lineCap     = super.getProperty('linecap');
+        ctx.lineJoin    = super.getProperty('linejoin');
+    }
+
+    #drawCtxLine(ctx, x, y) { 
+        ctx.beginPath();
+        ctx.moveTo(this.#startPos[0], this.#startPos[1]);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        ctx.closePath();
+    }
+
+    #alignXYToAngle(x, y) {
+        if (super.getProperty('angle') == "diagonal") {
+            if (y > this.#startPos[1]) {
+                y = this.#startPos[1] + (x - this.#startPos[0]);
+            } else {
+                y = this.#startPos[1] - (x - this.#startPos[0]);
+            }
+
+        } else if (super.getProperty('angle') == "horizontal") {
+            y = this.#startPos[1];
+
+        } else if (super.getProperty('angle') == "vertical") {
+            x = this.#startPos[0];
+        }
+
+        return [x, y];
+    }
+
+
+    startedCallback(x, y, shiftKey, altKey) {
+        var layerNum = super.getLayer(true);
+        if (layerNum === null) {
             return;
         }
 
-        super._resetClearArea(this);
+        this.#resetDirtyArea();
+        super.clearPad();
 
-        this.#padCtx = document.getElementById('pad_layer').getContext('2d');
-        this.#padCtx.globalCompositeOperation = 'source-over';
-        this.#padCtx.strokeStyle = document.getElementById('edytor').__getSelectedFgColour();
-        this.#padCtx.lineWidth = super._getProperty('width');
-        this.#padCtx.lineCap = super._getProperty('linecap');
-        this.#padCtx.lineJoin = super._getProperty('linejoin');
-        this.#setClearArea(x, y);
+        var padCtx = document.getElementById('pad_layer').getContext('2d');
+        this.#setCtxStyle(padCtx);
+
+        this.#updateDirtyArea(x, y);
         this.#startPos = [x, y];
     }
 
-    __drawMove(x, y, shiftKey, altKey) {
-        var layer = super._getLayer(false);
-        if (layer === null) {
+    movedCallback(x, y, shiftKey, altKey, useLayer) {
+        var layerNum = super.getLayer(false);
+        if (layerNum === null) {
             return;
         }
 
-        if (super._getProperty('angle') == "diagonal") {
-            if (y > this.#startPos[1]) {
-                y = this.#startPos[1] + (x - this.#startPos[0]);
-            } else {
-                y = this.#startPos[1] - (x - this.#startPos[0]);
-            }
-        } else if (super._getProperty('angle') == "horizontal") {
-            y = this.#startPos[1];
-        } else if (super._getProperty('angle') == "vertical") {
-            x = this.#startPos[0];
-        }
+        var finalXY = this.#alignXYToAngle(x, y);
+        x = finalXY[0];
+        y = finalXY[1];
 
-        this.#setClearArea(x, y);
-        super._clearPad(this);
-
-        if (this._inputArea != this.#startPos[0] || y != this.#startPos[1]) {
-            this.#padCtx.beginPath();
-            this.#padCtx.moveTo(this.#startPos[0], this.#startPos[1]);
-            this.#padCtx.lineTo(x, y);
-            this.#padCtx.stroke();
-            this.#padCtx.closePath();
-        }
-    }
-
-    __drawEnd(x, y, shiftKey, altKey) {
-        var layer = super._getLayer(false);
-        if (layer === null) {
-            return;
-        }
-
-        if (super._getProperty('angle') == "diagonal") {
-            if (y > this.#startPos[1]) {
-                y = this.#startPos[1] + (x - this.#startPos[0]);
-            } else {
-                y = this.#startPos[1] - (x - this.#startPos[0]);
-            }
-        } else if (super._getProperty('angle') == "horizontal") {
-            y = this.#startPos[1];
-        } else if (super._getProperty('angle') == "vertical") {
-            x = this.#startPos[0];
-        }
-
-        this.#setClearArea(x, y);
-        super._clearPad(this);
+        this.#updateDirtyArea(x, y);
+        super.clearPadArea(this.#dirtyArea);
 
         if (x != this.#startPos[0] || y != this.#startPos[1]) {
-            var ctx = document.getElementById('layer_' + layer).getContext('2d');
-            ctx.globalCompositeOperation = 'source-over';
-            ctx.strokeStyle = document.getElementById('edytor').__getSelectedFgColour();
-            ctx.lineWidth = super._getProperty('width');
-            ctx.lineCap = super._getProperty('linecap');
-            ctx.lineJoin = super._getProperty('linejoin');
-            ctx.beginPath();
-            ctx.moveTo(this.#startPos[0], this.#startPos[1]);
-            ctx.lineTo(x, y);
-            ctx.stroke();
-            ctx.closePath();
+            if (useLayer) {
+                var ctx = document.getElementById('layer_' + layerNum).getContext('2d');
+                this.#setCtxStyle(ctx);
+                this.#drawCtxLine(ctx, x, y);
+            } else {
+                var padCtx = document.getElementById('pad_layer').getContext('2d');
+                this.#drawCtxLine(padCtx, x, y);
+            }
         }
     }
 
-    __drawCancel() {
-        var layer = super._getLayer(false);
-        if (layer === null) {
+    endedCallback(x, y, shiftKey, altKey) {
+        this.movedCallback(x, y, shiftKey, altKey, true);
+    }
+
+    cancelledCallback() {
+        var layerNum = super.getLayer(false);
+        if (layerNum === null) {
             return;
         }
 
-        super._clearPad();
+        super.clearPad();
+    }
+
+    selectedCallback() {
+        this.#resetDirtyArea();
+        this.#resetStartPos();
+
+        super.clearPad();
     }
 }
 

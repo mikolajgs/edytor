@@ -53,6 +53,7 @@ class EdytorGrid extends HTMLCanvasElement {
             ctx.stroke();
             ctx.closePath();
         }
+
         for (var i = 0; i <= this.height / 10; i++) {
             var j = i * 10;
             ctx.beginPath();

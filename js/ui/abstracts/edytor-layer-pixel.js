@@ -33,7 +33,11 @@ class EdytorPixelLayer extends HTMLCanvasElement {
             } else if (side == "top" || side == "bottom") {
                 self.height = self.height + val;
             }
-            self.getContext('2d').drawImage(img, (side == "left" ? val : 0), (side == "top" ? val : 0));
+            self.getContext('2d').drawImage(
+                img,
+                (side == "left" ? val : 0),
+                (side == "top" ? val : 0)
+            );
         }
     }
 
@@ -57,7 +61,17 @@ class EdytorPixelLayer extends HTMLCanvasElement {
                 } else if (side == "top" || side == "bottom") {
                     self.height = self.height - val;
                 }
-                self.getContext('2d').drawImage(img, (side == "left" ? val : 0), (side == "top" ? val : 0), self.width, self.height, 0, 0, self.width, self.height);
+                self.getContext('2d').drawImage(
+                    img,
+                    (side == "left" ? val : 0),
+                    (side == "top" ? val : 0),
+                    self.width,
+                    self.height,
+                    0,
+                    0,
+                    self.width,
+                    self.height
+                );
             }
         }
     }
@@ -65,7 +79,9 @@ class EdytorPixelLayer extends HTMLCanvasElement {
     getColourFromXY(x, y) {
         var c = this.getContext('2d').getImageData(x, y, 1, 1).data;
         if (c[3] > 0) {
-            return "#"+c[0].toString(16)+c[1].toString(16)+c[2].toString(16);
+            return "#" + c[0].toString(16)
+                       + c[1].toString(16)
+                       + c[2].toString(16);
         }
         return "";
     }

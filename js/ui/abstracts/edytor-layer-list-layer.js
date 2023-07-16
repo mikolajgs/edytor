@@ -21,7 +21,9 @@ class EdytorLayerListLayer extends HTMLElement {
         tick.setAttribute('edytor-layer-id', this.getAttribute("edytor-layer-id"));
         tick.id = "layer_tick_" + this.getAttribute("edytor-layer-id");
         tick.addEventListener('click', function (e) {
-            document.getElementById("layer_tools").setTickAll(document.getElementById("layer_list").getTickAll());
+            document.getElementById("layer_tools").setTickAll(
+                document.getElementById("layer_list").getTickAll()
+            );
         });
         this.appendChild(tick);
 
@@ -35,7 +37,9 @@ class EdytorLayerListLayer extends HTMLElement {
         
         typ.setAttribute('edytor-layer-id', this.getAttribute("edytor-layer-id"));
         typ.addEventListener('click', function (e) {
-            document.getElementById('edytor').selectLayer(parseInt(this.getAttribute('edytor-layer-id')));
+            document.getElementById('edytor').selectLayer(
+                parseInt(this.getAttribute('edytor-layer-id'))
+            );
         });
         this.appendChild(typ);
 
@@ -48,43 +52,55 @@ class EdytorLayerListLayer extends HTMLElement {
 
         var btnLock = this.#createButton('fa-lock', 'locked');
         btnLock.addEventListener('click', function (e) {
-            document.getElementById('edytor').toggleLayerLocked(parseInt(this.getAttribute('edytor-layer-id')));
+            document.getElementById('edytor').toggleLayerLocked(
+                parseInt(this.getAttribute('edytor-layer-id'))
+            );
         });
         this.appendChild(btnLock);
 
         var btnHide = this.#createButton('fa-eye-slash', 'hidden');
         btnHide.addEventListener('click', function (e) {
-            document.getElementById('edytor').toggleLayerHidden(parseInt(this.getAttribute('edytor-layer-id')));
+            document.getElementById('edytor').toggleLayerHidden(
+                parseInt(this.getAttribute('edytor-layer-id'))
+            );
         });
         this.appendChild(btnHide);
 
         var btnMoveUp = this.#createButton('fa-arrow-up', 'moveup');
         btnMoveUp.addEventListener('click', function (e) {
-            document.getElementById('edytor').moveLayerUp(parseInt(this.getAttribute('edytor-layer-id')));
+            document.getElementById('edytor').moveLayerUp(
+                parseInt(this.getAttribute('edytor-layer-id'))
+            );
         });
         this.appendChild(btnMoveUp);
 
         var btnMoveDown = this.#createButton('fa-arrow-down', 'movedown');
         btnMoveDown.addEventListener('click', function (e) {
-            document.getElementById('edytor').moveLayerDown(parseInt(this.getAttribute('edytor-layer-id')));
+            document.getElementById('edytor').moveLayerDown(
+                parseInt(this.getAttribute('edytor-layer-id'))
+            );
         });
         this.appendChild(btnMoveDown);
 
         var btnDelete = this.#createButton('fa-trash', 'delete');
         btnDelete.addEventListener('click', function (e) {
-            document.getElementById('edytor').deleteLayer(parseInt(this.getAttribute('edytor-layer-id')));
+            document.getElementById('edytor').deleteLayer(
+                parseInt(this.getAttribute('edytor-layer-id'))
+            );
         });
         this.appendChild(btnDelete);
     }
 
     setHidden(h) {
-        document.getElementById("layer_hidden_" + this.getAttribute("edytor-layer-id")).classList.remove((h ? 'edytor_toggle_off' : 'edytor_toggle_on'));
-        document.getElementById("layer_hidden_" + this.getAttribute("edytor-layer-id")).classList.add((h ? 'edytor_toggle_on' : 'edytor_toggle_off'));
+        var layerHidden = document.getElementById("layer_hidden_" + this.getAttribute("edytor-layer-id"));
+        layerHidden.classList.remove((h ? 'edytor_toggle_off' : 'edytor_toggle_on'));
+        layerHidden.classList.add((h ? 'edytor_toggle_on' : 'edytor_toggle_off'));
     }
 
     setLocked(l) {
-        document.getElementById("layer_locked_" + this.getAttribute("edytor-layer-id")).classList.remove((l ? 'edytor_toggle_off' : 'edytor_toggle_on'));
-        document.getElementById("layer_locked_" + this.getAttribute("edytor-layer-id")).classList.add((l ? 'edytor_toggle_on' : 'edytor_toggle_off'));
+        var layerLocked = document.getElementById("layer_locked_" + this.getAttribute("edytor-layer-id"));
+        layerLocked.classList.remove((l ? 'edytor_toggle_off' : 'edytor_toggle_on'));
+        layerLocked.classList.add((l ? 'edytor_toggle_on' : 'edytor_toggle_off'));
     }
 
     tick(b) {

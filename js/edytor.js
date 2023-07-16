@@ -1,15 +1,12 @@
 class Edytor extends HTMLElement {
-    // Tools
     #toolNames = [];
     #tool = "";
 
-    // Colours
     #colourFgNames = [];
     #colourBgNames = [];
     #colourFg = "white";
     #colourBg = "black";
 
-    // Layers
     #lastLayerNum = 0;
     #layer = 0;
 
@@ -17,31 +14,7 @@ class Edytor extends HTMLElement {
         super();
     }
 
-    #el_tool(n) {
-        return document.getElementById('tool_' + n);
-    }
-
-    #el_pad_layer() {
-        return document.getElementById('pad_layer');
-    }
-
-    #el_colour_bg(n) {
-        return document.getElementById('colour_bg_' + n);
-    }
-
-    #el_colour_fg(n) {
-        return document.getElementById('colour_fg_' + n);
-    }
-
-    #el_layer_container() {
-        return document.getElementById('layer_container');
-    }
-
-    #el_layer_list() {
-        return document.getElementById('layer_list');
-    }
-
-    __initTool(s) {
+    initTool(s) {
         this.#toolNames.push(s);
     }
 
@@ -53,7 +26,8 @@ class Edytor extends HTMLElement {
         }
     }
 
-    __newWorkspace(w, h, m) {
+
+    newWorkspace(w, h, m) {
         var ws = document.getElementById("workspace");
         if (ws != null) {
             for (var i = 0; i <= this.#lastLayerNum; i++) {
@@ -73,7 +47,7 @@ class Edytor extends HTMLElement {
         this.addPixelLayer();
     }
 
-    __scaleWorkspace(w, h) {
+    scaleWorkspace(w, h) {
         var ws = document.getElementById("workspace");
         if (ws != null) {
             for (var i = 0; i <= this.#lastLayerNum; i++) {
@@ -85,7 +59,7 @@ class Edytor extends HTMLElement {
         }
     }
 
-    __extendWorkspaceSide(s, v) {
+    extendWorkspaceSide(s, v) {
         var ws = document.getElementById("workspace");
         if (ws != null) {
             for (var i = 0; i <= this.#lastLayerNum; i++) {
@@ -104,7 +78,7 @@ class Edytor extends HTMLElement {
         }
     }
 
-    __shrinkWorkspaceSide(s, v) {
+    shrinkWorkspaceSide(s, v) {
         var ws = document.getElementById("workspace");
         if (ws != null) {
             var nw = parseInt(ws.getAttribute("image-width"));
@@ -135,42 +109,26 @@ class Edytor extends HTMLElement {
         }
     }
 
-    __getSelectedTool() {
+    getSelectedTool() {
         return this.#tool;
     }
 
-    __getSelectedLayer() {
+    getSelectedLayer() {
         return this.#layer;
     }
 
-    __getSelectedBgColour() {
+    getSelectedBgColour() {
         return this.#colourBg;
     }
 
-    __getSelectedFgColour() {
+    getSelectedFgColour() {
         return this.#colourFg;
-    }
-
-    __getPadCanvas() {
-        return this.#el_pad_layer().getCanvas();
     }
 
     __centerScroll() {
         window.scrollTo(window.innerWidth / 2, window.innerHeight / 2);
     }
 
-    __selectTool(n) {
-        if (this.#tool != "") {
-            this.#el_tool(this.#tool).toggleOff();
-        }
-        this.#tool = n;
-        this.#el_tool(n).toggleOn();
-        if (this.#el_tool(n).RequiresPad) {
-            this.#el_pad_layer().show();
-        } else {
-            this.#el_pad_layer().hide();
-        }
-    }
 
     __setColour(type, s) {
         if (type == "bg") {
@@ -202,9 +160,9 @@ class Edytor extends HTMLElement {
         }
     }
 
-    __selectColourFromXY(type, x, y) {
+    selectColourFromXY(type, x, y) {
         for (var i = this.#lastLayerNum; i > 0; i--) {
-            var c = this.#el_layer_container().getColourFromXY(i, x, y);
+            var c = document.getElementById('layer_container').getColourFromXY(i, x, y);
             if (c != "") {
                 this.selectColour(type, c);
                 document.getElementById('colour_picker_' + type).value = c;
@@ -212,71 +170,108 @@ class Edytor extends HTMLElement {
         }
     }
 
+    selectTool(n) {
+        if (this.#tool != "") {
+            document.getElementById('tool_' + this.#tool).toggleOff();
+        }
+
+        this.#tool = n;
+        var tool = document.getElementById('tool_' + this.#tool);
+        var pad = document.getElementById('pad_layer');
+
+        tool.toggleOn();
+        if (tool.RequiresPad) {
+            pad.show();
+        } else {
+            pad.hide();
+        }
+
+        tool.selectedCallback();
+    }
+
     addVectorLayer() {
         this.#lastLayerNum++;
-        this.#el_layer_container().addVectorLayer(this.#lastLayerNum);
-        this.#el_layer_list().addVectorLayer(this.#lastLayerNum);
+        document.getElementById('layer_container').addVectorLayer(this.#lastLayerNum);
+        document.getElementById('layer_list').addVectorLayer(this.#lastLayerNum);
     }
 
     addPixelLayer() {
         this.#lastLayerNum++;
-        this.#el_layer_container().addPixelLayer(this.#lastLayerNum);
-        this.#el_layer_list().addPixelLayer(this.#lastLayerNum);
+        document.getElementById('layer_container').addPixelLayer(this.#lastLayerNum);
+        document.getElementById('layer_list').addPixelLayer(this.#lastLayerNum);
         this.selectLayer(this.#lastLayerNum);
     }
 
     toggleLayerHidden(num) {
-        this.#el_layer_list().setLayerHidden(num, this.#el_layer_container().toggleLayerHidden(num));
+        document.getElementById('layer_list').setLayerHidden(
+            num,
+            document.getElementById('layer_container').toggleLayerHidden(num)
+        );
     }
 
     toggleLayerLocked(num) {
-        this.#el_layer_list().setLayerLocked(num, this.#el_layer_container().toggleLayerLocked(num));
+        document.getElementById('layer_list').setLayerLocked(
+            num,
+            document.getElementById('layer_container').toggleLayerLocked(num)
+        );
     }
 
     deleteLayer(num) {
-        this.#el_layer_container().deleteLayer(num);
-        this.#el_layer_list().deleteLayer(num);
+        document.getElementById('layer_container').deleteLayer(num);
+        document.getElementById('layer_list').deleteLayer(num);
         if (num == this.#layer) {
             this.selectLayer(0);
         }
     }
 
     extendLayerSide(num, side, val) {
-        this.#el_layer_container().extendLayerSide(num, side, val);
+        document.getElementById('layer_container').extendLayerSide(num, side, val);
     }
 
     shrinkLayerSide(num, side, val) {
-        this.#el_layer_container().shrinkLayerSide(num, side, val);
+        document.getElementById('layer_container').shrinkLayerSide(num, side, val);
     }
 
     scaleLayer(num, width, height) {
-        this.#el_layer_container().scaleLayer(num, width, height);
+        document.getElementById('layer_container').scaleLayer(num, width, height);
     }
 
     moveLayerUp(num) {
-        this.#el_layer_container().swapLayers(num, this.#el_layer_list().moveLayerUp(num));
+        document.getElementById('layer_container').swapLayers(
+            num,
+            document.getElementById('layer_list').moveLayerUp(num)
+        );
     }
 
     moveLayerDown(num) {
-        this.#el_layer_container().swapLayers(num, this.#el_layer_list().moveLayerDown(num));
+        document.getElementById('layer_container').swapLayers(
+            num,
+            document.getElementById('layer_list').moveLayerDown(num)
+        );
     }
 
     toggleLayersLocked(numList) {
         if (numList.length > 0) {
-            var l = this.#el_layer_container().getLayerLocked(numList[0]);
+            var layerContainer = document.getElementById('layer_container');
+            var layerList = document.getElementById('layer_list');
+
+            var l = layerContainer.getLayerLocked(numList[0]);
             for (var i = 0; i < numList.length; i++) {
-                this.#el_layer_container().setLayerLocked(numList[i], !l);
-                this.#el_layer_list().setLayerLocked(numList[i], !l);
+                layerContainer.setLayerLocked(numList[i], !l);
+                layerList.setLayerLocked(numList[i], !l);
             }
         }
     }
 
     toggleLayersHidden(numList) {
         if (numList.length > 0) {
-            var h = this.#el_layer_container().getLayerHidden(numList[0]);
+            var layerContainer = document.getElementById('layer_container');
+            var layerList = document.getElementById('layer_list');
+
+            var h = layerContainer.getLayerHidden(numList[0]);
             for (var i = 0; i < numList.length; i++) {
-                this.#el_layer_container().setLayerHidden(numList[i], !h);
-                this.#el_layer_list().setLayerHidden(numList[i], !h);
+                layerContainer.setLayerHidden(numList[i], !h);
+                layerList.setLayerHidden(numList[i], !h);
             }
         }
     }
@@ -289,10 +284,10 @@ class Edytor extends HTMLElement {
 
     selectLayer(num) {
         this.#layer = num;
-        this.#el_layer_list().selectLayer(num);
+        document.getElementById('layer_list').selectLayer(num);
     }
 
-    __showError(e) {
+    showError(e) {
         document.getElementById("logs").addError(e);
     }
 

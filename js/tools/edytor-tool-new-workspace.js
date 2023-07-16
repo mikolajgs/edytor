@@ -1,29 +1,31 @@
 class EdytorNewWorkspaceTool extends EdytorTool {
     RequiresPad = true;
 
+    isMultiClick() {
+        return false;
+    }
+
+
     constructor() {
         super();
     }
 
     connectedCallback() {
-        super._init('new-workspace', 'fa-file', 'New');
-        super._addProperty("Width", "width", "1920", null, null, false);
-        super._addProperty("Height", "height", "1080", null, null, false);
+        super.init('new-workspace', 'fa-file', 'New');
+        super.addProperty("Width", "width", "1920", null, null, false);
+        super.addProperty("Height", "height", "1080", null, null, false);
         var self = this;
-        super._addButton("Start new image", function () {
-            var w = parseInt(self.__getProperty("width"));
-            var h = parseInt(self.__getProperty("height"));
+        super.addButton("Start new image", function () {
+            var w = parseInt(self.getProperty("width"));
+            var h = parseInt(self.getProperty("height"));
             if (!isNaN(w) && !isNaN(h)) {
-                document.getElementById('edytor').__newWorkspace(w, h, 400);
+                document.getElementById('edytor').newWorkspace(w, h, 400);
             } else {
-                document.getElementById("edytor").__showError("Invalid width or height");
+                document.getElementById("edytor").showError("Invalid width or height");
             }
         });
     }
 
-    isMultiClick() {
-        return false;
-    }
 
     toggleOn() {
         super.toggleOn();
@@ -33,27 +35,29 @@ class EdytorNewWorkspaceTool extends EdytorTool {
         super.toggleOff();
     }
 
-    __getProperty(name) {
-        return super._getProperty(name);
+
+    getProperty(name) {
+        return super.getProperty(name);
     }
 
-    __drawStart(x, y, shiftKey, altKey) {
+
+    startedCallback(x, y) {
         return false;
     }
 
-    __drawPoint(x, y) {
+    movedCallback(x, y, shiftKey, altKey) {
         return false;
     }
 
-    __drawMove(x, y, shiftKey, altKey) {
+    endedCallback(x, y, shiftKey, altKey) {
         return false;
     }
 
-    __drawEnd(x, y, shiftKey, altKey) {
+    cancelledCallback() {
         return false;
     }
 
-    __drawCancel() {
+    selectedCallback() {
         return false;
     }
 }

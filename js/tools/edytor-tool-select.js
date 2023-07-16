@@ -197,20 +197,20 @@ class EdytorSelectTool extends EdytorTool {
 
         this.#setInputArea(x, y);
         this.#setClearArea();
+        super._clearPad(this); console.log("x,y: "+x+","+y+" points: "+this.#points+" _inputArea:"+this._inputArea);
 
         this.#points.push([x, y]);
 
         if (this.#points.length == 2) {
             this.#padCtx = document.getElementById('layer_' + layer).getContext('2d');
-            this.#setCtxStyle(this.#ctx);
+            this.#setCtxStyle(this.#padCtx);
             this.#padCtx.beginPath();
             this.#padCtx.moveTo(this.#points[0][0], this.#points[0][1]);
             this.#padCtx.lineTo(x, y);
             this.#padCtx.stroke();
         }
         if (this.#points.length > 2) {
-            this.#padCtx.lineTo(x, y);
-            this.#padCtx.stroke();
+            this.#drawCtxPolygon(this.#padCtx);
         }
     }
 
@@ -235,10 +235,10 @@ class EdytorSelectTool extends EdytorTool {
         }
 
         switch (super._getProperty("shape")) {
-            case "rectangle": this.#drawCtxRectangle(this.#padCtx); break;
+            case "rectangle":         this.#drawCtxRectangle(this.#padCtx); break;
             case "rounded_rectangle": this.#drawCtxRoundedRectangle(this.#padCtx); break;
-            case "ellipse": this.#drawCtxEllipse(this.#padCtx); break;
-            case "free": this.#drawMoveFree(x, y); break;
+            case "ellipse":           this.#drawCtxEllipse(this.#padCtx); break;
+            case "free":              this.#drawMoveFree(x, y); break;
         }
     }
 
@@ -264,14 +264,13 @@ class EdytorSelectTool extends EdytorTool {
         this.#setCtxStyle(ctx);
 
         switch (super._getProperty("shape")) {
-            case "rectangle": this.#drawCtxRectangle(ctx); break;
+            case "rectangle":         this.#drawCtxRectangle(ctx); break;
             case "rounded_rectangle": this.#drawCtxRoundedRectangle(ctx); break;
-            case "ellipse": this.#drawCtxEllipse(ctx); break;
-            case "free": this.#drawEndFree(); break;
-            case "polygon":
-                this.#drawCtxPolygon(ctx);
-                this.#points = [];
-                break;
+            case "ellipse":           this.#drawCtxEllipse(ctx); break;
+            case "free":              this.#drawEndFree(); break;
+            case "polygon":           this.#drawCtxPolygon(ctx);
+                                      this.#points = [];
+                                      break;
         }
     }
 

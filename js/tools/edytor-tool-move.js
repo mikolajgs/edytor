@@ -1,26 +1,19 @@
 class EdytorMoveTool extends EdytorTool {
     RequiresPad = true;
 
+    isMultiClick() {
+        return false;
+    }
+
+
     constructor() {
         super();
     }
 
     connectedCallback() {
-        super._init('move', 'fa-up-down-left-right', 'Move');
-        super._addProperty("stroke", "Width", "width", "3", null);
-        super._addProperty("stroke", "Opacity", "opacity", "100%", null);
-        super._addProperty("stroke", "Linecap", "linecap", "", {
-            "butt": "butt",
-            "square": "square",
-            "round": "round"
-        });
-        super._addProperty("stroke", "Linejoin", "linejoin", "", {
-            "miter": "miter",
-            "round": "round",
-            "bevel": "bevel"
-        });
-        super._addProperty("stroke", "Dasharray", "dasharray", "5", null);
+        super.init('move', 'fa-up-down-left-right', 'Move');
     }
+
 
     toggleOn() {
         super.toggleOn();
@@ -28,6 +21,27 @@ class EdytorMoveTool extends EdytorTool {
 
     toggleOff() {
         super.toggleOff();
+    }
+
+
+    startedCallback(x, y) {
+        return false;
+    }
+
+    movedCallback(x, y, shiftKey, altKey) {
+        return false;
+    }
+
+    endedCallback(x, y, shiftKey, altKey) {
+        return false;
+    }
+
+    cancelledCallback() {
+        return false;
+    }
+
+    selectedCallback() {
+        return false;
     }
 }
 

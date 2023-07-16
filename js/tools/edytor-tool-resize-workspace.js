@@ -1,13 +1,18 @@
 class EdytorResizeWorkspaceTool extends EdytorTool {
     RequiresPad = true;
 
+    isMultiClick() {
+        return false;
+    }
+
+
     constructor() {
         super();
     }
 
     connectedCallback() {
-        super._init('resize-workspace', 'fa-arrows-left-right', 'Resize');
-        super._addProperty("Operation", "operation", "", {
+        super.init('resize-workspace', 'fa-arrows-left-right', 'Resize');
+        super.addProperty("Operation", "operation", "", {
             "extend_side": "extend",
             "shrink_side": "shrink",
             "scale": "scale"
@@ -17,46 +22,43 @@ class EdytorResizeWorkspaceTool extends EdytorTool {
             "scale": ["width", "height"],
             "_": ["side", "value", "width", "height"]
         }, false);
-        super._addProperty("Side", "side", "", {
+        super.addProperty("Side", "side", "", {
             "left": "left",
             "top": "top",
             "right": "right",
             "bottom": "bottom"
         }, null, false);
-        super._addProperty("Value", "value", "50", null, null, false);
-        super._addProperty("Width", "width", "1920", null, null, true);
-        super._addProperty("Height", "height", "1080", null, null, true);
+        super.addProperty("Value", "value", "50", null, null, false);
+        super.addProperty("Width", "width", "1920", null, null, true);
+        super.addProperty("Height", "height", "1080", null, null, true);
         var self = this;
-        super._addButton("Resize", function () {
+        super.addButton("Resize", function () {
             var v = parseInt(self.__getProperty("value"));
             var w = parseInt(self.__getProperty("width"));
             var h = parseInt(self.__getProperty("height"));
-            var s = self.__getProperty("side");
-            if (self.__getProperty("operation") == "extend_side") {
+            var s = self.getProperty("side");
+            if (self.ggetProperty("operation") == "extend_side") {
                 if (!isNaN(v)) {
-                    document.getElementById('edytor').__extendWorkspaceSide(s, v);
+                    document.getElementById('edytor').extendWorkspaceSide(s, v);
                 } else {
-                    document.getElementById("edytor").__showError("Invalid value");
+                    document.getElementById("edytor").showError("Invalid value");
                 }
-            } else if (self.__getProperty("operation") == "shrink_side") {
+            } else if (self.getProperty("operation") == "shrink_side") {
                 if (!isNaN(v)) {
-                    document.getElementById('edytor').__shrinkWorkspaceSide(s, v);
+                    document.getElementById('edytor').shrinkWorkspaceSide(s, v);
                 } else {
-                    document.getElementById("edytor").__showError("Invalid value");
+                    document.getElementById("edytor").showError("Invalid value");
                 }
             } else {
                 if (!isNaN(w) && !isNaN(h)) {
-                    document.getElementById('edytor').__scaleWorkspace(w, h);
+                    document.getElementById('edytor').scaleWorkspace(w, h);
                 } else {
-                    document.getElementById("edytor").__showError("Invalid width or height");
+                    document.getElementById("edytor").showError("Invalid width or height");
                 }
             }
         });
     }
 
-    isMultiClick() {
-        return false;
-    }
 
     toggleOn() {
         super.toggleOn();
@@ -67,27 +69,28 @@ class EdytorResizeWorkspaceTool extends EdytorTool {
     }
 
 
-    __getProperty(name) {
+    getProperty(name) {
         return super._getProperty(name);
     }
 
-    __drawStart(x, y, shiftKey, altKey) {
+
+    startedCallback(x, y) {
         return false;
     }
 
-    __drawPoint(x, y) {
+    movedCallback(x, y, shiftKey, altKey) {
         return false;
     }
 
-    __drawMove(x, y, shiftKey, altKey) {
+    endedCallback(x, y, shiftKey, altKey) {
         return false;
     }
 
-    __drawEnd(x, y, shiftKey, altKey) {
+    cancelledCallback() {
         return false;
     }
 
-    __drawCancel() {
+    selectedCallback() {
         return false;
     }
 }

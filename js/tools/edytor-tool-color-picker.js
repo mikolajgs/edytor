@@ -1,18 +1,20 @@
 class EdytorColorPickerTool extends EdytorTool {
     RequiresPad = true;
 
+    isMultiClick() {
+        return false;
+    }
+
+
     constructor() {
         super();
     }
 
     connectedCallback() {
-        super._init('color_picker', 'fa-eye-dropper', 'Color Picker');
+        super.init('color_picker', 'fa-eye-dropper', 'Color Picker');
     }
 
-    isMultiClick() {
-        return false;
-    }
-
+    
     toggleOn() {
         super.toggleOn();
     }
@@ -22,15 +24,24 @@ class EdytorColorPickerTool extends EdytorTool {
     }
 
 
-    __drawStart(x, y) {
-        document.getElementById("edytor").__selectColourFromXY("fg", x, y);
+    startedCallback(x, y) {
+        document.getElementById("edytor").selectColourFromXY("fg", x, y);
     }
-    __drawMove(x, y, shiftKey, altKey) {
-        document.getElementById("edytor").__selectColourFromXY("fg", x, y);
+
+    movedCallback(x, y, shiftKey, altKey) {
+        document.getElementById("edytor").selectColourFromXY("fg", x, y);
     }
-    __drawEnd(x, y, shiftKey, altKey) {
+
+    endedCallback(x, y, shiftKey, altKey) {
+        return false;
     }
-    __drawCancel() {
+
+    cancelledCallback() {
+        return false;
+    }
+
+    selectedCallback() {
+        return false;
     }
 }
 

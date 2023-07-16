@@ -5,46 +5,50 @@ class EdytorPad extends HTMLCanvasElement {
         super();
     }
 
-    #attachEvents() {
+    #attachCallbacks() {
         var scope = this;
+
         this.addEventListener('mousedown', function (e) {
             scope.#mouseDown = true;
-            var toolName = document.getElementById('edytor').__getSelectedTool();
+            var toolName = document.getElementById('edytor').getSelectedTool();
             var tool = document.getElementById('tool_' + toolName);
             if (!tool.isMultiClick()) {
-                tool.__drawStart(e.layerX, e.layerY, e.shiftKey, e.altKey);
+                tool.startedCallback(e.layerX, e.layerY, e.shiftKey, e.altKey);
             }
         });
+
         this.addEventListener('mousemove', function (e) {
-            var toolName = document.getElementById('edytor').__getSelectedTool();
+            var toolName = document.getElementById('edytor').getSelectedTool();
             var tool = document.getElementById('tool_' + toolName);
             if ((scope.#mouseDown && !tool.isMultiClick()) || tool.isMultiClick()) {
-                tool.__drawMove(e.layerX, e.layerY, e.shiftKey, e.altKey);
+                tool.movedCallback(e.layerX, e.layerY, e.shiftKey, e.altKey);
             }
             document.getElementById("edit_info").setPosition(e.offsetX, e.offsetY);
         });
+
         this.addEventListener('mouseup', function (e) {
             scope.#mouseDown = false;
-            var toolName = document.getElementById('edytor').__getSelectedTool();
+            var toolName = document.getElementById('edytor').getSelectedTool();
             var tool = document.getElementById('tool_' + toolName);
             if (!tool.isMultiClick()) {
-                tool.__drawEnd(e.layerX, e.layerY, e.shiftKey, e.altKey);
+                tool.endedCallback(e.layerX, e.layerY, e.shiftKey, e.altKey);
             } else {
-                tool.__drawPoint(e.layerX, e.layerY);
+                tool.pointedCallback(e.layerX, e.layerY);
             }
         });
+
         this.addEventListener('mouseout', function (e) {
             scope.#mouseDown = false;
-            var toolName = document.getElementById('edytor').__getSelectedTool();
+            var toolName = document.getElementById('edytor').getSelectedTool();
             var tool = document.getElementById('tool_' + toolName);
-            tool.__drawCancel();
+            tool.cancelledCallback();
         });
+
         this.addEventListener('dblclick', function (e) {
-            scope.#mouseDown = false;
-            var toolName = document.getElementById('edytor').__getSelectedTool();
+            var toolName = document.getElementById('edytor').getSelectedTool();
             var tool = document.getElementById('tool_' + toolName);
             if (tool.isMultiClick()) {
-                tool.__drawEnd(e.layerX, e.layerY);
+                tool.endedCallback(e.layerX, e.layerY, e.shiftKey, e.altKey);
             }
         });
     }
@@ -63,7 +67,7 @@ class EdytorPad extends HTMLCanvasElement {
         this.style.zIndex = 403;
         this.style.display = 'none';
 
-        this.#attachEvents();
+        this.#attachCallbacks();
     }
 
     setSize(w, h) {

@@ -32,11 +32,13 @@ class EdytorWorkspace extends HTMLElement {
 
         document.getElementById("edit_info").setSize(imageWidth, imageHeight);
 
-        document.getElementById("workspace_container").setPosition(containerMargin);
-        document.getElementById("workspace_container").setSize(imageWidth, imageHeight);
+        var workspaceContainer = document.getElementById("workspace_container");
+        workspaceContainer.setPosition(containerMargin);
+        workspaceContainer.setSize(imageWidth, imageHeight);
 
-        document.getElementById("workspace_rulers").setPosition(containerMargin, imageWidth, imageHeight);
-        document.getElementById("workspace_rulers").setSize(imageWidth, imageHeight);
+        var workspaceRulers = document.getElementById("workspace_rulers");
+        workspaceRulers.setPosition(containerMargin, imageWidth, imageHeight);
+        workspaceRulers.setSize(imageWidth, imageHeight);
     }
 }
 

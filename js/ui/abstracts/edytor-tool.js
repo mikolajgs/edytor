@@ -7,7 +7,7 @@ class EdytorTool extends HTMLElement {
     this._init('tool', 'lbl');
   }
 
-  _init(name, className, alt) {
+  init(name, className, alt) {
     this.id = "tool_" + name;
     this.setAttribute("edytor-tool-name", name);
     this.className = "edytor_toggle_off edytor_sidebar_toggle edytor_tool";
@@ -15,10 +15,10 @@ class EdytorTool extends HTMLElement {
 
     this.addEventListener('click', function () {
       document.getElementById("edit_info").setPosition(0, 0);
-      document.getElementById('edytor').__selectTool(name);
+      document.getElementById('edytor').selectTool(name);
     });
 
-    document.getElementById('edytor').__initTool(name);
+    document.getElementById('edytor').initTool(name);
 
     var d = document.createElement('edytor-properties');
     d.id = "tool_config_" + name;
@@ -31,99 +31,119 @@ class EdytorTool extends HTMLElement {
     d.appendChild(title);
   }
 
-  _addProperty(label, name, defval, vals, onchange, hiddenOnStart) {
-    document.getElementById("tool_config_" + this.getAttribute("edytor-tool-name"))._addProperty("tool_property_" + this.getAttribute("edytor-tool-name"), label, name, defval, vals, onchange, hiddenOnStart);
+  getToolCfgId() {
+    return "tool_config_" + this.getAttribute("edytor-tool-name");
   }
 
-  _addButton(label, fn) {
-    document.getElementById("tool_config_" + this.getAttribute("edytor-tool-name"))._addButton("tool_property_" + this.getAttribute("edytor-tool-name"), label, fn);
+  getToolPropertyIdPrefix() {
+    return "tool_property_" + this.getAttribute("edytor-tool-name");
   }
 
-  _getProperty(name) {
-    var p = document.getElementById("tool_property_" + this.getAttribute("edytor-tool-name") + "_" + name);
+  getToolPropertyId(name) {
+    return this.getToolPropertyIdPrefix()+"_"+name;
+  }
+
+  toggleOn() {
+    this.classList.remove('edytor_toggle_off');
+    this.classList.add('edytor_toggle_on');
+    document.getElementById(this.getToolCfgId()).style.display = '';
+  }
+
+  toggleOff() {
+    this.classList.remove('edytor_toggle_on');
+    this.classList.add('edytor_toggle_off');
+    document.getElementById(this.getToolCfgId()).style.display = 'none';
+  }
+
+  addProperty(label, name, defval, vals, onchange, hiddenOnStart) {
+    document.getElementById(this.getToolCfgId()).addProperty(
+      this.getToolPropertyIdPrefix(), label, name, defval, vals, onchange, hiddenOnStart
+    );
+  }
+
+  addButton(label, fn) {
+    document.getElementById(this.getToolCfgId()).addButton(
+      this.getToolPropertyIdPrefix(), label, fn
+    );
+  }
+
+  getProperty(name) {
+    var p = document.getElementById(this.getToolPropertyId(name));
     if (p.tagName.toLowerCase() == "input" && p.getAttribute("type").toLowerCase() == "checkbox") {
       return (p.checked ? "true" : "false");
     }
     return p.value;
   }
 
-  _getLayer(showAlert) {
-    var layer = document.getElementById('edytor').__getSelectedLayer();
-    if (layer === 0 || layer === null) {
-      if (showAlert === true) {
-        document.getElementById("edytor").__showError("No layer has been selected");
+  getLayer(showError) {
+    var edytor = document.getElementById('edytor');
+
+    var layerNum = edytor.getSelectedLayer();
+    if (layerNum === 0 || layerNum === null) {
+      if (showError === true) {
+        edytor.showError("No layer has been selected");
       }
       return null;
     }
-    if (document.getElementById('layer_' + layer).tagName.toLowerCase() !== 'canvas') {
-      if (showAlert === true) {
-        document.getElementById("edytor").__showError("No pixel layer has been selected");
+
+    var layer = document.getElementById('layer_' + layerNum);
+    if (layer.tagName.toLowerCase() !== 'canvas') {
+      if (showError === true) {
+        edytor.showError("No pixel layer has been selected");
       }
       return null;
     }
-    if (document.getElementById('layer_' + layer).getAttribute("locked") === "true") {
-      if (showAlert === true) {
-        document.getElementById("edytor").__showError("Layer is locked for editing");
+    if (layer.getAttribute("locked") === "true") {
+      if (showError === true) {
+        edytor.showError("Layer is locked for editing");
       }
       return null;
     }
-    if (document.getElementById('layer_' + layer).style.display === 'none') {
+    if (layer.style.display === 'none') {
       return null;
     }
     return layer;
   }
 
-  _getLowerValue(candidate, current) {
-    if (candidate < 0) {
-      return 0;
-    }
-    if (candidate < current) {
-      return candidate;
-    }
-    return current;
+
+  // Functions related to drawing, clearing, points, input area etc.
+  calculateDirtyArea(curDirtyArea, x1, y1, x2, y2, w, h, dx, dy) {
+    var newDirtyArea = [];
+    newDirtyArea[0] = Math.min((x1-dx < 0 ? 0 : x1-dx), curDirtyArea[0]);
+    newDirtyArea[1] = Math.min((y1-dy < 0 ? 0 : y1-dy), curDirtyArea[1]);
+    newDirtyArea[2] = Math.max((x2+dx > w ? w : x2+dx), curDirtyArea[2]);
+    newDirtyArea[3] = Math.max((y2+dy > h ? h : y2+dy), curDirtyArea[3]);
+    return newDirtyArea;
   }
 
-  _getHigherValue(candidate, current, max) {
-    if (candidate > max) {
-      return max;
-    }
-    if (candidate > current) {
-      return candidate;
-    }
-    return current;
+  clearPad() {
+    document.getElementById('pad_layer').getContext('2d').clearRect(
+      0, 0,
+      document.getElementById('pad_layer').width,
+      document.getElementById('pad_layer').height
+    );
   }
 
-  _setClearArea(o, x, y, w, h, dx, dy) {
-    o['_clearArea'][0] = this._getLowerValue(x - dx, o['_clearArea'][0]);
-    o['_clearArea'][1] = this._getLowerValue(y - dy, o['_clearArea'][1]);
-    o['_clearArea'][2] = this._getHigherValue(x + dx, o['_clearArea'][2], w);
-    o['_clearArea'][3] = this._getHigherValue(y + dy, o['_clearArea'][3], h);
+  clearPadArea(dirtyArea) {
+    document.getElementById('pad_layer').getContext('2d').clearRect(
+      dirtyArea[0],
+      dirtyArea[1],
+      dirtyArea[2] - dirtyArea[0],
+      dirtyArea[3] - dirtyArea[1]
+    );
   }
 
-  _setClearAreaFromInputArea(o, w, h, dx, dy) {
-    o['_inputArea'][0] = this._getLowerValue(o['_inputArea'][0] - dx, o['_inputArea'][0]);
-    o['_inputArea'][1] = this._getLowerValue(o['_inputArea'][1] - dy, o['_inputArea'][1]);
-    o['_inputArea'][2] = this._getHigherValue(o['_inputArea'][2] + dx, o['_inputArea'][2], w);
-    o['_inputArea'][3] = this._getHigherValue(o['_inputArea'][3] + dy, o['_inputArea'][3], h);
-  }
-
-  _resetClearArea(o) {
-    o['_clearArea'] = [999999, 999999, 0, 0];
-  }
-
-  _resetInputArea(o) {
-    o['_inputArea'] = [999999, 999999, 0, 0];
-  }
-
-  _setInputArea(o, x1, y1, x2, y2, equalRatio, drawFromCenter) {
+  calculateShapeArea(curShapeArea, x1, y1, x2, y2, equalRatio, drawFromCenter) {
     if (drawFromCenter) {
       var w = Math.abs(x2 - x1);
       var h = (equalRatio ? Math.abs(x2 - x1) : Math.abs(y2 - y1));
-      o['_inputArea'][0] = x1 - w;
-      o['_inputArea'][1] = y1 - h;
-      o['_inputArea'][2] = x1 + w;
-      o['_inputArea'][3] = y1 + h;
-      return;
+
+      return [
+        x1 - w,
+        y1 - h,
+        x1 + w,
+        y1 + h
+      ];
     }
 
     if (equalRatio) {
@@ -133,38 +153,11 @@ class EdytorTool extends HTMLElement {
         y2 = y1 - Math.abs(x2 - x1);
       }
     }
-    o['_inputArea'][0] = (x1 < x2 ? x1 : x2);
-    o['_inputArea'][1] = (y1 < y2 ? y1 : y2);
-    o['_inputArea'][2] = (x1 < x2 ? x2 : x1);
-    o['_inputArea'][3] = (y1 < y2 ? y2 : y1);
-  }
-
-  _clearPad(o) {
-    if (o !== undefined) {
-      document.getElementById('pad_layer').getContext('2d').clearRect(
-        o['_clearArea'][0],
-        o['_clearArea'][1],
-        o['_clearArea'][2] - o['_clearArea'][0],
-        o['_clearArea'][3] - o['_clearArea'][1]
-      );
-      return;
-    }
-    document.getElementById('pad_layer').getContext('2d').clearRect(
-      0, 0,
-      document.getElementById('pad_layer').width,
-      document.getElementById('pad_layer').height
-    );
-  }
-
-  toggleOn() {
-    this.classList.remove('edytor_toggle_off');
-    this.classList.add('edytor_toggle_on');
-    document.getElementById("tool_config_" + this.getAttribute("edytor-tool-name")).style.display = '';
-  }
-
-  toggleOff() {
-    this.classList.remove('edytor_toggle_on');
-    this.classList.add('edytor_toggle_off');
-    document.getElementById("tool_config_" + this.getAttribute("edytor-tool-name")).style.display = 'none';
+    return [
+      (x1 < x2 ? x1 : x2),
+      (y1 < y2 ? y1 : y2),
+      (x1 < x2 ? x2 : x1),
+      (y1 < y2 ? y2 : y1)
+    ];
   }
 }

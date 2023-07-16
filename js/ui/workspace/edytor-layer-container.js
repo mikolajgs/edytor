@@ -1,4 +1,4 @@
-class EdytorLayerContainer extends HTMLElement {
+ class EdytorLayerContainer extends HTMLElement {
     #imageWidth = 0;
     #imageHeight = 0;
 
@@ -135,9 +135,13 @@ class EdytorLayerContainer extends HTMLElement {
         if (num1 == num2) {
             return;
         }
-        var z = document.getElementById("layer_" + num1).style.zIndex;
-        document.getElementById("layer_" + num1).style.zIndex = document.getElementById("layer_" + num2).style.zIndex;
-        document.getElementById("layer_" + num2).style.zIndex = z;
+
+        var layer1 = document.getElementById("layer_" + num1);
+        var layer2 = document.getElementById("layer_" + num2);
+
+        var z = layer1.style.zIndex;
+        layer1.style.zIndex = layer2.style.zIndex;
+        layer2.style.zIndex = z;
     }
 
     getColourFromXY(num, x, y) {
