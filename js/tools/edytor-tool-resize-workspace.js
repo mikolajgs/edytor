@@ -33,9 +33,9 @@ class EdytorResizeWorkspaceTool extends EdytorTool {
         super.addProperty("Height", "height", "1080", null, null, true);
         var self = this;
         super.addButton("Resize", function () {
-            var v = parseInt(self.__getProperty("value"));
-            var w = parseInt(self.__getProperty("width"));
-            var h = parseInt(self.__getProperty("height"));
+            var v = parseInt(self.getProperty("value"));
+            var w = parseInt(self.getProperty("width"));
+            var h = parseInt(self.getProperty("height"));
             var s = self.getProperty("side");
             if (self.ggetProperty("operation") == "extend_side") {
                 if (!isNaN(v)) {
@@ -70,7 +70,7 @@ class EdytorResizeWorkspaceTool extends EdytorTool {
 
 
     getProperty(name) {
-        return super._getProperty(name);
+        return super.getProperty(name);
     }
 
 

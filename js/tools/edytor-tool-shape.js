@@ -103,7 +103,7 @@ class EdytorShapeTool extends EdytorTool {
             this.#startPos[1],
             x,
             y,
-            (super._getProperty('1_to_1') == "true" ? true : false),
+            (super.getProperty('1_to_1') == "true" ? true : false),
             drawFromCenter
         );
     }
@@ -299,7 +299,7 @@ class EdytorShapeTool extends EdytorTool {
             return;
         }
 
-        var layerNum = super._getLayer(false);
+        var layerNum = super.getLayer(false);
         if (layerNum === null) {
             return;
         }

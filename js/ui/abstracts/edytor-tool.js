@@ -4,7 +4,7 @@ class EdytorTool extends HTMLElement {
   }
 
   connectedCallback() {
-    this._init('tool', 'lbl');
+    this.init('tool', 'lbl');
   }
 
   init(name, className, alt) {

@@ -129,15 +129,6 @@ class Edytor extends HTMLElement {
         window.scrollTo(window.innerWidth / 2, window.innerHeight / 2);
     }
 
-
-    __setColour(type, s) {
-        if (type == "bg") {
-            this.#colourBg = s;
-        } else {
-            this.#colourFg = s;
-        }
-    }
-
     selectColour(type, s) {
         if (type == "bg") {
             this.#colourBg = s;

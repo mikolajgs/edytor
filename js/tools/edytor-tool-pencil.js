@@ -47,7 +47,7 @@ class EdytorPencilTool extends EdytorTool {
 
 
     startedCallback(x, y, shiftKey, altKey) {
-        var layerNum = super._getLayer(true);
+        var layerNum = super.getLayer(true);
         if (layerNum === null) {
             return;
         }
@@ -67,20 +67,20 @@ class EdytorPencilTool extends EdytorTool {
     }
 
     movedCallback(x, y, shiftKey, altKey) {
-        var layerNum = super._getLayer(false);
+        var layerNum = super.getLayer(false);
         if (layerNum === null) {
             return;
         }
 
         var ctx = document.getElementById('layer_' + layerNum).getContext('2d');
 
-        if (super._getProperty('straight') == "diagonal-down") {
+        if (super.getProperty('straight') == "diagonal-down") {
             y = this.#startPos[1] + (x - this.#startPos[0]);
-        } else if (super._getProperty('straight') == "diagonal-up") {
+        } else if (super.getProperty('straight') == "diagonal-up") {
             y = this.#startPos[1] - (x - this.#startPos[0]);
-        } else if (super._getProperty('straight') == "vertical") {
+        } else if (super.getProperty('straight') == "vertical") {
             y = this.#startPos[1];
-        } else if (super._getProperty('straight') == "horizontal") {
+        } else if (super.getProperty('straight') == "horizontal") {
             x = this.#startPos[0];
         }
 
@@ -94,7 +94,7 @@ class EdytorPencilTool extends EdytorTool {
     }
 
     endedCallback(x, y, shiftKey, altKey) {
-        var layerNum = super._getLayer(false);
+        var layerNum = super.getLayer(false);
         if (layerNum === null) {
             return;
         }
