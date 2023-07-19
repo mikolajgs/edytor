@@ -246,8 +246,8 @@ class EdytorShapeTool extends EdytorTool {
 
     startedCallback(x, y, shiftKey, altKey) {
         // polygon does not use startedCallback
-        var layerNum = super.getLayer(true);
-        if (layerNum === null) {
+        var layer = super.getLayer(true);
+        if (layer === null) {
             return;
         }
 
@@ -259,7 +259,7 @@ class EdytorShapeTool extends EdytorTool {
         this.#startPos = [x, y];
 
         if (super.getProperty("shape") == "free") {
-            var ctx = document.getElementById('layer_' + layerNum).getContext('2d');
+            var ctx = layer.getContext('2d');
             this.#setCtxStyle(ctx);
             ctx.beginPath();
 
@@ -274,8 +274,8 @@ class EdytorShapeTool extends EdytorTool {
 
     pointedCallback(x, y) {
         // used by polygon only
-        var layerNum = super.getLayer(true);
-        if (layerNum === null) {
+        var layer = super.getLayer(true);
+        if (layer === null) {
             return;
         }
 
@@ -299,8 +299,8 @@ class EdytorShapeTool extends EdytorTool {
             return;
         }
 
-        var layerNum = super.getLayer(false);
-        if (layerNum === null) {
+        var layer = super.getLayer(false);
+        if (layer === null) {
             return;
         }
 
@@ -314,7 +314,7 @@ class EdytorShapeTool extends EdytorTool {
             }
         }
 
-        var layerCtx = document.getElementById('layer_' + layerNum).getContext('2d');
+        var layerCtx = layer.getContext('2d');
         var padCtx = document.getElementById('pad_layer').getContext('2d');
 
         switch (super.getProperty("shape")) {
@@ -326,8 +326,8 @@ class EdytorShapeTool extends EdytorTool {
     }
 
     endedCallback(x, y, shiftKey, altKey) {
-        var layerNum = super.getLayer(false);
-        if (layerNum === null) {
+        var layer = super.getLayer(false);
+        if (layer === null) {
             return;
         }
 
@@ -349,7 +349,7 @@ class EdytorShapeTool extends EdytorTool {
             }
         }
 
-        var ctx = document.getElementById('layer_' + layerNum).getContext('2d');
+        var ctx = layer.getContext('2d');
         this.#setCtxStyle(ctx);
 
         switch (super.getProperty("shape")) {
@@ -366,13 +366,13 @@ class EdytorShapeTool extends EdytorTool {
     cancelledCallback() {
         this.selectedCallback();
 
-        var layerNum = super.getLayer(false);
-        if (layerNum === null) {
+        var layer = super.getLayer(false);
+        if (layer === null) {
             return;
         }
 
         if (super.getProperty("shape") == "free") {
-            var ctx = document.getElementById('layer_' + layerNum).getContext('2d');
+            var ctx = layer.getContext('2d');
             ctx.closePath();
         }
     }

@@ -47,12 +47,12 @@ class EdytorPencilTool extends EdytorTool {
 
 
     startedCallback(x, y, shiftKey, altKey) {
-        var layerNum = super.getLayer(true);
-        if (layerNum === null) {
+        var layer = super.getLayer(true);
+        if (layer === null) {
             return;
         }
 
-        var ctx = document.getElementById('layer_' + layerNum).getContext('2d');
+        var ctx = layer.getContext('2d');
 
         ctx.globalCompositeOperation = 'source-over';
         ctx.strokeStyle = document.getElementById('edytor').getSelectedFgColour();
@@ -67,12 +67,12 @@ class EdytorPencilTool extends EdytorTool {
     }
 
     movedCallback(x, y, shiftKey, altKey) {
-        var layerNum = super.getLayer(false);
-        if (layerNum === null) {
+        var layer = super.getLayer(false);
+        if (layer === null) {
             return;
         }
 
-        var ctx = document.getElementById('layer_' + layerNum).getContext('2d');
+        var ctx = layer.getContext('2d');
 
         if (super.getProperty('straight') == "diagonal-down") {
             y = this.#startPos[1] + (x - this.#startPos[0]);
@@ -94,12 +94,12 @@ class EdytorPencilTool extends EdytorTool {
     }
 
     endedCallback(x, y, shiftKey, altKey) {
-        var layerNum = super.getLayer(false);
-        if (layerNum === null) {
+        var layer = super.getLayer(false);
+        if (layer === null) {
             return;
         }
 
-        document.getElementById('layer_' + layerNum).getContext('2d').closePath();
+        layer.getContext('2d').closePath();
     }
 
     cancelledCallback() {

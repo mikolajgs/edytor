@@ -107,8 +107,8 @@ class EdytorLineTool extends EdytorTool {
 
 
     startedCallback(x, y, shiftKey, altKey) {
-        var layerNum = super.getLayer(true);
-        if (layerNum === null) {
+        var layer = super.getLayer(true);
+        if (layer === null) {
             return;
         }
 
@@ -123,8 +123,8 @@ class EdytorLineTool extends EdytorTool {
     }
 
     movedCallback(x, y, shiftKey, altKey, useLayer) {
-        var layerNum = super.getLayer(false);
-        if (layerNum === null) {
+        var layer = super.getLayer(false);
+        if (layer === null) {
             return;
         }
 
@@ -137,7 +137,7 @@ class EdytorLineTool extends EdytorTool {
 
         if (x != this.#startPos[0] || y != this.#startPos[1]) {
             if (useLayer) {
-                var ctx = document.getElementById('layer_' + layerNum).getContext('2d');
+                var ctx = layer.getContext('2d');
                 this.#setCtxStyle(ctx);
                 this.#drawCtxLine(ctx, x, y);
             } else {
@@ -152,8 +152,8 @@ class EdytorLineTool extends EdytorTool {
     }
 
     cancelledCallback() {
-        var layerNum = super.getLayer(false);
-        if (layerNum === null) {
+        var layer = super.getLayer(false);
+        if (layer === null) {
             return;
         }
 
