@@ -2,8 +2,6 @@
 
 ### TODO
 - add pixel tools first -> mid april
-    - select existing shape 3d
-    - select custom shape 3d
     - magic wand 3d
     - delete selection 2d
     - fill selection 2d
