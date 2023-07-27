@@ -15,7 +15,6 @@ class EdytorSelectTool extends EdytorTool {
     #prevPos   = [];
     #points    = [];
 
-
     constructor() {
         super();
     }
@@ -37,6 +36,8 @@ class EdytorSelectTool extends EdytorTool {
         super.addProperty("Radius", "corner_radius", "3", null, null, true);
         super.addProperty("1:1", "1_to_1", false, null, null, false);
         super.addProperty("Draw from center", "draw_from_center", false, null, null, false);
+        // select all
+        // deselect all
     }
 
 
@@ -58,8 +59,8 @@ class EdytorSelectTool extends EdytorTool {
             y,
             document.getElementById('pad_layer').width,
             document.getElementById('pad_layer').height,
-            0, // line thickness
-            0  // line thickness
+            3, // line thickness
+            3  // line thickness
         );
     }
 
@@ -92,8 +93,8 @@ class EdytorSelectTool extends EdytorTool {
             this.#shapeArea[3],
             document.getElementById('pad_layer').width,
             document.getElementById('pad_layer').height,
-            0, // line thickness
-            0  // line thickness
+            3, // line thickness
+            3  // line thickness
         );
     }
 
@@ -177,15 +178,27 @@ class EdytorSelectTool extends EdytorTool {
 
     #drawCtxMoveFree(ctx, x, y) {
         if (this.#prevPos[0] != x || this.#prevPos[1] != y) {
-            ctx.lineTo(x, y);
-            ctx.stroke();
+            this.#points.push([x, y]);
         }
 
         this.#prevPos[0] = x;
         this.#prevPos[1] = y;
+
+        ctx.beginPath();
+        ctx.moveTo(this.#points[0][0], this.#points[0][1]);
+        for (var i = 1; i < this.#points.length; i++) {
+            ctx.lineTo(this.#points[i][0], this.#points[i][1]);
+        }
+        ctx.closePath();
+        ctx.stroke();
     }
 
     #drawCtxEndFree(ctx) {
+        ctx.beginPath();
+        ctx.moveTo(this.#points[0][0], this.#points[0][1]);
+        for (var i = 1; i < this.#points.length; i++) {
+            ctx.lineTo(this.#points[i][0], this.#points[i][1]);
+        }
         ctx.closePath();
         ctx.stroke();
     }
@@ -200,13 +213,119 @@ class EdytorSelectTool extends EdytorTool {
         ctx.stroke();
     }
 
-    startedCallback(x, y, shiftKey, altKey) {
-        // polygon does not use startedCallback
-        var layer = super.getLayer(false);
-        if (layer === null) {
+    #setSelectFromRectangle() {
+        var s = document.getElementById("select_layer");
+        s.setSelection(
+            "rectangle",
+            [
+                this.#shapeArea[0],
+                this.#shapeArea[1],
+                Math.abs(this.#shapeArea[2] - this.#shapeArea[0]),
+                Math.abs(this.#shapeArea[3] - this.#shapeArea[1])
+            ],
+            this.#dirtyArea
+        );
+    }
+
+    #setSelectFromRoundedRectangle() {
+        var s = document.getElementById("select_layer");
+        s.setSelection(
+            "rounded_rectangle",
+            [
+                this.#shapeArea[0],
+                this.#shapeArea[1],
+                Math.abs(this.#shapeArea[2] - this.#shapeArea[0]),
+                Math.abs(this.#shapeArea[3] - this.#shapeArea[1]),
+                parseInt(super.getProperty("corner_radius"))
+            ],
+            this.#dirtyArea
+        );
+    }
+
+    #setSelectFromEllipse() {
+        var s = document.getElementById("select_layer");
+        s.setSelection(
+            "ellipse",
+            [
+                this.#shapeArea[0],
+                this.#shapeArea[1],
+                Math.abs(this.#shapeArea[2] - this.#shapeArea[0]),
+                Math.abs(this.#shapeArea[3] - this.#shapeArea[1])
+            ],
+            this.#dirtyArea
+        );
+    }
+
+    #setSelectFromFree() {
+        var s = document.getElementById("select_layer");
+        s.setSelection(
+            "free",
+            this.#points,
+            this.#dirtyArea
+        );
+    }
+
+    #setSelectFromPolygon() {
+        var s = document.getElementById("select_layer");
+        s.setSelection(
+            "polygon",
+            this.#points,
+            this.#dirtyArea
+        );
+    }
+
+    #setSelect() {
+        if (
+            super.getProperty("shape") == "rectangle" ||
+            super.getProperty("shape") == "rounded_rectangle" ||
+            super.getProperty("shape") == "ellipse"
+        ) {
+            if (
+                this.#shapeArea.length != 4 ||
+                this.#shapeArea[0] >= this.#shapeArea[2] ||
+                this.#shapeArea[1] >= this.#shapeArea[3]
+            ) {
+                select.shape     = "";
+                select.points    = [];
+                select.dirtyArea = [];
+            }
+            switch (super.getProperty("shape")) {
+            case "rectangle":
+                this.#setSelectFromRectangle();
+                break;
+            case "rounded_rectangle":
+                this.#setSelectFromRoundedRectangle();
+                break;
+            case "ellipse":
+                this.#setSelectFromEllipse();
+                break;
+            }
             return;
         }
 
+        if (
+            super.getProperty("shape") == "free" ||
+            super.getProperty("shape") == "polygon"
+        ) {
+            if (this.#points.length < 3) {
+                select.shape     = "";
+                select.points    = [];
+                select.dirtyArea = [];
+            }
+            switch (super.getProperty("shape")) {
+                case "free":
+                    this.#setSelectFromFree();
+                    break;
+                case "polygon":
+                    this.#setSelectFromPolygon();
+                    break;
+            }
+            return;
+        }
+    }
+
+    startedCallback(x, y, shiftKey, altKey) {
+        // polygon does not use startedCallback
         this.#resetDirtyArea();
         this.#resetShapeArea();
         this.#resetPosAndPoints();
@@ -214,27 +333,18 @@ class EdytorSelectTool extends EdytorTool {
 
         this.#startPos = [x, y];
 
+        var padCtx = document.getElementById('pad_layer').getContext('2d');
+        this.#setCtxStyle(padCtx);
+        this.#updateDirtyArea(x, y);
+
         if (super.getProperty("shape") == "free") {
-            var ctx = layer.getContext('2d');
-            this.#setCtxStyle(ctx);
-            ctx.beginPath();
-
             this.#prevPos = [-1, -1];
-        } else {
-            var padCtx = document.getElementById('pad_layer').getContext('2d');
-            this.#setCtxStyle(padCtx);
-
-            this.#updateDirtyArea(x, y);
+            this.#points  = [x, y];
         }
     }
 
     pointedCallback(x, y) {
         // used by polygon only
-        var layer = super.getLayer(false);
-        if (layer === null) {
-            return;
-        }
-
         // polygon does not use shape area
         this.#updateDirtyArea(x, y);
         super.clearPadArea(this.#dirtyArea);
@@ -255,48 +365,34 @@ class EdytorSelectTool extends EdytorTool {
             return;
         }
 
-        var layer = super.getLayer(false);
-        if (layer === null) {
-            return;
-        }
+        this.#updateShapeArea(x, y);
+        this.#updateDirtyAreaFromShapeArea();
+        super.clearPadArea(this.#dirtyArea);
 
         if (super.getProperty("shape") != "free") {
-            this.#updateShapeArea(x, y);
-            this.#updateDirtyAreaFromShapeArea();
-            super.clearPadArea(this.#dirtyArea);
-
             if (!this.#isShapeAreaExist()) {
                 return;
             }
         }
 
-        var layerCtx = layer.getContext('2d');
         var padCtx = document.getElementById('pad_layer').getContext('2d');
-
         switch (super.getProperty("shape")) {
             case "rectangle":         this.#drawCtxRectangle(padCtx); break;
             case "rounded_rectangle": this.#drawCtxRoundedRectangle(padCtx); break;
             case "ellipse":           this.#drawCtxEllipse(padCtx); break;
-            case "free":              this.#drawCtxMoveFree(layerCtx, x, y); break;
+            case "free":              this.#drawCtxMoveFree(padCtx, x, y); break;
         }
     }
 
     endedCallback(x, y, shiftKey, altKey) {
-        var layer = super.getLayer(false);
-        if (layer === null) {
-            return;
-        }
+        super.clearPadArea(this.#dirtyArea);
 
         if (super.getProperty("shape") != "free") {
 
             if (super.getProperty("shape") != "polygon") {
                 this.#updateShapeArea(x, y);
                 this.#updateDirtyAreaFromShapeArea();
-            } else {
-                this.#updateDirtyArea(x, y);
-            }
-
-            super.clearPadArea(this.#dirtyArea);
+            } 
 
             if (super.getProperty("shape") != "polygon") {
                 if (!this.#isShapeAreaExist()) {
@@ -305,32 +401,11 @@ class EdytorSelectTool extends EdytorTool {
             }
         }
 
-        var ctx = layer.getContext('2d');
-        this.#setCtxStyle(ctx);
-
-        switch (super.getProperty("shape")) {
-            case "rectangle":         this.#drawCtxRectangle(ctx); break;
-            case "rounded_rectangle": this.#drawCtxRoundedRectangle(ctx); break;
-            case "ellipse":           this.#drawCtxEllipse(ctx); break;
-            case "free":              this.#drawCtxEndFree(ctx); break;
-            case "polygon":           this.#drawCtxPolygon(ctx);
-                                      this.#resetPosAndPoints();
-                                      break;
-        }
+        this.#setSelect();
     }
 
     cancelledCallback() {
         this.selectedCallback();
-
-        var layer = super.getLayer(false);
-        if (layer === null) {
-            return;
-        }
-
-        if (super.getProperty("shape") == "free") {
-            var ctx = layer.getContext('2d');
-            ctx.closePath();
-        }
     }
 
     selectedCallback() {

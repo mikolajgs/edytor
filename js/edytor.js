@@ -169,6 +169,7 @@ class Edytor extends HTMLElement {
         this.#tool = n;
         var tool = document.getElementById('tool_' + this.#tool);
         var pad = document.getElementById('pad_layer');
+        var select = document.getElementById('select_layer');
 
         tool.toggleOn();
         if (tool.RequiresPad) {
