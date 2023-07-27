@@ -125,6 +125,7 @@ class EdytorSelectTool extends EdytorTool {
         ctx.strokeStyle = "#ffffff";
         ctx.fillStyle = "";
         ctx.lineWidth = 0.5;
+        ctx.setLineDash([5, 5]);
     }
 
     #drawCtxRectangle(ctx) {

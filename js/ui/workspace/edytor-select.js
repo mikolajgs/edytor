@@ -7,6 +7,9 @@ class EdytorSelect extends HTMLCanvasElement {
 
     #animationFrame = 0;
 
+    #color1 = "rgb(0,0,0)";
+    #color2 = "rgb(255,255,255)";
+
     #interval = [];
 
     constructor() {
@@ -127,31 +130,46 @@ class EdytorSelect extends HTMLCanvasElement {
     }
 
     draw() {
+        var ctx = this.getContext("2d");
+        ctx.lineDashOffset = this.#animationFrame;
+        ctx.setLineDash([5, 5]);
+        ctx.strokeStyle = "rgb(255,255,255)";
+        ctx.lineWidth = 1.0;
+        ctx.lineCap = "square";
+
         if (
             this.#shape == "rectangle" ||
             this.#shape == "rounded_rectangle" ||
             this.#shape == "ellipse"
         ) {
+
             if (this.#shape == "rounded_rectangle" && this.#points.length < 5) {
                 return;
             }
             if (this.#points.length < 4) {
                 return;
             }
+
+            this.clearDirtyArea();
+
             switch (this.#shape) {
             case "rectangle":         this.#drawRectangle(); break;
             case "rounded_rectangle": this.#drawRoundedRectangle(); break;
             case "ellipse":           this.#drawEllipse(); break;
             }
-            return;
-        }
 
-        if (this.#shape == "free" || this.#shape == "polygon") {
+        } else if (this.#shape == "free" || this.#shape == "polygon") {
             if (this.#points.length < 3) {
                 return;
             }
+
+            this.clearDirtyArea();
             this.#drawFreeOrPolygon();
         }
+
+        this.#animationFrame++;
+        if (this.#animationFrame > 9)
+            this.#animationFrame = 0;
     }
 }
 
