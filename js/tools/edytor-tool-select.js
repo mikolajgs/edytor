@@ -36,8 +36,15 @@ class EdytorSelectTool extends EdytorTool {
         super.addProperty("Radius", "corner_radius", "3", null, null, true);
         super.addProperty("1:1", "1_to_1", false, null, null, false);
         super.addProperty("Draw from center", "draw_from_center", false, null, null, false);
-        // select all
-        // deselect all
+        super.addButton("Invert", function () {
+            document.getElementById('select_layer').invert();
+        });
+        super.addButton("Select All", function () {
+            document.getElementById('select_layer').selectAll();
+        });
+        super.addButton("Deselect All", function () {
+            document.getElementById('select_layer').deselectAll();
+        });
     }
 
 
