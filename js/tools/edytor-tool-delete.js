@@ -121,7 +121,8 @@ class EdytorDeleteTool extends EdytorTool {
         ctx.lineWidth = 0;
         ctx.lineCap   = "square";
         ctx.fillStyle = "rgba(255,255,255,1)";
-        ctx.globalCompositeOperation = 'destination-out';
+        ctx.globalCompositeOperation 
+        	= (inverted ? 'destination-in' : 'destination-out');
 
         if (
             shape == "rectangle" ||
