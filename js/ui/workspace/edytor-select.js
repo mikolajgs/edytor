@@ -78,6 +78,19 @@ class EdytorSelect extends HTMLCanvasElement {
         this.#dirtyArea = newDirtyArea;
     }
 
+    getSelectionShape() {
+        return this.#shape;
+    }
+    getSelectionPoints() {
+        return this.#points;
+    }
+    getSelectionDirtyArea() {
+        return this.#dirtyArea;
+    }
+    getSelectionInverted() {
+        return this.#inverted;
+    }
+
     invert() {
         this.clearDirtyArea();
         this.#inverted = (this.#inverted ? false : true);
@@ -107,6 +120,10 @@ class EdytorSelect extends HTMLCanvasElement {
         this.#shape = "";
         this.#points = [];
         this.#dirtyArea = [];
+    }
+
+    isSelection() {
+        return (this.#points.length > 1 ? true : false);
     }
 
     #drawFreeOrPolygon() {
