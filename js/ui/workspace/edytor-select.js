@@ -4,6 +4,7 @@ class EdytorSelect extends HTMLCanvasElement {
     #shape          = "";
     #points         = [];
     #dirtyArea      = [];
+    #inverted       = false;
 
     #animationFrame = 0;
 
@@ -51,6 +52,15 @@ class EdytorSelect extends HTMLCanvasElement {
 
     clearDirtyArea() {
         var ctx = this.getContext("2d");
+        if (this.#inverted) {
+            ctx.clearRect(
+                0,
+                0,
+                parseInt(document.getElementById("size_width").innerHTML),
+                parseInt(document.getElementById("size_height").innerHTML)
+            );
+            return;
+        }
         if (this.#dirtyArea.length == 4) {
             ctx.clearRect(
                 this.#dirtyArea[0],
@@ -68,6 +78,37 @@ class EdytorSelect extends HTMLCanvasElement {
         this.#dirtyArea = newDirtyArea;
     }
 
+    invert() {
+        this.clearDirtyArea();
+        this.#inverted = (this.#inverted ? false : true);
+    }
+
+    selectAll() {
+        this.clearDirtyArea();
+        this.#inverted = false;
+        this.#shape = "rectangle";
+        this.#points = [
+            0,
+            0,
+            parseInt(document.getElementById("size_width").innerHTML),
+            parseInt(document.getElementById("size_height").innerHTML)
+        ];
+        this.#dirtyArea = [
+            0,
+            0,
+            parseInt(document.getElementById("size_width").innerHTML),
+            parseInt(document.getElementById("size_height").innerHTML)
+        ];
+    }
+
+    deselectAll() {
+        this.clearDirtyArea();
+        this.#inverted = false;
+        this.#shape = "";
+        this.#points = [];
+        this.#dirtyArea = [];
+    }
+
     #drawFreeOrPolygon() {
         var ctx = this.getContext("2d");
         ctx.beginPath();
@@ -77,6 +118,10 @@ class EdytorSelect extends HTMLCanvasElement {
         }
         ctx.closePath();
         ctx.stroke();
+
+        if (this.#inverted) {
+            this.#drawOutlineForInverted();
+        }
     }
 
     #drawRectangle() {
@@ -90,6 +135,10 @@ class EdytorSelect extends HTMLCanvasElement {
         );
         ctx.closePath();
         ctx.stroke();
+
+        if (this.#inverted) {
+            this.#drawOutlineForInverted();
+        }
     }
 
     #drawRoundedRectangle() {
@@ -112,6 +161,10 @@ class EdytorSelect extends HTMLCanvasElement {
         ctx.quadraticCurveTo(x, y, x + r, y);
         ctx.closePath();
         ctx.stroke();
+
+        if (this.#inverted) {
+            this.#drawOutlineForInverted();
+        }
     }
 
     #drawEllipse() {
@@ -127,14 +180,31 @@ class EdytorSelect extends HTMLCanvasElement {
         ctx.ellipse(cx, cy, (w / 2), (h / 2), 0, 0, 2 * Math.PI);
         ctx.closePath();
         ctx.stroke();
+
+        if (this.#inverted) {
+            this.#drawOutlineForInverted();
+        }
+    }
+
+    #drawOutlineForInverted() {
+        var ctx = this.getContext("2d");
+        ctx.beginPath();
+        ctx.rect(
+            0,
+            0,
+            parseInt(document.getElementById("size_width").innerHTML),
+            parseInt(document.getElementById("size_height").innerHTML)
+        );
+        ctx.closePath();
+        ctx.stroke();
     }
 
     draw() {
         var ctx = this.getContext("2d");
         ctx.lineDashOffset = this.#animationFrame;
         ctx.setLineDash([5, 5]);
-        ctx.strokeStyle = "rgb(255,255,255)";
-        ctx.lineWidth = 1.0;
+        ctx.strokeStyle = "rgb(255,255,255,255)";
+        ctx.lineWidth = 1;
         ctx.lineCap = "square";
 
         if (
