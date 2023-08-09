@@ -50,29 +50,34 @@ class EdytorSelect extends HTMLCanvasElement {
         document.getElementById("select_layer").draw();
     }
 
+    clear() {
+        var ctx = this.getContext("2d");
+        ctx.clearRect(
+            0,
+            0,
+            parseInt(document.getElementById("size_width").innerHTML),
+            parseInt(document.getElementById("size_height").innerHTML)
+        );
+    }
+
     clearDirtyArea() {
         var ctx = this.getContext("2d");
         if (this.#inverted) {
-            ctx.clearRect(
-                0,
-                0,
-                parseInt(document.getElementById("size_width").innerHTML),
-                parseInt(document.getElementById("size_height").innerHTML)
-            );
+            this.clear();
             return;
         }
         if (this.#dirtyArea.length == 4) {
             ctx.clearRect(
-                this.#dirtyArea[0],
-                this.#dirtyArea[1],
-                this.#dirtyArea[2] - this.#dirtyArea[0],
-                this.#dirtyArea[3] - this.#dirtyArea[1]
+                this.#dirtyArea[0] - 2,
+                this.#dirtyArea[1] - 2,
+                this.#dirtyArea[2] - this.#dirtyArea[0] + 2,
+                this.#dirtyArea[3] - this.#dirtyArea[1] + 2
             );
         }
     }
 
     setSelection(shape, points, newDirtyArea) {
-        this.clearDirtyArea();
+        this.clear();
         this.#shape = shape;
         this.#points = points;
         this.#dirtyArea = newDirtyArea;
@@ -92,12 +97,12 @@ class EdytorSelect extends HTMLCanvasElement {
     }
 
     invert() {
-        this.clearDirtyArea();
+        this.clear();
         this.#inverted = (this.#inverted ? false : true);
     }
 
     selectAll() {
-        this.clearDirtyArea();
+        this.clear();
         this.#inverted = false;
         this.#shape = "rectangle";
         this.#points = [
@@ -115,11 +120,56 @@ class EdytorSelect extends HTMLCanvasElement {
     }
 
     deselectAll() {
-        this.clearDirtyArea();
+        this.clear();
         this.#inverted = false;
         this.#shape = "";
         this.#points = [];
         this.#dirtyArea = [];
+    }
+
+    moveSelection(moveX, moveY) {
+        var newPts = [];
+        var newDirtyArea = [];
+        var w = parseInt(document.getElementById("size_width").innerHTML);
+        var h = parseInt(document.getElementById("size_height").innerHTML);
+
+        this.clear();
+
+        if (this.#shape == "free" || this.#shape == "polygon") {
+            for (var i=0; i<this.#points.length; i++) {
+                var pt = [];
+                pt[0] = this.#points[i][0] + moveX;
+                pt[1] = this.#points[i][1] + moveY;
+                if (pt[0] < 0) pt[0] = 0;
+                if (pt[1] < 0) pt[1] = 0;
+                if (pt[0] > w) pt[0] = w;
+                if (pt[1] > h) pt[1] = h;
+                newPts.push(pt);
+            }
+            this.#points = newPts;
+        }
+
+        if (this.#shape == "rectangle") {
+            var ptX = this.#points[0] + moveX;
+            var ptY = this.#points[1] + moveY;
+            var newW = this.#points[2];
+            var newH = this.#points[3];
+            if (ptX < 0) {
+                newW = newW - Math.abs(ptX);
+                ptX = 0;
+            }
+            if (ptY < 0) {
+                newH = newH - Math.abs(ptY);
+                ptY = 0;
+            }
+            if (ptX + newW > w) {
+                newW = Math.abs(w-ptX);
+            }
+            if (ptY + newH > h) {
+                newH = Math.abs(h-ptY);
+            }
+            this.#points = [ptX, ptY, newW, newH];
+        }
     }
 
     isSelection() {
@@ -237,7 +287,7 @@ class EdytorSelect extends HTMLCanvasElement {
                 return;
             }
 
-            this.clearDirtyArea();
+            this.clear();
 
             switch (this.#shape) {
             case "rectangle":         this.#drawRectangle(); break;
@@ -250,7 +300,7 @@ class EdytorSelect extends HTMLCanvasElement {
                 return;
             }
 
-            this.clearDirtyArea();
+            this.clear();
             this.#drawFreeOrPolygon();
         }
 
