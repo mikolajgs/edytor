@@ -165,39 +165,26 @@ class EdytorShapeTool extends EdytorTool {
     }
 
 
-    #drawCtxMoveFree(ctx, x, y) {
-        if (this.#prevPos[0] != x || this.#prevPos[1] != y) {
-            ctx.lineTo(x, y);
-            ctx.stroke();
-        }
-
-        this.#prevPos[0] = x;
-        this.#prevPos[1] = y;
-    }
-
-    #drawCtxEndFree(ctx) {
-        ctx.closePath();
-
-        this.#fillAndStroke(ctx);
-    }
-
-    #drawCtxRectangle(ctx) {
-        document.getElementById("edytor").drawRectanglePathOnCtx(ctx, this.#shapeArea);
-        this.#fillAndStroke(ctx);
-    }
-
-    #drawCtxRoundedRectangle(ctx) {
-        document.getElementById("edytor").drawRoundedRectanglePathOnCtx(ctx, this.#shapeArea, parseInt(super.getProperty("corner_radius")));
-        this.#fillAndStroke(ctx);
-    }
-
     #drawCtxPolygon(ctx) {
         document.getElementById("edytor").drawPolygonPathOnCtx(ctx, this.#points);
         this.#fillAndStroke(ctx);
     }
 
-    #drawCtxEllipse(ctx) {
-        document.getElementById("edytor").drawEllipsePathOnCtx(ctx, this.#shapeArea);
+    #drawCtxRestOfShapes(ctx) {
+        switch (super.getProperty("shape")) {
+            case "rectangle":
+                document.getElementById("edytor").drawRectanglePathOnCtx(ctx, this.#shapeArea);
+                break;
+
+            case "rounded_rectangle":
+                document.getElementById("edytor").drawRoundedRectanglePathOnCtx(ctx, this.#shapeArea, parseInt(super.getProperty("corner_radius")));
+                break;
+
+            case "ellipse":
+                document.getElementById("edytor").drawEllipsePathOnCtx(ctx, this.#shapeArea);
+                break;
+        }
+
         this.#fillAndStroke(ctx);
     }
 
@@ -216,9 +203,9 @@ class EdytorShapeTool extends EdytorTool {
         this.#startPos = [x, y];
 
         if (super.getProperty("shape") == "free") {
-            var ctx = layer.getContext('2d');
-            this.#setCtxStyle(ctx);
-            ctx.beginPath();
+            var layerCtx = layer.getContext('2d');
+            this.#setCtxStyle(layerCtx);
+            layerCtx.beginPath();
 
             this.#prevPos = [-1, -1];
         } else {
@@ -274,12 +261,19 @@ class EdytorShapeTool extends EdytorTool {
         var layerCtx = layer.getContext('2d');
         var padCtx = document.getElementById('pad_layer').getContext('2d');
 
-        switch (super.getProperty("shape")) {
-            case "rectangle":         this.#drawCtxRectangle(padCtx); break;
-            case "rounded_rectangle": this.#drawCtxRoundedRectangle(padCtx); break;
-            case "ellipse":           this.#drawCtxEllipse(padCtx); break;
-            case "free":              this.#drawCtxMoveFree(layerCtx, x, y); break;
+        if (super.getProperty("shape") == "free") {
+            if (this.#prevPos[0] != x || this.#prevPos[1] != y) {
+                layerCtx.lineTo(x, y);
+                layerCtx.stroke();
+            }
+
+            this.#prevPos[0] = x;
+            this.#prevPos[1] = y;
+
+            return;
         }
+
+        this.#drawCtxRestOfShapes(padCtx);
     }
 
     endedCallback(x, y, shiftKey, altKey) {
@@ -309,15 +303,21 @@ class EdytorShapeTool extends EdytorTool {
         var ctx = layer.getContext('2d');
         this.#setCtxStyle(ctx);
 
-        switch (super.getProperty("shape")) {
-            case "rectangle":         this.#drawCtxRectangle(ctx); break;
-            case "rounded_rectangle": this.#drawCtxRoundedRectangle(ctx); break;
-            case "ellipse":           this.#drawCtxEllipse(ctx); break;
-            case "free":              this.#drawCtxEndFree(ctx); break;
-            case "polygon":           this.#drawCtxPolygon(ctx);
-                                      this.#resetPosAndPoints();
-                                      break;
+        if (super.getProperty("shape") == "free") {
+            ctx.closePath();
+            this.#fillAndStroke(ctx);
+
+            return;
         }
+
+        if (super.getProperty("shape") == "polygon") {
+            this.#drawCtxPolygon(ctx);
+            this.#resetPosAndPoints();
+
+            return;
+        }
+
+        this.#drawCtxRestOfShapes(ctx);
     }
 
     cancelledCallback() {

@@ -43,26 +43,6 @@ class EdytorDeleteTool extends EdytorTool {
     selectedCallback() {
     }
 
-    #drawFreeOrPolygon(ctx, points) {
-        document.getElementById("edytor").drawPolygonPathOnCtx(ctx, points);
-        ctx.fill();
-    }
-
-    #drawRectangle(ctx, points) {
-        document.getElementById("edytor").drawRectanglePathOnCtx(ctx, points);
-        ctx.fill();
-    }
-
-    #drawRoundedRectangle(ctx, points) {
-        document.getElementById("edytor").drawRoundedRectanglePathOnCtx(ctx, points, points[4]);
-        ctx.fill();
-    }
-
-    #drawEllipse(ctx, points) {
-        document.getElementById("edytor").drawEllipsePathOnCtx(ctx, points);
-        ctx.fill();
-    }
-
     deleteSelection() {
         var layer = super.getLayer(true);
         if (layer === null) {
@@ -101,17 +81,25 @@ class EdytorDeleteTool extends EdytorTool {
             }
 
             switch (shape) {
-            case "rectangle":         this.#drawRectangle(ctx, points); break;
-            case "rounded_rectangle": this.#drawRoundedRectangle(ctx, points); break;
-            case "ellipse":           this.#drawEllipse(ctx, points); break;
+            case "rectangle":
+                document.getElementById("edytor").drawRectanglePathOnCtx(ctx, points);
+                break;
+            case "rounded_rectangle":
+                document.getElementById("edytor").drawRoundedRectanglePathOnCtx(ctx, points, points[4]);
+                break;
+            case "ellipse":
+                document.getElementById("edytor").drawEllipsePathOnCtx(ctx, points);
+                break;
             }
+            ctx.fill();
 
         } else if (shape == "free" || shape == "polygon") {
             if (points.length < 3) {
                 return;
             }
 
-            this.#drawFreeOrPolygon(ctx, points);
+            document.getElementById("edytor").drawPolygonPathOnCtx(ctx, points);
+            ctx.fill();
         }
     }
 }
