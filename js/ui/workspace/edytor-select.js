@@ -178,12 +178,7 @@ class EdytorSelect extends HTMLCanvasElement {
 
     #drawFreeOrPolygon() {
         var ctx = this.getContext("2d");
-        ctx.beginPath();
-        ctx.moveTo(this.#points[0][0], this.#points[0][1]);
-        for (var i = 1; i < this.#points.length; i++) {
-            ctx.lineTo(this.#points[i][0], this.#points[i][1]);
-        }
-        ctx.closePath();
+        document.getElementById("edytor").drawPolygonPathOnCtx(ctx, this.#points);
         ctx.stroke();
 
         if (this.#inverted) {
@@ -193,14 +188,7 @@ class EdytorSelect extends HTMLCanvasElement {
 
     #drawRectangle() {
         var ctx = this.getContext("2d");
-        ctx.beginPath();
-        ctx.rect(
-            this.#points[0],
-            this.#points[1],
-            this.#points[2],
-            this.#points[3]
-        );
-        ctx.closePath();
+        document.getElementById("edytor").drawRectanglePathOnCtx(ctx, this.#points);
         ctx.stroke();
 
         if (this.#inverted) {
@@ -209,24 +197,8 @@ class EdytorSelect extends HTMLCanvasElement {
     }
 
     #drawRoundedRectangle() {
-        var r = this.#points[4];
-        var w = this.#points[2];
-        var h = this.#points[3];
-        var x = this.#points[0];
-        var y = this.#points[1];
-
         var ctx = this.getContext("2d");
-        ctx.beginPath();
-        ctx.moveTo(x + r, y);
-        ctx.lineTo(x + w - r, y);
-        ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-        ctx.lineTo(x + w, y + h - r);
-        ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-        ctx.lineTo(x + r, y + h);
-        ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-        ctx.lineTo(x, y + r);
-        ctx.quadraticCurveTo(x, y, x + r, y);
-        ctx.closePath();
+        document.getElementById("edytor").drawRoundedRectanglePathOnCtx(ctx, this.#points, this.#points[4]);
         ctx.stroke();
 
         if (this.#inverted) {
@@ -235,17 +207,8 @@ class EdytorSelect extends HTMLCanvasElement {
     }
 
     #drawEllipse() {
-        var w = this.#points[2];
-        var h = this.#points[3];
-        var x = this.#points[0];
-        var y = this.#points[1];
-        var cx = x + (w / 2);
-        var cy = y + (h / 2);
-
         var ctx = this.getContext("2d");
-        ctx.beginPath();
-        ctx.ellipse(cx, cy, (w / 2), (h / 2), 0, 0, 2 * Math.PI);
-        ctx.closePath();
+        document.getElementById("edytor").drawEllipsePathOnCtx(ctx, this.#points);
         ctx.stroke();
 
         if (this.#inverted) {

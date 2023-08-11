@@ -135,55 +135,6 @@ class EdytorSelectTool extends EdytorTool {
         ctx.setLineDash([5, 5]);
     }
 
-    #drawCtxRectangle(ctx) {
-        ctx.beginPath();
-        ctx.rect(
-            this.#shapeArea[0],
-            this.#shapeArea[1],
-            Math.abs(this.#shapeArea[2] - this.#shapeArea[0]),
-            Math.abs(this.#shapeArea[3] - this.#shapeArea[1])
-        );
-        ctx.closePath();
-        ctx.stroke();
-    }
-
-    #drawCtxRoundedRectangle(ctx) {
-        var r = parseInt(super.getProperty("corner_radius"));
-        var w = Math.abs(this.#shapeArea[2] - this.#shapeArea[0]);
-        var h = Math.abs(this.#shapeArea[3] - this.#shapeArea[1]);
-        var x = this.#shapeArea[0];
-        var y = this.#shapeArea[1];
-
-        ctx.beginPath();
-        ctx.moveTo(x + r, y);
-        ctx.lineTo(x + w - r, y);
-        ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-        ctx.lineTo(x + w, y + h - r);
-        ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-        ctx.lineTo(x + r, y + h);
-        ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-        ctx.lineTo(x, y + r);
-        ctx.quadraticCurveTo(x, y, x + r, y);
-        ctx.closePath();
-
-        ctx.stroke();
-    }
-
-    #drawCtxEllipse(ctx) {
-        var w = Math.abs(this.#shapeArea[2] - this.#shapeArea[0]);
-        var h = Math.abs(this.#shapeArea[3] - this.#shapeArea[1]);
-        var x = this.#shapeArea[0];
-        var y = this.#shapeArea[1];
-        var cx = x + (w / 2);
-        var cy = y + (h / 2);
-
-        ctx.beginPath();
-        ctx.ellipse(cx, cy, (w / 2), (h / 2), 0, 0, 2 * Math.PI);
-        ctx.closePath();
-        
-        ctx.stroke();
-    }
-
     #drawCtxMoveFree(ctx, x, y) {
         if (this.#prevPos[0] != x || this.#prevPos[1] != y) {
             this.#points.push([x, y]);
@@ -211,13 +162,23 @@ class EdytorSelectTool extends EdytorTool {
         ctx.stroke();
     }
 
+    #drawCtxRectangle(ctx) {
+        document.getElementById("edytor").drawRectanglePathOnCtx(ctx, this.#shapeArea);
+        ctx.stroke();
+    }
+
+    #drawCtxRoundedRectangle(ctx) {
+        document.getElementById("edytor").drawRoundedRectanglePathOnCtx(ctx, this.#shapeArea, parseInt(super.getProperty("corner_radius")));
+        ctx.stroke();
+    }
+
+    #drawCtxEllipse(ctx) {
+        document.getElementById("edytor").drawEllipsePathOnCtx(ctx, this.#shapeArea);
+        ctx.stroke();
+    }
+
     #drawCtxPolygon(ctx) {
-        ctx.beginPath();
-        ctx.moveTo(this.#points[0][0], this.#points[0][1]);
-        for (var i = 1; i < this.#points.length; i++) {
-            ctx.lineTo(this.#points[i][0], this.#points[i][1]);
-        }
-        ctx.closePath();
+        document.getElementById("edytor").drawPolygonPathOnCtx(ctx, this.#points);
         ctx.stroke();
     }
 
@@ -228,8 +189,8 @@ class EdytorSelectTool extends EdytorTool {
             [
                 this.#shapeArea[0],
                 this.#shapeArea[1],
-                Math.abs(this.#shapeArea[2] - this.#shapeArea[0]),
-                Math.abs(this.#shapeArea[3] - this.#shapeArea[1])
+                this.#shapeArea[2],
+                this.#shapeArea[3]
             ],
             this.#dirtyArea
         );
@@ -242,8 +203,8 @@ class EdytorSelectTool extends EdytorTool {
             [
                 this.#shapeArea[0],
                 this.#shapeArea[1],
-                Math.abs(this.#shapeArea[2] - this.#shapeArea[0]),
-                Math.abs(this.#shapeArea[3] - this.#shapeArea[1]),
+                this.#shapeArea[2],
+                this.#shapeArea[3],
                 parseInt(super.getProperty("corner_radius"))
             ],
             this.#dirtyArea
@@ -257,8 +218,8 @@ class EdytorSelectTool extends EdytorTool {
             [
                 this.#shapeArea[0],
                 this.#shapeArea[1],
-                Math.abs(this.#shapeArea[2] - this.#shapeArea[0]),
-                Math.abs(this.#shapeArea[3] - this.#shapeArea[1])
+                this.#shapeArea[2],
+                this.#shapeArea[3]
             ],
             this.#dirtyArea
         );
@@ -326,6 +287,7 @@ class EdytorSelectTool extends EdytorTool {
                     break;
                 case "polygon":
                     this.#setSelectFromPolygon();
+                    this.#resetPosAndPoints();
                     break;
             }
             return;

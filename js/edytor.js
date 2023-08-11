@@ -279,6 +279,61 @@ class Edytor extends HTMLElement {
         document.getElementById('layer_list').selectLayer(num);
     }
 
+
+    // Drawing functions (temporarily put here)
+    drawPolygonPathOnCtx(ctx, points) {
+        ctx.beginPath();
+        ctx.moveTo(points[0][0], points[0][1]);
+        for (var i = 1; i < points.length; i++) {
+            ctx.lineTo(points[i][0], points[i][1]);
+        }
+        ctx.closePath();
+    }
+
+    drawEllipsePathOnCtx(ctx, shapeArea) { 
+        var w = Math.abs(shapeArea[2] - shapeArea[0]);
+        var h = Math.abs(shapeArea[3] - shapeArea[1]);
+        var x = shapeArea[0];
+        var y = shapeArea[1];
+        var cx = x + (w / 2);
+        var cy = y + (h / 2);
+
+        ctx.beginPath();
+        ctx.ellipse(cx, cy, (w / 2), (h / 2), 0, 0, 2 * Math.PI);
+        ctx.closePath();
+    }
+
+    drawRoundedRectanglePathOnCtx(ctx, shapeArea, r) {
+        var w = Math.abs(shapeArea[2] - shapeArea[0]);
+        var h = Math.abs(shapeArea[3] - shapeArea[1]);
+        var x = shapeArea[0];
+        var y = shapeArea[1];
+
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.lineTo(x + w - r, y);
+        ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+        ctx.lineTo(x + w, y + h - r);
+        ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+        ctx.lineTo(x + r, y + h);
+        ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+        ctx.lineTo(x, y + r);
+        ctx.quadraticCurveTo(x, y, x + r, y);
+        ctx.closePath();
+    }
+
+    drawRectanglePathOnCtx(ctx, shapeArea) {
+        ctx.beginPath();
+        ctx.rect(
+            shapeArea[0],
+            shapeArea[1],
+            Math.abs(shapeArea[2] - shapeArea[0]),
+            Math.abs(shapeArea[3] - shapeArea[1])
+        );
+        ctx.closePath();
+    }
+
+
     showError(e) {
         document.getElementById("logs").addError(e);
     }
