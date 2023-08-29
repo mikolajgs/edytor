@@ -191,8 +191,7 @@ class EdytorSelectTool extends EdytorTool {
                 this.#shapeArea[1],
                 this.#shapeArea[2],
                 this.#shapeArea[3]
-            ],
-            this.#dirtyArea
+            ]
         );
     }
 
@@ -206,8 +205,7 @@ class EdytorSelectTool extends EdytorTool {
                 this.#shapeArea[2],
                 this.#shapeArea[3],
                 parseInt(super.getProperty("corner_radius"))
-            ],
-            this.#dirtyArea
+            ]
         );
     }
 
@@ -220,8 +218,7 @@ class EdytorSelectTool extends EdytorTool {
                 this.#shapeArea[1],
                 this.#shapeArea[2],
                 this.#shapeArea[3]
-            ],
-            this.#dirtyArea
+            ]
         );
     }
 
@@ -229,8 +226,7 @@ class EdytorSelectTool extends EdytorTool {
         var s = document.getElementById("select_layer");
         s.setSelection(
             "free",
-            this.#points,
-            this.#dirtyArea
+            this.#points
         );
     }
 
@@ -238,8 +234,7 @@ class EdytorSelectTool extends EdytorTool {
         var s = document.getElementById("select_layer");
         s.setSelection(
             "polygon",
-            this.#points,
-            this.#dirtyArea
+            this.#points
         );
     }
 
@@ -256,7 +251,6 @@ class EdytorSelectTool extends EdytorTool {
             ) {
                 select.shape     = "";
                 select.points    = [];
-                select.dirtyArea = [];
             }
             switch (super.getProperty("shape")) {
             case "rectangle":
@@ -279,7 +273,6 @@ class EdytorSelectTool extends EdytorTool {
             if (this.#points.length < 3) {
                 select.shape     = "";
                 select.points    = [];
-                select.dirtyArea = [];
             }
             switch (super.getProperty("shape")) {
                 case "free":

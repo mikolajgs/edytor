@@ -7,6 +7,8 @@ class EdytorMoveTool extends EdytorTool {
 
 
     #startPos = [];
+    #startSelectLayerPos = [];
+    #cancelled = false;
 
 
     constructor() {
@@ -28,12 +30,20 @@ class EdytorMoveTool extends EdytorTool {
 
 
     startedCallback(x, y) {
+        this.#cancelled = false;
+
         var layer = super.getLayer(true);
         if (layer === null) {
             return;
         }
 
         this.#startPos = [x, y];
+
+        var selectLayer = document.getElementById("select_layer");
+        this.#startSelectLayerPos = [
+            selectLayer.getMoveLeft(),
+            selectLayer.getMoveTop()
+        ];
     }
 
     movedCallback(x, y, shiftKey, altKey) {
@@ -49,15 +59,18 @@ class EdytorMoveTool extends EdytorTool {
         if (!selectLayer.isSelection()) {
             layer.style.left = moveX + "px";
             layer.style.top  = moveY + "px";
-
             return;
         }
 
-        selectLayer.style.left = moveX + "px";
-        selectLayer.style.top  = moveY + "px";
+        selectLayer.setMoveLeft(this.#startSelectLayerPos[0] + moveX);
+        selectLayer.setMoveTop(this.#startSelectLayerPos[1] + moveY);
     }
 
     endedCallback(x, y, shiftKey, altKey) {
+        if (this.#cancelled) {
+            return;
+        }
+
         var layer = super.getLayer(true);
         if (layer === null) {
             return;
@@ -88,11 +101,6 @@ class EdytorMoveTool extends EdytorTool {
 
             return;
         }
-
-        selectLayer.moveSelection(moveX, moveY);
-
-        selectLayer.style.left = "0px";
-        selectLayer.style.top  = "0px";
     }
 
     cancelledCallback() {
@@ -109,8 +117,7 @@ class EdytorMoveTool extends EdytorTool {
             return;
         }
 
-        selectLayer.style.left = "0px";
-        selectLayer.style.top  = "0px";
+        this.#cancelled = true;
     }
 
     selectedCallback() {

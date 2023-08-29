@@ -3,7 +3,6 @@ class EdytorSelect extends HTMLCanvasElement {
 
     #shape          = "";
     #points         = [];
-    #dirtyArea      = [];
     #inverted       = false;
 
     #animationFrame = 0;
@@ -38,6 +37,11 @@ class EdytorSelect extends HTMLCanvasElement {
         this.height = h;
     }
 
+    resetPosition() {
+        this.style.top = 0;
+        this.style.left = 0;
+    }
+
     show() {
         this.style.display = '';
     }
@@ -60,27 +64,11 @@ class EdytorSelect extends HTMLCanvasElement {
         );
     }
 
-    clearDirtyArea() {
-        var ctx = this.getContext("2d");
-        if (this.#inverted) {
-            this.clear();
-            return;
-        }
-        if (this.#dirtyArea.length == 4) {
-            ctx.clearRect(
-                this.#dirtyArea[0] - 2,
-                this.#dirtyArea[1] - 2,
-                this.#dirtyArea[2] - this.#dirtyArea[0] + 2,
-                this.#dirtyArea[3] - this.#dirtyArea[1] + 2
-            );
-        }
-    }
-
-    setSelection(shape, points, newDirtyArea) {
+    setSelection(shape, points) {
+        this.resetPosition();
         this.clear();
         this.#shape = shape;
         this.#points = points;
-        this.#dirtyArea = newDirtyArea;
     }
 
     getSelectionShape() {
@@ -89,11 +77,22 @@ class EdytorSelect extends HTMLCanvasElement {
     getSelectionPoints() {
         return this.#points;
     }
-    getSelectionDirtyArea() {
-        return this.#dirtyArea;
-    }
     getSelectionInverted() {
         return this.#inverted;
+    }
+
+    getMoveLeft() {
+        return parseInt(this.style.left.replace("px", ""));
+    }
+    getMoveTop() {
+        return parseInt(this.style.top.replace("px", ""));
+    }
+
+    setMoveLeft(v) {
+        this.style.left = v + "px";
+    }
+    setMoveTop(v) {
+        this.style.top = v + "px";
     }
 
     invert() {
@@ -102,6 +101,7 @@ class EdytorSelect extends HTMLCanvasElement {
     }
 
     selectAll() {
+        this.resetPosition();
         this.clear();
         this.#inverted = false;
         this.#shape = "rectangle";
@@ -111,65 +111,14 @@ class EdytorSelect extends HTMLCanvasElement {
             parseInt(document.getElementById("size_width").innerHTML),
             parseInt(document.getElementById("size_height").innerHTML)
         ];
-        this.#dirtyArea = [
-            0,
-            0,
-            parseInt(document.getElementById("size_width").innerHTML),
-            parseInt(document.getElementById("size_height").innerHTML)
-        ];
     }
 
     deselectAll() {
+        this.resetPosition();
         this.clear();
         this.#inverted = false;
         this.#shape = "";
         this.#points = [];
-        this.#dirtyArea = [];
-    }
-
-    moveSelection(moveX, moveY) {
-        var newPts = [];
-        var newDirtyArea = [];
-        var w = parseInt(document.getElementById("size_width").innerHTML);
-        var h = parseInt(document.getElementById("size_height").innerHTML);
-
-        this.clear();
-
-        if (this.#shape == "free" || this.#shape == "polygon") {
-            for (var i=0; i<this.#points.length; i++) {
-                var pt = [];
-                pt[0] = this.#points[i][0] + moveX;
-                pt[1] = this.#points[i][1] + moveY;
-                if (pt[0] < 0) pt[0] = 0;
-                if (pt[1] < 0) pt[1] = 0;
-                if (pt[0] > w) pt[0] = w;
-                if (pt[1] > h) pt[1] = h;
-                newPts.push(pt);
-            }
-            this.#points = newPts;
-        }
-
-        if (this.#shape == "rectangle") {
-            var ptX = this.#points[0] + moveX;
-            var ptY = this.#points[1] + moveY;
-            var newW = this.#points[2];
-            var newH = this.#points[3];
-            if (ptX < 0) {
-                newW = newW - Math.abs(ptX);
-                ptX = 0;
-            }
-            if (ptY < 0) {
-                newH = newH - Math.abs(ptY);
-                ptY = 0;
-            }
-            if (ptX + newW > w) {
-                newW = Math.abs(w-ptX);
-            }
-            if (ptY + newH > h) {
-                newH = Math.abs(h-ptY);
-            }
-            this.#points = [ptX, ptY, newW, newH];
-        }
     }
 
     isSelection() {

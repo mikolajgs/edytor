@@ -37,7 +37,7 @@ class EdytorResizeWorkspaceTool extends EdytorTool {
             var w = parseInt(self.getProperty("width"));
             var h = parseInt(self.getProperty("height"));
             var s = self.getProperty("side");
-            if (self.ggetProperty("operation") == "extend_side") {
+            if (self.getProperty("operation") == "extend_side") {
                 if (!isNaN(v)) {
                     document.getElementById('edytor').extendWorkspaceSide(s, v);
                 } else {
