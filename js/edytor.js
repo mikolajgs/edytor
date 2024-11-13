@@ -290,7 +290,7 @@ class Edytor extends HTMLElement {
         ctx.closePath();
     }
 
-    drawEllipsePathOnCtx(ctx, shapeArea) { 
+    drawEllipsePathOnCtx(ctx, shapeArea) {
         var w = Math.abs(shapeArea[2] - shapeArea[0]);
         var h = Math.abs(shapeArea[3] - shapeArea[1]);
         var x = shapeArea[0];
